@@ -43,5 +43,10 @@ namespace SWZOS.Repositories
                 Surname = a.Surname
             }).FirstOrDefault();
         }
+
+        public void EditUser(UserFormModel model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
