@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SWZOS_Database.Entities
 {
-    class Pitch
+    public class Pitch
     {
         public int Id { get; set; }
         public int PitchTypeId { get; set; }

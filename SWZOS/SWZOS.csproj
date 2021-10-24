@@ -16,8 +16,4 @@
     <ProjectReference Include="..\SWZOS_Database\SWZOS_Database.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
 </Project>

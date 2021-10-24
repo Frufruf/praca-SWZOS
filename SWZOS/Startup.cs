@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SWZOS.Repositories;
 using SWZOS_Database;
 using System;
 using System.Collections.Generic;
@@ -25,9 +26,16 @@ namespace SWZOS
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             services.AddMvc();
             services.AddDbContext<SWZOSContext>(a =>
                 a.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("SWZOS")));
+
+            #region DependencyInjection
+
+            services.AddScoped<UsersRepository, UsersRepository>();
+
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

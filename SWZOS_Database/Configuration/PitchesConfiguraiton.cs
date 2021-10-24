@@ -7,7 +7,7 @@ using System.Text;
 
 namespace SWZOS_Database.Configuration
 {
-    class PitchConfiguraiton: IEntityTypeConfiguration<Pitch>
+    class PitchesConfiguraiton: IEntityTypeConfiguration<Pitch>
     {
         public void Configure(EntityTypeBuilder<Pitch> builder)
         {
