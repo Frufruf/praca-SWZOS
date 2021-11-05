@@ -17,6 +17,11 @@ namespace SWZOS.Repositories
 
         }
 
+        public void AuthenticateUser(LoginModel model)
+        {
+
+        }
+
         public void AddUser(UserFormModel model)
         {
             var user = new User
@@ -27,26 +32,32 @@ namespace SWZOS.Repositories
                 PESEL = model.PESEL,
                 MailAddress = model.MailAddress,
                 PhoneNumber = model.PhoneNumber,
-                UserTypeId = (int)UserTypesEnum.Customer
+                UserTypeId = (int)UserTypesEnum.Customer,
+                PasswordExpirationDate = DateTime.Now.AddDays(180)
             };
 
             _database.Users.Add(user);
             SaveChanges();
         }
 
-        public UserModel GetUserById(int userId)
-        {
-            return _database.Users.Where(a => a.Id == userId).Select(a => new UserModel
-            {
-                Id = a.Id,
-                Name = a.Name,
-                Surname = a.Surname
-            }).FirstOrDefault();
-        }
-
         public void EditUser(UserFormModel model)
         {
             throw new NotImplementedException();
         }
+
+        public UserFormModel GetUserById(int userId)
+        {
+            return _database.Users.Where(a => a.Id == userId).Select(a => new UserFormModel
+            {
+                Id = a.Id,
+                Login = a.Login,
+                Name = a.Name,
+                Surname = a.Surname,
+                PhoneNumber = a.PhoneNumber,
+                MailAddress = a.MailAddress,
+                PESEL = a.PESEL
+            }).FirstOrDefault();
+        }
+
     }
 }

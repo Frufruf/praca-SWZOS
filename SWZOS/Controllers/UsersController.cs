@@ -21,6 +21,18 @@ namespace SWZOS.Controllers
         }
 
         [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public JsonResult Login(LoginModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet]
         public IActionResult AddUser()
         {
             var model = new UserFormModel
@@ -53,7 +65,7 @@ namespace SWZOS.Controllers
         public IActionResult EditUser(int userId)
         {
             var user = _usersRepository.GetUserById(userId);
-            throw new NotImplementedException();
+            return View("~/Views/Users/UserForm.cshtml", user);
         }
 
         public JsonResult EditUser(UserFormModel model)

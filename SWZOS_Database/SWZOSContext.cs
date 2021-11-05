@@ -21,8 +21,6 @@ namespace SWZOS_Database
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(SWZOSContext).Assembly);
-
-
         }
     }
 }

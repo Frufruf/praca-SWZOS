@@ -1,10 +1,12 @@
 ﻿@model SWZOS.Models.User.UserFormModel
 <script>
-    UserFormUrl = {
-        AddUserUrl = "@Url.Action("AddUser", "Users")",
-        EditUserUrl = "@Url.Action("EditUser", "Users")",
-        DeleteUserUrl = "@Url.Action("DeleteUser", "Users")"
+    let UserFormUrl = {
+        AddUserUrl: "@Url.Action("AddUser", "Users")",
+        EditUserUrl: "@Url.Action("EditUser", "Users")",
+        DeleteUserUrl: "@Url.Action("DeleteUser", "Users")"
     }
+
+    let isEditForm = "@Model.IsEditForm";
 </script>
 <div>
     <form id="UserForm">
@@ -45,7 +47,7 @@
                     <input type="text" id="PhoneNumber" name="PhoneNumber" asp-for="PhoneNumber" />
                 </div>
             </div>
-            <input type="button" value="Zapisz"/>
+            <input id="SubmitUserForm" type="button" value="Zapisz"/>
         </div>
     </form>
 </div>

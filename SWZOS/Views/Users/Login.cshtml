@@ -1,0 +1,24 @@
+﻿@model SWZOS.Models.User.LoginModel
+
+<div style="text-align:center">
+    <form>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label asp-for="LoginOrEmail">Login:</label>
+                    <input type="text" id="Login" name="Login" asp-for="LoginOrEmail" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password">Hasło:</label>
+                    <input type="password" id="Password" name="Password" asp-for="Password" />
+                </div>
+                <div class="form-group">
+                    <input id="Login" type="button" value="Zaloguj" />
+                </div>
+                <div class="form-group">
+                    <input id="CreateAccount" type="button" value="Zarejestruj się" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

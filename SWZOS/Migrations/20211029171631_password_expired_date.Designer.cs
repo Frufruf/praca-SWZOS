@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SWZOS_Database;
 
 namespace SWZOS.Migrations
 {
     [DbContext(typeof(SWZOSContext))]
-    partial class SWZOSContextModelSnapshot : ModelSnapshot
+    [Migration("20211029171631_password_expired_date")]
+    partial class password_expired_date
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
