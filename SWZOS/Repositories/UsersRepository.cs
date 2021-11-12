@@ -19,7 +19,12 @@ namespace SWZOS.Repositories
 
         public void AuthenticateUser(LoginModel model)
         {
+            //var currentUser = _db.Users.Where(a => a.Login == model.LoginOrEmail || a.MailAddress == model.LoginOrEmail)
+            //            .Select(a => new CurrentUser
+            //            {
+            //                Login = a.Login,
 
+            //            }).FirstOrDefault();
         }
 
         public void AddUser(UserFormModel model)
@@ -36,7 +41,7 @@ namespace SWZOS.Repositories
                 PasswordExpirationDate = DateTime.Now.AddDays(180)
             };
 
-            _database.Users.Add(user);
+            _db.Users.Add(user);
             SaveChanges();
         }
 
@@ -47,7 +52,7 @@ namespace SWZOS.Repositories
 
         public UserFormModel GetUserById(int userId)
         {
-            return _database.Users.Where(a => a.Id == userId).Select(a => new UserFormModel
+            return _db.Users.Where(a => a.Id == userId).Select(a => new UserFormModel
             {
                 Id = a.Id,
                 Login = a.Login,
