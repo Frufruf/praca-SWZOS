@@ -41,8 +41,8 @@ namespace SWZOS.Repositories
                 PasswordExpirationDate = DateTime.Now.AddDays(180)
             };
 
-            _db.Users.Add(user);
-            SaveChanges();
+            //_db.Users.Add(user);
+            //SaveChanges();
         }
 
         public void EditUser(UserFormModel model)
@@ -52,16 +52,17 @@ namespace SWZOS.Repositories
 
         public UserFormModel GetUserById(int userId)
         {
-            return _db.Users.Where(a => a.Id == userId).Select(a => new UserFormModel
-            {
-                Id = a.Id,
-                Login = a.Login,
-                Name = a.Name,
-                Surname = a.Surname,
-                PhoneNumber = a.PhoneNumber,
-                MailAddress = a.MailAddress,
-                PESEL = a.PESEL
-            }).FirstOrDefault();
+            throw new NotImplementedException();
+            //return _db.Users.Where(a => a.Id == userId).Select(a => new UserFormModel
+            //{
+            //    Id = a.Id,
+            //    Login = a.Login,
+            //    Name = a.Name,
+            //    Surname = a.Surname,
+            //    PhoneNumber = a.PhoneNumber,
+            //    MailAddress = a.MailAddress,
+            //    PESEL = a.PESEL
+            //}).FirstOrDefault();
         }
 
     }

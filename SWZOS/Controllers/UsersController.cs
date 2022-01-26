@@ -77,5 +77,10 @@ namespace SWZOS.Controllers
         {
             throw new NotImplementedException();
         }
+
+        public JsonResult AddToBlackList()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
