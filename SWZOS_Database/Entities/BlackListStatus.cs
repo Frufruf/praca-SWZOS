@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace SWZOS_Database.Entities
 {
-    internal class ReservationPayments
+    public class BlackListStatus
     {
         public int Id { get; set; }
-        public int ReservationId { get; set; }
-        public string PriceListId { get; set; }
-
+        public string Name { get; set; }
+        public ICollection<BlackList> BlackList { get; set; }
     }
 }

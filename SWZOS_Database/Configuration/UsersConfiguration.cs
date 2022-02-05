@@ -11,11 +11,11 @@ namespace SWZOS_Database.Configuration
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.HasKey(e => e.Id);
+            builder.HasKey(e => e.UserId);
 
             builder.ToTable("USERS");
 
-            builder.Property(e => e.Id)
+            builder.Property(e => e.UserId)
                 .HasColumnName("USER_ID")
                 .IsRequired();
 
@@ -49,12 +49,23 @@ namespace SWZOS_Database.Configuration
                 .IsRequired();
 
             builder.Property(e => e.PasswordSalt)
-                .HasColumnName("PASSWORD_SALT");
-            //.IsRequired();
+                .HasColumnName("PASSWORD_SALT")
+                .IsRequired();
 
             builder.Property(e => e.PasswordHash)
-                .HasColumnName("PASSWORD_HASH");
-                //.IsRequired();
+                .HasColumnName("PASSWORD_HASH")
+                .IsRequired();
+
+            builder.Property(e => e.PasswordExpirationDate)
+                .HasColumnName("PASSWORD_EXPIRATION_DATE");
+
+            builder.HasMany(e => e.Reservations)
+                .WithOne(r => r.User)
+                .HasForeignKey(r => r.UserId);
+
+            builder.HasOne<BlackList>(e => e.BlackList)
+                .WithOne(b => b.User)
+                .HasForeignKey<BlackList>(b => b.UserId);
         }
     }
 }

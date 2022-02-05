@@ -22,5 +22,8 @@ namespace SWZOS_Database.Entities
         public int ReservationStatus { get; set; }
         //Opis (dodatkowe informacje)
         public string Description { get; set; }
+        public User User { get; set; }
+        public Pitch Pitch { get; set; }
+        public List<Payment> Payments { get; set; }
     }
 }

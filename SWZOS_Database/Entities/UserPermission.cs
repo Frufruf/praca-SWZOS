@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace SWZOS_Database.Entities
 {
-    public class Item
+    public class UserPermission
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public int Quantity { get; set; }
-
+        public int UserId { get; set; }
+        public int PermissionId { get; set; }
     }
 }

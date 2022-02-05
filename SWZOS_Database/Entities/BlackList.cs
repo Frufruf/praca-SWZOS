@@ -12,9 +12,12 @@ namespace SWZOS_Database.Entities
         public int Id { get; set; }
         //Klucz obcy użytkownika z zakazem wstępu na teren obiektu
         public int UserId { get; set; }
+        //Klucz obcy statusu wpisu na czarną listę
+        public int StatusId { get; set; }
         //Powód wpisania na czarną listę
         public string Reason { get; set; }
-        //Flaga obsługująca usunięcie z czarnej listy
-        public bool DeletedFlag { get; set; }
+       
+        public User User { get; set; }
+        public BlackListStatus BlackListStatus { get; set; }
     }
 }

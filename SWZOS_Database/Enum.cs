@@ -20,5 +20,19 @@ namespace SWZOS_Database
             Basketball = 3,
             Volleyball = 4
         }
+
+        public enum ReservationStatusEnum
+        {
+            Canceled = 1,
+            Paid = 2
+        }
+
+        public enum BlackListStatusEnum
+        {
+            WaitingForApproval = 1,
+            Approved = 2,
+            Rejected = 3,
+            Deleted = 4
+        }
     }
 }

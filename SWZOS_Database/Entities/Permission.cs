@@ -8,7 +8,8 @@ namespace SWZOS_Database.Entities
 {
     public class Permission
     {
-        public int Id { get; set; }
+        public int PermissionId { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
     }
 }

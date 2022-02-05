@@ -17,10 +17,17 @@ namespace SWZOS_Database.Configuration.Seeds
             );
 
             modelBuilder.Entity<PitchType>().HasData(
-                new PitchType { Id = 1, PitchTypeName = "Football pitch" },
-                new PitchType { Id = 2, PitchTypeName = "Basketball pitch"},
-                new PitchType { Id = 3, PitchTypeName = "Volleyball pitch" },
-                new PitchType { Id = 4, PitchTypeName = "Tennis court" }
+                new PitchType { PitchTypeId = 1, PitchTypeName = "Football pitch" },
+                new PitchType { PitchTypeId = 2, PitchTypeName = "Basketball pitch"},
+                new PitchType { PitchTypeId = 3, PitchTypeName = "Volleyball pitch" },
+                new PitchType { PitchTypeId = 4, PitchTypeName = "Tennis court" }
+            );
+
+            modelBuilder.Entity<BlackListStatus>().HasData(
+                new BlackListStatus { Id = 1, Name = "Waiting for approval" },
+                new BlackListStatus { Id = 2, Name = "Approved" },
+                new BlackListStatus { Id = 3, Name = "Rejected" },
+                new BlackListStatus { Id = 4, Name = "Deleted" }
             );
         }
     }

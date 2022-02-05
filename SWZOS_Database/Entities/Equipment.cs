@@ -6,17 +6,16 @@ using System.Threading.Tasks;
 
 namespace SWZOS_Database.Entities
 {
-    public class PriceList
+    public class Equipment
     {
         //PK
         public int Id { get; set; }
-        //Nazwa przedmiotu z cennika
+        //Nazwa sprzętu
         public string Name { get; set; }
-        //Cena za godzinę wynajmu/wypożyczenia
-        public double Price { get; set; }
-        //Opis pozycji w cenniku
+        //Ilość sprzętu w magazynie
+        public int Quantity { get; set; }
+        //Opis sprzętu
         public string Description { get; set; }
-
 
     }
 }

@@ -6,7 +6,7 @@ namespace SWZOS_Database.Entities
 {
     public class User
     {
-        public int Id { get; set; }
+        public int UserId { get; set; }
         public string Login { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
@@ -17,7 +17,10 @@ namespace SWZOS_Database.Entities
         public string PasswordSalt { get; set; }
         public string PasswordHash { get; set; }
         public DateTime PasswordExpirationDate { get; set; }
-
+        public bool ActiveFlag { get; set; }
+        public bool DeletedFlag { get; set; }
         public UserType UserType { get; set; }
+        public BlackList BlackList { get; set; }
+        public List<Reservation> Reservations { get; set; } 
     }
 }
