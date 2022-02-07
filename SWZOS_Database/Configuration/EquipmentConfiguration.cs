@@ -32,8 +32,7 @@ namespace SWZOS_Database.Configuration
 
             builder.Property(e => e.Description)
                 .HasColumnName("DESCRIPTION")
-                .HasMaxLength(4000)
-                .IsRequired();
+                .HasMaxLength(4000);
         }
     }
 }

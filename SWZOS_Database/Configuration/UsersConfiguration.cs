@@ -42,7 +42,8 @@ namespace SWZOS_Database.Configuration
                 .HasColumnName("PHONE_NUMBER");
 
             builder.Property(e => e.MailAddress)
-                .HasColumnName("EMAIL_ADDRESS");
+                .HasColumnName("EMAIL_ADDRESS")
+                .IsRequired();
 
             builder.Property(e => e.UserTypeId)
                 .HasColumnName("USER_TYPE_ID")

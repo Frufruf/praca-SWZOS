@@ -39,7 +39,7 @@ namespace SWZOS_Database.Configuration
 
             builder.Property(e => e.ReservationPrice)
                 .HasColumnName("PRICE")
-                .HasPrecision(18, 2)
+                .HasColumnType("decimal(18, 2)")
                 .IsRequired();
 
             builder.Property(e => e.ReservationStatus)

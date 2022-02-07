@@ -31,16 +31,16 @@ namespace SWZOS_Database.Configuration
 
             builder.Property(e => e.FullFee)
                 .HasColumnName("FULL_FEE")
-                .HasPrecision(18, 2)
+                .HasColumnType("decimal(18, 2)")
                 .IsRequired();
 
             builder.Property(e => e.AdvancePayment)
                 .HasColumnName("ADVANCE_PAYMENT")
-                .HasPrecision(18, 2);
+                .HasColumnType("decimal(18, 2)");
 
             builder.Property(e => e.PaidInAmmount)
                 .HasColumnName("PAID_IN_AMMOUNT")
-                .HasPrecision(18, 2)
+                .HasColumnType("decimal(18, 2)")
                 .IsRequired();
 
             builder.Property(e => e.StatusId)
