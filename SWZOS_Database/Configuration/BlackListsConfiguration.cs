@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SWZOS_Database.Configuration
 {
-    class BlackListConfiguration: IEntityTypeConfiguration<BlackList>
+    class BlackListsConfiguration: IEntityTypeConfiguration<BlackList>
     {
         public void Configure(EntityTypeBuilder<BlackList> builder)
         {
@@ -31,7 +31,7 @@ namespace SWZOS_Database.Configuration
                 .IsRequired();
 
             builder.Property(e => e.StatusId)
-                .HasColumnName("STATUS")
+                .HasColumnName("STATUS_ID")
                 .IsRequired();
 
         }

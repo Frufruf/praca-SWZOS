@@ -25,7 +25,7 @@ namespace SWZOS_Database.Configuration
                 .HasColumnName("NAME")
                 .IsRequired();
 
-            builder.HasMany(e => e.BlackList)
+            builder.HasMany(e => e.BlackLists)
                 .WithOne(b => b.BlackListStatus)
                 .HasForeignKey(b => b.StatusId);
         }

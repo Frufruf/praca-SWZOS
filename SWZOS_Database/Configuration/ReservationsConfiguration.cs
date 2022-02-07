@@ -50,9 +50,9 @@ namespace SWZOS_Database.Configuration
                 .HasColumnName("DESCRIPTION")
                 .HasMaxLength(4000);
 
-            builder.HasMany(e => e.Payments)
+            builder.HasOne<Payment>(e => e.Payment)
                 .WithOne(p => p.Reservation)
-                .HasForeignKey(p => p.ReservationId);
+                .HasForeignKey<Payment>(p => p.ReservationId);
         }
     }
 }

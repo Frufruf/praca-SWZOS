@@ -16,5 +16,7 @@ namespace SWZOS_Database.Entities
         public int EquipmentId  { get; set; }
         //Ilość sztuk wypożyczonego sprzętu
         public int Quantity { get; set; }   
+        public Reservation Reservation { get; set; }
+        public Equipment Equipment { get; set; }
     }
 }

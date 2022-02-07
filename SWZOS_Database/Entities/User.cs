@@ -22,5 +22,6 @@ namespace SWZOS_Database.Entities
         public UserType UserType { get; set; }
         public BlackList BlackList { get; set; }
         public List<Reservation> Reservations { get; set; } 
+        public List<UserPermission> UserPermissions { get; set; }
     }
 }

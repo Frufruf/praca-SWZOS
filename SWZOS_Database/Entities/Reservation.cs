@@ -24,6 +24,7 @@ namespace SWZOS_Database.Entities
         public string Description { get; set; }
         public User User { get; set; }
         public Pitch Pitch { get; set; }
-        public List<Payment> Payments { get; set; }
+        public Payment Payment { get; set; }
+        public List<ReservationEquipment> ReservationsEquipment { get; set; }
     }
 }

@@ -16,6 +16,7 @@ namespace SWZOS_Database.Entities
         public int Quantity { get; set; }
         //Opis sprzętu
         public string Description { get; set; }
+        public List<ReservationEquipment> ReservationsEquipment { get; set; }
 
     }
 }

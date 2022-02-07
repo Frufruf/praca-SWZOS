@@ -25,18 +25,32 @@ namespace SWZOS_Database.Configuration
                 .HasColumnName("RESERVATION_ID")
                 .IsRequired();
 
-            builder.Property(e => e.Fee)
-                .HasColumnName("FEE")
+            builder.Property(e => e.UserId)
+                .HasColumnName("USER_ID")
+                .IsRequired();
+
+            builder.Property(e => e.FullFee)
+                .HasColumnName("FULL_FEE")
                 .HasPrecision(18, 2)
                 .IsRequired();
 
-            builder.Property(e => e.IsSettled)
-                .HasColumnName("IS_SETTLED")
+            builder.Property(e => e.AdvancePayment)
+                .HasColumnName("ADVANCE_PAYMENT")
+                .HasPrecision(18, 2);
+
+            builder.Property(e => e.PaidInAmmount)
+                .HasColumnName("PAID_IN_AMMOUNT")
+                .HasPrecision(18, 2)
+                .IsRequired();
+
+            builder.Property(e => e.StatusId)
+                .HasColumnName("PAYMENT_STATUS_ID")
                 .IsRequired();
 
             builder.Property(e => e.Description)
                 .HasColumnName("DESCRIPTION")
                 .HasMaxLength(4000);
+
         }
     }
 }

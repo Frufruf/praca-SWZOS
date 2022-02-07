@@ -59,6 +59,14 @@ namespace SWZOS_Database.Configuration
             builder.Property(e => e.PasswordExpirationDate)
                 .HasColumnName("PASSWORD_EXPIRATION_DATE");
 
+            builder.Property(e => e.ActiveFlag)
+                .HasColumnName("ACTIVE_FLAG")
+                .IsRequired();
+
+            builder.Property(e => e.DeletedFlag)
+                .HasColumnName("DELETED_FLAG")
+                .IsRequired();
+
             builder.HasMany(e => e.Reservations)
                 .WithOne(r => r.User)
                 .HasForeignKey(r => r.UserId);

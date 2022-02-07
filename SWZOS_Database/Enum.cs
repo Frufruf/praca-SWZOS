@@ -34,5 +34,10 @@ namespace SWZOS_Database
             Rejected = 3,
             Deleted = 4
         }
+
+        public enum PaymentStatusEnum
+        {
+
+        }
     }
 }
