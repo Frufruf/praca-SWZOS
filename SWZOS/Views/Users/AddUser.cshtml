@@ -1,20 +1,11 @@
 ﻿@model SWZOS.Models.User.UserFormModel
 <script>
-    let UserFormUrl = {
-        AddUserUrl: "@Url.Action("AddUser", "Users")",
-        EditUserUrl: "@Url.Action("EditUser", "Users")",
-        DeleteUserUrl: "@Url.Action("DeleteUser", "Users")"
-    }
-
-    let isEditForm = "@Model.IsEditForm";
+    var CreateUserUrl = "@Url.Action("AddUser", "Users")";
+   
 </script>
 <div>
-    <form id="UserForm">
+    <form id="AddUserForm">
         <div class="row">
-            @if (Model.IsEditForm)
-            {
-                <input hidden disabled asp-for="Id"/>
-            }
             <div class="col-6">
                 <div class="form-group">
                     <label asp-for="Login">Login:</label>

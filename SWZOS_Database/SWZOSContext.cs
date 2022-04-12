@@ -13,10 +13,8 @@ namespace SWZOS_Database
 
         }
 
-        //public DbSet<Pitch> Pitches { get; set; }
-        //public DbSet<Reservation> Reservations { get; set; }
-        //public DbSet<UserType> UserTypes { get; set; }
-        //public DbSet<IdentityUser> USERS { get; set; }
+
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

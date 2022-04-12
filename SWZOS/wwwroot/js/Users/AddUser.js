@@ -2,7 +2,7 @@
     $('#SubmitUserForm').on('click', function () {
         //TODO na późniejszym etapie walidacja
 
-        let form = $('#UserForm');
+        let form = $('#AddUserForm');
         let formData = new FormData(form[0]);
 
         $.ajax({

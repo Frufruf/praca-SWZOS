@@ -33,13 +33,9 @@ namespace SWZOS.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddUser()
+        public IActionResult CreateUser()
         {
-            var model = new UserFormModel
-            {
-                IsEditForm = false
-            };
-            return View("~/Views/Users/UserForm.cshtml", model);
+            return View();
         }
 
         [HttpPost]

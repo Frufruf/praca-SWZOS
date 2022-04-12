@@ -38,11 +38,11 @@ namespace SWZOS.Repositories
                 MailAddress = model.MailAddress,
                 PhoneNumber = model.PhoneNumber,
                 UserTypeId = (int)UserTypesEnum.Customer,
-                PasswordExpirationDate = DateTime.Now.AddDays(180)
+                PasswordExpirationDate = DateTime.Now.AddDays(200)
             };
 
-            //_db.Users.Add(user);
-            //SaveChanges();
+            _db.Users.Add(user);
+            SaveChanges();
         }
 
         public void EditUser(UserFormModel model)
