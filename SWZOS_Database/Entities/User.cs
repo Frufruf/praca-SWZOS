@@ -19,6 +19,7 @@ namespace SWZOS_Database.Entities
         public DateTime PasswordExpirationDate { get; set; }
         public bool ActiveFlag { get; set; }
         public bool DeletedFlag { get; set; }
+        public string PasswordTemp { get; set; }
         public UserType UserType { get; set; }
         public BlackList BlackList { get; set; }
         public List<Reservation> Reservations { get; set; } 

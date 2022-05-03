@@ -12,13 +12,19 @@ namespace SWZOS.Models.User
         public int Id { get; set; }
         [Required]
         public string Login { get; set; }
+        [Required]
         public string Password { get; set; }
+        [Required]
         public string ConfirmedPassowrd { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string Surname { get; set; }
         public string PhoneNumber { get; set; }
         public string PESEL { get; set; }
         [Required]
         public string MailAddress { get; set; }
+        public string Hash { get; set; }
+        public string Salt { get; set; }
     }
 }

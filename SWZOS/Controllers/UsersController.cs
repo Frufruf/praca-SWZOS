@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using SWZOS.Models.User;
 using SWZOS.Repositories;
 using System;
@@ -18,43 +19,33 @@ namespace SWZOS.Controllers
         public IActionResult Index()
         {
             return View();
-        }
+        }        
 
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult AddUser()
         {
             return View();
         }
 
         [HttpPost]
-        public JsonResult Login(LoginModel model)
+        public ActionResult AddUser(UserFormModel model)
         {
-            throw new NotImplementedException();
-        }
-
-        [HttpGet]
-        public IActionResult CreateUser()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public JsonResult AddUser(UserFormModel model)
-        {
+            _usersRepository.ValidateUserFormModel(model, ModelState); //Walidacja przy tworzeniu konta
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _usersRepository.AddUser(model);
-                    return Json(new { success = true });
+                    _usersRepository.AddUser(model); //Dodanie użytkownika
+                    return RedirectToAction("Login", "Account"); //Przekierowanie na stronę logowania
                 }
                 catch (Exception ex)
                 {
-                    var errorMessage = ex.Message;
-                    return Json(new { success = false, errorMessage = errorMessage });
+                    Log.Logger.Error(ex.Message);
+                    ModelState.AddModelError("", "Wystąpił nieoczekiwany błąd");
+                    return View(model);
                 }
             }
-            return Json(new { success = false });
+            return View(model);
         }
 
         [HttpGet]

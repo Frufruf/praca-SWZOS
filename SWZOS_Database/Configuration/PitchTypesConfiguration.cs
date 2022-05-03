@@ -22,7 +22,7 @@ namespace SWZOS_Database.Configuration
                 .IsRequired();
 
             builder.Property(e => e.PitchTypeName)
-                .HasColumnName("PitchTypeName")
+                .HasColumnName("PITCH_TYPE_NAME")
                 .HasMaxLength(100)
                 .IsRequired();
 
