@@ -1,4 +1,5 @@
-﻿using SWZOS.Models.User;
+﻿using SWZOS.Models.Account;
+using SWZOS.Models.User;
 using System;
 using System.Security.Cryptography;
 
@@ -10,30 +11,33 @@ namespace SWZOS.Utils
         private const int HASH_SIZE = 32;
         private const int ITERATIONS = 8500;
 
-        public void CreateHashForUser(UserFormModel user)
+        public static HashedPasswordModel GetHashedPasswordModel(string password)
         {
+            var hashedPassword = new HashedPasswordModel();
             var salt = new byte[SALT_SIZE];
             var provider = RandomNumberGenerator.Create();
             provider.GetBytes(salt);
 
-            Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(user.Password, salt, ITERATIONS);
+            Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(password, salt, ITERATIONS);
             var hash = pbkdf2.GetBytes(HASH_SIZE);
 
-            user.Hash = Convert.ToBase64String(hash);
-            user.Salt = Convert.ToBase64String(salt);
+            hashedPassword.Hash = Convert.ToBase64String(hash);
+            hashedPassword.Salt = Convert.ToBase64String(salt);
+
+            return hashedPassword;
         }
 
-        public bool ValidatePassword(string password, string passwordHash, string passwordSalt)
+        public static bool ValidatePassword(string password, string passwordHash, string passwordSalt)
         {
-            var oldHash = Convert.FromBase64String(passwordHash);
+            var correctHash = Convert.FromBase64String(passwordHash);
             var salt = Convert.FromBase64String(passwordSalt);
 
             Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(password, salt, ITERATIONS);
             var hash = pbkdf2.GetBytes(HASH_SIZE);
-            return SlowEquals(oldHash, hash);
+            return SlowEquals(correctHash, hash);
         }
 
-        public bool SlowEquals(byte[] a, byte[] b)
+        public static bool SlowEquals(byte[] a, byte[] b)
         {
             uint diff = (uint)a.Length ^ (uint)b.Length;
             for (int i = 0; i < a.Length && i < b.Length; i++)

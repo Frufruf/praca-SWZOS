@@ -12,8 +12,8 @@ using SWZOS_Database;
 namespace SWZOS.Migrations
 {
     [DbContext(typeof(SWZOSContext))]
-    [Migration("20220207210147_configurations_fix")]
-    partial class configurations_fix
+    [Migration("20220504113311_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -248,7 +248,7 @@ namespace SWZOS.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
-                        .HasColumnName("PitchTypeName");
+                        .HasColumnName("PITCH_TYPE_NAME");
 
                     b.HasKey("PitchTypeId");
 

@@ -246,7 +246,7 @@ namespace SWZOS.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
-                        .HasColumnName("PitchTypeName");
+                        .HasColumnName("PITCH_TYPE_NAME");
 
                     b.HasKey("PitchTypeId");
 
@@ -382,11 +382,6 @@ namespace SWZOS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("PASSWORD_SALT");
-
-                    b.Property<string>("PasswordTemp")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("PASSWORD_TEMP");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)")

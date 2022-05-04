@@ -20,20 +20,9 @@ namespace SWZOS.Repositories
 
         }
 
-        public void AuthenticateUser(LoginModel model)
-        {
-            //var currentUser = _db.Users.Where(a => a.Login == model.LoginOrEmail || a.MailAddress == model.LoginOrEmail)
-            //            .Select(a => new CurrentUser
-            //            {
-            //                Login = a.Login,
-
-            //            }).FirstOrDefault();
-        }
-
         public void AddUser(UserFormModel model)
         {
-            var hasher = new PasswordHash();
-            hasher.CreateHashForUser(model);
+            var hashedPassword = PasswordHash.GetHashedPasswordModel(model.Password);
 
             var user = new User
             {
@@ -45,10 +34,9 @@ namespace SWZOS.Repositories
                 PhoneNumber = model.PhoneNumber,
                 UserTypeId = (int)UserTypesEnum.Customer,
                 ActiveFlag = true,
-                PasswordExpirationDate = DateTime.Now.AddDays(200),
-                PasswordTemp = model.Password,
-                PasswordHash = model.Hash,
-                PasswordSalt = model.Salt
+                PasswordExpirationDate = DateTime.Now.AddDays(365),
+                PasswordHash = hashedPassword.Hash,
+                PasswordSalt = hashedPassword.Salt
             };
 
             _db.Users.Add(user);
@@ -58,6 +46,8 @@ namespace SWZOS.Repositories
         public void EditUser(UserFormModel model)
         {
             var user = _db.Users.FirstOrDefault(u => u.UserId == model.Id);
+
+
             throw new NotImplementedException();
         }
 
@@ -77,7 +67,7 @@ namespace SWZOS.Repositories
 
         public void ValidateUserFormModel(UserFormModel user, ModelStateDictionary modelState)
         {
-            if (user.Password != user.ConfirmedPassowrd) 
+            if (user.Password != user.ConfirmedPassword) 
             {
                 modelState.AddModelError("ConfirmedPassowrd", "Wprowadzone hasło różni się");
             }

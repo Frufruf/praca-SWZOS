@@ -30,11 +30,39 @@ namespace SWZOS.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NAME = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     QUANTITY = table.Column<int>(type: "int", nullable: false),
-                    DESCRIPTION = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false)
+                    DESCRIPTION = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EQUIPMENT", x => x.ITEM_ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PAYMENTS_STATUS",
+                columns: table => new
+                {
+                    PAYMENT_STATUS_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NAME = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PAYMENTS_STATUS", x => x.PAYMENT_STATUS_ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PERMISSIONS",
+                columns: table => new
+                {
+                    PERMISSION_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NAME = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    DESCRIPTION = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true),
+                    DELETED_FLAG = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PERMISSIONS", x => x.PERMISSION_ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -43,7 +71,7 @@ namespace SWZOS.Migrations
                 {
                     PITCH_TYPE_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PitchTypeName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    PITCH_TYPE_NAME = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -70,7 +98,7 @@ namespace SWZOS.Migrations
                     PITCH_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PITCH_TYPE_ID = table.Column<int>(type: "int", nullable: false),
-                    PRICE = table.Column<double>(type: "float(18)", precision: 18, scale: 2, nullable: false),
+                    PRICE = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ACTIVE_FLAG = table.Column<bool>(type: "bit", nullable: false),
                     DESCRIPTION = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true)
                 },
@@ -96,13 +124,13 @@ namespace SWZOS.Migrations
                     SURNAME = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PESEL = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: true),
                     PHONE_NUMBER = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EMAIL_ADDRESS = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EMAIL_ADDRESS = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     USER_TYPE_ID = table.Column<int>(type: "int", nullable: false),
                     PASSWORD_SALT = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PASSWORD_HASH = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PASSWORD_EXPIRATION_DATE = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ActiveFlag = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedFlag = table.Column<bool>(type: "bit", nullable: false)
+                    ACTIVE_FLAG = table.Column<bool>(type: "bit", nullable: false),
+                    DELETED_FLAG = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -122,15 +150,15 @@ namespace SWZOS.Migrations
                     BLACK_LIST_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     USER_ID = table.Column<int>(type: "int", nullable: false),
-                    STATUS = table.Column<int>(type: "int", nullable: false),
+                    STATUS_ID = table.Column<int>(type: "int", nullable: false),
                     REASON = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BLACK_LIST", x => x.BLACK_LIST_ID);
                     table.ForeignKey(
-                        name: "FK_BLACK_LIST_BLACK_LIST_STATUS_STATUS",
-                        column: x => x.STATUS,
+                        name: "FK_BLACK_LIST_BLACK_LIST_STATUS_STATUS_ID",
+                        column: x => x.STATUS_ID,
                         principalTable: "BLACK_LIST_STATUS",
                         principalColumn: "BLACK_LIST_STATUS_ID",
                         onDelete: ReferentialAction.Cascade);
@@ -152,7 +180,7 @@ namespace SWZOS.Migrations
                     PITCH_ID = table.Column<int>(type: "int", nullable: false),
                     START_DATE = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DURATION = table.Column<int>(type: "int", nullable: false),
-                    PRICE = table.Column<double>(type: "float(18)", precision: 18, scale: 2, nullable: false),
+                    PRICE = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     STATUS = table.Column<int>(type: "int", nullable: false),
                     DESCRIPTION = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true)
                 },
@@ -174,19 +202,52 @@ namespace SWZOS.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "USER_PERMISSIONS",
+                columns: table => new
+                {
+                    USER_ID = table.Column<int>(type: "int", nullable: false),
+                    PERMISSION_ID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_USER_PERMISSIONS", x => new { x.USER_ID, x.PERMISSION_ID });
+                    table.ForeignKey(
+                        name: "FK_USER_PERMISSIONS_PERMISSIONS_PERMISSION_ID",
+                        column: x => x.PERMISSION_ID,
+                        principalTable: "PERMISSIONS",
+                        principalColumn: "PERMISSION_ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_USER_PERMISSIONS_USERS_USER_ID",
+                        column: x => x.USER_ID,
+                        principalTable: "USERS",
+                        principalColumn: "USER_ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PAYMENTS",
                 columns: table => new
                 {
                     PAYMENT_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RESERVATION_ID = table.Column<int>(type: "int", nullable: false),
-                    FEE = table.Column<double>(type: "float(18)", precision: 18, scale: 2, nullable: false),
-                    IS_SETTLED = table.Column<bool>(type: "bit", nullable: false),
+                    USER_ID = table.Column<int>(type: "int", nullable: false),
+                    FULL_FEE = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ADVANCE_PAYMENT = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    PAID_IN_AMMOUNT = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PAYMENT_STATUS_ID = table.Column<int>(type: "int", nullable: false),
                     DESCRIPTION = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PAYMENTS", x => x.PAYMENT_ID);
+                    table.ForeignKey(
+                        name: "FK_PAYMENTS_PAYMENTS_STATUS_PAYMENT_STATUS_ID",
+                        column: x => x.PAYMENT_STATUS_ID,
+                        principalTable: "PAYMENTS_STATUS",
+                        principalColumn: "PAYMENT_STATUS_ID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PAYMENTS_RESERVATIONS_RESERVATION_ID",
                         column: x => x.RESERVATION_ID,
@@ -195,10 +256,37 @@ namespace SWZOS.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "RESERVATIONS_EQUIPMENT",
+                columns: table => new
+                {
+                    RESERVATION_EQUIPMENT_ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RESERVATION_ID = table.Column<int>(type: "int", nullable: false),
+                    EQUIPMENT_ID = table.Column<int>(type: "int", nullable: false),
+                    QUANTITY = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RESERVATIONS_EQUIPMENT", x => x.RESERVATION_EQUIPMENT_ID);
+                    table.ForeignKey(
+                        name: "FK_RESERVATIONS_EQUIPMENT_EQUIPMENT_EQUIPMENT_ID",
+                        column: x => x.EQUIPMENT_ID,
+                        principalTable: "EQUIPMENT",
+                        principalColumn: "ITEM_ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RESERVATIONS_EQUIPMENT_RESERVATIONS_RESERVATION_ID",
+                        column: x => x.RESERVATION_ID,
+                        principalTable: "RESERVATIONS",
+                        principalColumn: "RESERVATION_ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_BLACK_LIST_STATUS",
+                name: "IX_BLACK_LIST_STATUS_ID",
                 table: "BLACK_LIST",
-                column: "STATUS");
+                column: "STATUS_ID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BLACK_LIST_USER_ID",
@@ -207,9 +295,15 @@ namespace SWZOS.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_PAYMENTS_PAYMENT_STATUS_ID",
+                table: "PAYMENTS",
+                column: "PAYMENT_STATUS_ID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PAYMENTS_RESERVATION_ID",
                 table: "PAYMENTS",
-                column: "RESERVATION_ID");
+                column: "RESERVATION_ID",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_PITCHES_PITCH_TYPE_ID",
@@ -227,6 +321,21 @@ namespace SWZOS.Migrations
                 column: "USER_ID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RESERVATIONS_EQUIPMENT_EQUIPMENT_ID",
+                table: "RESERVATIONS_EQUIPMENT",
+                column: "EQUIPMENT_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RESERVATIONS_EQUIPMENT_RESERVATION_ID",
+                table: "RESERVATIONS_EQUIPMENT",
+                column: "RESERVATION_ID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_USER_PERMISSIONS_PERMISSION_ID",
+                table: "USER_PERMISSIONS",
+                column: "PERMISSION_ID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_USERS_USER_TYPE_ID",
                 table: "USERS",
                 column: "USER_TYPE_ID");
@@ -238,16 +347,28 @@ namespace SWZOS.Migrations
                 name: "BLACK_LIST");
 
             migrationBuilder.DropTable(
-                name: "EQUIPMENT");
+                name: "PAYMENTS");
 
             migrationBuilder.DropTable(
-                name: "PAYMENTS");
+                name: "RESERVATIONS_EQUIPMENT");
+
+            migrationBuilder.DropTable(
+                name: "USER_PERMISSIONS");
 
             migrationBuilder.DropTable(
                 name: "BLACK_LIST_STATUS");
 
             migrationBuilder.DropTable(
+                name: "PAYMENTS_STATUS");
+
+            migrationBuilder.DropTable(
+                name: "EQUIPMENT");
+
+            migrationBuilder.DropTable(
                 name: "RESERVATIONS");
+
+            migrationBuilder.DropTable(
+                name: "PERMISSIONS");
 
             migrationBuilder.DropTable(
                 name: "PITCHES");

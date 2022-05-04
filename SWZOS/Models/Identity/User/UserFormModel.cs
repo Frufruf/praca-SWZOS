@@ -15,7 +15,7 @@ namespace SWZOS.Models.User
         [Required]
         public string Password { get; set; }
         [Required]
-        public string ConfirmedPassowrd { get; set; }
+        public string ConfirmedPassword { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]

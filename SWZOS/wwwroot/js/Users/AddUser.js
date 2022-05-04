@@ -1,26 +1,26 @@
 ﻿$(function () {
-    $('#SubmitUserForm').on('click', function () {
-        //TODO na późniejszym etapie walidacja
+    //$('#SubmitUserForm').on('click', function () {
+    //    //TODO na późniejszym etapie walidacja
 
-        let form = $('#AddUserForm');
-        let formData = new FormData(form[0]);
+    //    let form = $('#AddUserForm');
+    //    let formData = new FormData(form[0]);
 
-        $.ajax({
-            type: 'POST',
-            url: UserFormUrl.AddUserUrl,
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                if (data.success) {
+    //    $.ajax({
+    //        type: 'POST',
+    //        url: UserFormUrl.AddUserUrl,
+    //        data: formData,
+    //        processData: false,
+    //        contentType: false,
+    //        success: function (data) {
+    //            if (data.success) {
 
-                } else {
-                    alert(data.errorMessage);
-                }
-            },
-            error: function (error) {
+    //            } else {
+    //                alert(data.errorMessage);
+    //            }
+    //        },
+    //        error: function (error) {
 
-            }
-        });
-    });
+    //        }
+    //    });
+    //});
 });
