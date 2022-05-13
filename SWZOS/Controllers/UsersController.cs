@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using SWZOS.Models.User;
 using SWZOS.Repositories;
@@ -16,6 +17,8 @@ namespace SWZOS.Controllers
         {
             _usersRepository = usersRepository;
         }
+
+        //[Authorize]
         public IActionResult Index()
         {
             return View();
@@ -51,7 +54,7 @@ namespace SWZOS.Controllers
         [HttpGet]
         public IActionResult EditUser(int userId)
         {
-            var user = _usersRepository.GetUserById(userId);
+            var user = _usersRepository.GetUserFormById(userId);
             return View("~/Views/Users/UserForm.cshtml", user);
         }
 

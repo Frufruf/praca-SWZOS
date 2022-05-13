@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SWZOS.Models.User;
 using SWZOS.Repositories;
 using SWZOS_Database;
 using System;
@@ -39,6 +41,8 @@ namespace SWZOS
             {
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
+
+            services.AddHttpContextAccessor();
 
             services.AddMvc();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
@@ -74,6 +78,15 @@ namespace SWZOS
 
             app.UseAuthentication();
             app.UseAuthorization();
+            
+
+            //TODO poczytaæ o polityce Cookies
+            var cookiePolicyOptions = new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Strict
+            };
+
+            app.UseCookiePolicy(cookiePolicyOptions);
 
             app.UseEndpoints(endpoints =>
             {

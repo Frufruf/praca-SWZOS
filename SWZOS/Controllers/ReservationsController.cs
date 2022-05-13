@@ -8,5 +8,23 @@ namespace SWZOS.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult AddReservation()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult EditReservation(int reservationId)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CancelReservation(int reservationId)
+        {
+            return RedirectToAction("Index");
+        }
     }
 }

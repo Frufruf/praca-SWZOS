@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 using SWZOS.Models.Account;
 using SWZOS.Models.User;
 using SWZOS.Repositories;
 using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace SWZOS.Controllers
 {
@@ -22,11 +27,38 @@ namespace SWZOS.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginModel model)
+        public async Task<IActionResult> Login(LoginModel model)
         {
-            var result = _accountRepository.AuthenticateUser(model);
-            if (result == true)
+            var user = _accountRepository.AuthenticateUser(model);
+            if (user != null)
             {
+                //TODO odpowiednie ustawienie roli
+                var userRole = "Customer";
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.MailAddress),
+                    new Claim("FullName", user.Name + " " + user.Surname),
+                    new Claim(ClaimTypes.Role, userRole),
+                };
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var authProperties = new AuthenticationProperties
+                {
+                    AllowRefresh = true,
+                    IssuedUtc = DateTimeOffset.UtcNow,
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(60),
+                    IsPersistent = true
+                    //RedirectUri = <string>
+                    // The full path or absolute URI to be used as an http 
+                    // redirect response value.
+                };
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity),
+                    authProperties);
+
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -37,9 +69,10 @@ namespace SWZOS.Controllers
         }
 
         [HttpGet]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            return View();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -55,7 +88,6 @@ namespace SWZOS.Controllers
             if (ModelState.IsValid)
             {
                 _accountRepository.ChangePassword(model);
-                //TODO Wyloguj użytkownika i przekieruj na stronę logowania
                 return RedirectToAction("Login");
             }
             return View(model);

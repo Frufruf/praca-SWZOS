@@ -3,6 +3,7 @@ using SWZOS.Models.Account;
 using SWZOS.Models.User;
 using SWZOS.Utils;
 using SWZOS_Database;
+using SWZOS_Database.Entities;
 using System;
 using System.Linq;
 
@@ -15,21 +16,23 @@ namespace SWZOS.Repositories
 
         }
 
-        public bool AuthenticateUser(LoginModel model)
+        public User AuthenticateUser(LoginModel model)
         {
             var user = _db.Users.Where(u => u.Login == model.Login).FirstOrDefault();
             if (user != null && PasswordHash.ValidatePassword(model.Password, user.PasswordHash, user.PasswordSalt))
             {
-                return true;
+                return user;
             }
-            return false;
+            return null;
         }
 
         public void ValidatePasswordChange(PasswordChangeModel model, ModelStateDictionary modelState)
         {
             //TODO Podmienić na currentUser
-            var user = _db.Users.Where(u => u.UserId == model.UserId).FirstOrDefault();
-            if (!AuthenticateUser(new LoginModel() { Login = user.Login, Password = model.CurrentPassword }))
+            var login = _db.Users.Where(u => u.UserId == model.UserId).FirstOrDefault().Login;
+            var user = AuthenticateUser(new LoginModel() { Login = login, Password = model.CurrentPassword }); 
+
+            if (user == null)
             {
                 modelState.AddModelError("CurrentPassword", "Niepoprawne hasło");
             }

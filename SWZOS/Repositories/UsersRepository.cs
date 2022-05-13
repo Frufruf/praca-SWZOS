@@ -51,7 +51,7 @@ namespace SWZOS.Repositories
             throw new NotImplementedException();
         }
 
-        public UserFormModel GetUserById(int userId)
+        public UserFormModel GetUserFormById(int userId)
         {
             return _db.Users.Where(a => a.UserId == userId).Select(a => new UserFormModel
             {
