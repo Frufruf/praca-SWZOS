@@ -10,8 +10,6 @@ namespace SWZOS_Database.Entities
         public int PitchId { get; set; }
         //Typ boiska
         public int PitchTypeId { get; set; }
-        //Cena za godzinę wynajmu
-        public double Price { get; set; }
         //Flaga obsługująca wyłączenie boiska z użytku
         public bool ActiveFlag { get; set; }
         //Opis boiska

@@ -16,6 +16,10 @@ namespace SWZOS_Database.Entities
         public int StatusId { get; set; }
         //Powód wpisania na czarną listę
         public string Reason { get; set; }
+        //Data dodania wpisu
+        //public DateTime Created { get; set; }
+        //Id twórcy wpisu
+        //public int CreateUserId { get; set; }
        
         public User User { get; set; }
         public BlackListStatus BlackListStatus { get; set; }

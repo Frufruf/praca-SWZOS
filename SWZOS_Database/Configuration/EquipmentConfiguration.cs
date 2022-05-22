@@ -33,6 +33,11 @@ namespace SWZOS_Database.Configuration
             builder.Property(e => e.Description)
                 .HasColumnName("DESCRIPTION")
                 .HasMaxLength(4000);
+
+            builder.Property(e => e.Price)
+                .HasColumnName("PRICE")
+                .HasColumnType("decimal(18, 2)")
+                .IsRequired();
         }
     }
 }

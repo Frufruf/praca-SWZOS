@@ -26,6 +26,11 @@ namespace SWZOS_Database.Configuration
                 .HasMaxLength(100)
                 .IsRequired();
 
+            builder.Property(e => e.PitchTypePrice)
+                .HasColumnName("PITCH_TYPE_PRICE")
+                .HasColumnType("decimal(18, 2)")
+                .IsRequired();
+
             builder.HasMany(e => e.Pitches)
                 .WithOne(p => p.PitchType)
                 .HasForeignKey(p => p.PitchTypeId);

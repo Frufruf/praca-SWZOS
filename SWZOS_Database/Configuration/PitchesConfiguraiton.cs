@@ -23,11 +23,6 @@ namespace SWZOS_Database.Configuration
                 .HasColumnName("PITCH_TYPE_ID")
                 .IsRequired();
 
-            builder.Property(e => e.Price)
-                .HasColumnName("PRICE")
-                .HasColumnType("decimal(18, 2)")
-                .IsRequired();
-
             builder.Property(e => e.ActiveFlag)
                 .HasColumnName("ACTIVE_FLAG")
                 .IsRequired();

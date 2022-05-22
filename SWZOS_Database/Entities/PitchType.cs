@@ -12,6 +12,8 @@ namespace SWZOS_Database.Entities
         public int PitchTypeId { get; set; }
         //Nazwa typu boiska
         public string PitchTypeName { get; set; }
+        //Cena za godzinę wynajmu
+        public double PitchTypePrice { get; set; }
         public List<Pitch> Pitches { get; set; }
 
     }

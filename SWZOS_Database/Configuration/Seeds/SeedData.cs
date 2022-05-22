@@ -17,10 +17,10 @@ namespace SWZOS_Database.Configuration.Seeds
             );
 
             modelBuilder.Entity<PitchType>().HasData(
-                new PitchType { PitchTypeId = 1, PitchTypeName = "Football pitch" },
-                new PitchType { PitchTypeId = 2, PitchTypeName = "Basketball pitch"},
-                new PitchType { PitchTypeId = 3, PitchTypeName = "Volleyball pitch" },
-                new PitchType { PitchTypeId = 4, PitchTypeName = "Tennis court" }
+                new PitchType { PitchTypeId = 1, PitchTypeName = "Boisko piłkarskie" },
+                new PitchType { PitchTypeId = 2, PitchTypeName = "Boisko do koszykówki"},
+                new PitchType { PitchTypeId = 3, PitchTypeName = "Boisko do siatkówki" },
+                new PitchType { PitchTypeId = 4, PitchTypeName = "Kort tenisowy" }
             );
 
             modelBuilder.Entity<BlackListStatus>().HasData(

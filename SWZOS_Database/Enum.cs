@@ -39,5 +39,13 @@ namespace SWZOS_Database
         {
 
         }
+
+        //Rodzaje pozycji w cenniku
+        public enum PriceListItemTypeEnum
+        {
+            Pitch = 1,
+            Equipment = 2,
+            Other = 3
+        }
     }
 }
