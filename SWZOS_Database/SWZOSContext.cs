@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using SWZOS_Database.Configuration.Seeds;
 
 namespace SWZOS_Database
 {
@@ -33,6 +34,7 @@ namespace SWZOS_Database
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(SWZOSContext).Assembly);
+            modelBuilder.SeedData();
         }
     }
 }

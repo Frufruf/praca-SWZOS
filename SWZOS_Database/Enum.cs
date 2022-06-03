@@ -23,8 +23,10 @@ namespace SWZOS_Database
 
         public enum ReservationStatusEnum
         {
-            Canceled = 1,
-            Paid = 2
+            Active = 1,
+            Paid = 2,
+            Canceled = 3,
+            Deleted = 4
         }
 
         public enum BlackListStatusEnum
