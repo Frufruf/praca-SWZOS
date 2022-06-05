@@ -28,6 +28,14 @@ namespace SWZOS.Repositories
 
         public void ValidatePasswordChange(PasswordChangeModel model, ModelStateDictionary modelState)
         {
+            if (model.NewPassword != model.ConfirmedPassword)
+            {
+                modelState.AddModelError("ConfirmedPassowrd", "Wprowadzone hasło różni się");
+            }
+            else if (model.NewPassword.Length < 5)
+            {
+                modelState.AddModelError("NewPassword", "Nowe hasło musi posiadać co najmniej 5 znaków");
+            }
             //TODO Podmienić na currentUser
             var login = _db.Users.Where(u => u.UserId == model.UserId).FirstOrDefault().Login;
             var user = AuthenticateUser(new LoginModel() { Login = login, Password = model.CurrentPassword }); 
@@ -36,10 +44,7 @@ namespace SWZOS.Repositories
             {
                 modelState.AddModelError("CurrentPassword", "Niepoprawne hasło");
             }
-            if (model.NewPassword != model.ConfirmedPassword)
-            {
-                modelState.AddModelError("ConfirmedPassowrd", "Wprowadzone hasło różni się");
-            }
+            
         }
 
         public void ChangePassword(PasswordChangeModel model)

@@ -19,6 +19,7 @@ namespace SWZOS.Repositories
             { 
                 UserId = a.UserId,
                 StatusId = a.StatusId,
+                StatusName = a.BlackListStatus.Name,
                 FullName = a.User.Name + " " + a.User.Surname,
                 Reason = a.Reason
             }).ToList();

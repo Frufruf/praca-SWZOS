@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SWZOS.Models.BlackList;
 using SWZOS.Repositories;
 
 namespace SWZOS.Controllers
@@ -14,12 +15,22 @@ namespace SWZOS.Controllers
         public IActionResult Index()
         {
             var model = _blackListRepository.GetBlackListFull();
-            return View();
+            return View(model);
         }
 
         [HttpGet]
         public IActionResult AddToBlackList(int userId)
         {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddToBlackList(BlackListFormModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                _blackListRepository.AddToBlackList(model);
+            }
             return View();
         }
     }
