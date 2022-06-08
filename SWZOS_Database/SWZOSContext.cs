@@ -9,6 +9,7 @@ namespace SWZOS_Database
 {
     public class SWZOSContext: DbContext
     {
+        
         public SWZOSContext(DbContextOptions options): base(options)
         {
 

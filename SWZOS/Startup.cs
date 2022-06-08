@@ -55,6 +55,7 @@ namespace SWZOS
             services.AddScoped<AccountRepository, AccountRepository>();
             services.AddScoped<ReservationsRepository, ReservationsRepository>();
             services.AddScoped<PriceListRepository, PriceListRepository>();
+            services.AddScoped<BlackListRepository, BlackListRepository>();
 
             #endregion
         }

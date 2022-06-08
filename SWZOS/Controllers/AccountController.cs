@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SWZOS.Models.Account;
 using SWZOS.Models.User;
@@ -14,10 +15,12 @@ namespace SWZOS.Controllers
     public class AccountController : Controller
     {
         private AccountRepository _accountRepository;
+        private IHttpContextAccessor _httpContextAccessor;
 
-        public AccountController(AccountRepository accountRepository)
+        public AccountController(AccountRepository accountRepository, IHttpContextAccessor httpContextAccessor)
         {
             _accountRepository = accountRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]

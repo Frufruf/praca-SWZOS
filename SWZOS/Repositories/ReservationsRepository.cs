@@ -88,7 +88,11 @@ namespace SWZOS.Repositories
         public ReservationFullFormModel ValidateReservation(ReservationFormModel model, ModelStateDictionary modelState)
         {
             //TODO Sprawdzenie czy w wybranym terminie są dostępne boiska dla danego typu
-            throw new NotImplementedException();
+
+
+            var reservation = new ReservationFullFormModel(model);
+            reservation.Price = CountReservationPrice(model);
+            return reservation;
         }
 
         //Metoda obliczająca pełną kwotę rezerwacji na podstawie wybranego boiska, czasu rezerwacji i wypożyczonego sprzętu
@@ -107,11 +111,33 @@ namespace SWZOS.Repositories
         }
 
 
-        public void EditReservation(ReservationFormModel model)
+        public void EditReservation(ReservationFullFormModel model)
         {
+            var transaction = _db.Database.BeginTransaction();
             var reservation = _db.Reservations.Where(a => a.ReservationId == model.ReservationId).FirstOrDefault();
 
+            reservation.ReservationStartDate = model.StartDate;
+            reservation.ReservationDuration = model.Duration;
+            reservation.Description = model.Description;
+            
+            var equipment = _db.ReservationsEquipment.Where(a => a.ReservationId == reservation.ReservationId).ToList();
+            _db.ReservationsEquipment.RemoveRange(equipment);
+            _db.SaveChanges();
 
+            var equipmentList = new List<ReservationEquipment>();
+            foreach (var eq in model.EquipmentList)
+            {
+                var reservationEquipment = new ReservationEquipment
+                {
+                    ReservationId = reservation.ReservationId,
+                    EquipmentId = eq.Id,
+                    Quantity = eq.Quantity
+                };
+                equipmentList.Add(reservationEquipment);
+            }
+            _db.ReservationsEquipment.AddRange(equipmentList);
+            _db.SaveChanges();
+            transaction.Commit();
         }
 
         //Metoda usuwająca rezerwację z systemu

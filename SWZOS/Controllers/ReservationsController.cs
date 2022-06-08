@@ -54,6 +54,27 @@ namespace SWZOS.Controllers
         }
 
         [HttpPost]
+        public IActionResult EditReservation(ReservationFormModel model)
+        {
+            var reservation = _reservationsRepository.ValidateReservation(model, ModelState);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _reservationsRepository.EditReservation(reservation);
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    Log.Logger.Error(ex.Message);
+                    ModelState.AddModelError("", "Wystąpił nieoczekiwany błąd");
+                    return View(model);
+                }
+            }
+            return View(model);
+        }
+
+        [HttpPost]
         public IActionResult CancelReservation(int reservationId)
         {
             _reservationsRepository.CancelReservation(reservationId);
