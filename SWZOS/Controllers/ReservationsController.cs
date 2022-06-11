@@ -31,17 +31,20 @@ namespace SWZOS.Controllers
             var reservation = _reservationsRepository.ValidateReservation(model, ModelState);
             if (ModelState.IsValid)
             {
-                try
+                if (reservation != null)
                 {
-                    _reservationsRepository.AddReservation(reservation);
-                    return RedirectToAction("Index");
+                    try
+                    {
+                        _reservationsRepository.AddReservation(reservation);
+                        return RedirectToAction("Index");
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Logger.Error(ex.Message);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Log.Logger.Error(ex.Message);
-                    ModelState.AddModelError("", "Wystąpił nieoczekiwany błąd");
-                    return View(model);
-                }
+                ModelState.AddModelError("", "Wystąpił nieoczekiwany błąd");
+                return View(model);
             }
             return View(model);
         }
@@ -50,6 +53,7 @@ namespace SWZOS.Controllers
         public IActionResult EditReservation(int reservationId)
         {
             var model = _reservationsRepository.GetReservationById(reservationId);
+            model.IsEditForm = true;
             return View(model);
         }
 
@@ -59,17 +63,20 @@ namespace SWZOS.Controllers
             var reservation = _reservationsRepository.ValidateReservation(model, ModelState);
             if (ModelState.IsValid)
             {
-                try
+                if (reservation != null)
                 {
-                    _reservationsRepository.EditReservation(reservation);
-                    return RedirectToAction("Index");
+                    try
+                    {
+                        _reservationsRepository.EditReservation(reservation);
+                        return RedirectToAction("Index");
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Logger.Error(ex.Message);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Log.Logger.Error(ex.Message);
-                    ModelState.AddModelError("", "Wystąpił nieoczekiwany błąd");
-                    return View(model);
-                }
+                ModelState.AddModelError("", "Wystąpił nieoczekiwany błąd");
+                return View(model);
             }
             return View(model);
         }

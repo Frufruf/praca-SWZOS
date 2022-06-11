@@ -72,6 +72,28 @@ namespace SWZOS.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BLACK_LIST_STATUS", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Waiting for approval"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Approved"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Rejected"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Deleted"
+                        });
                 });
 
             modelBuilder.Entity("SWZOS_Database.Entities.Equipment", b =>
@@ -93,6 +115,10 @@ namespace SWZOS.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("NAME");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("PRICE");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int")
@@ -222,10 +248,6 @@ namespace SWZOS.Migrations
                         .HasColumnType("int")
                         .HasColumnName("PITCH_TYPE_ID");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)")
-                        .HasColumnName("PRICE");
-
                     b.HasKey("PitchId");
 
                     b.HasIndex("PitchTypeId");
@@ -248,9 +270,39 @@ namespace SWZOS.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("PITCH_TYPE_NAME");
 
+                    b.Property<decimal>("PitchTypePrice")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("PITCH_TYPE_PRICE");
+
                     b.HasKey("PitchTypeId");
 
                     b.ToTable("PITCH_TYPES", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            PitchTypeId = 1,
+                            PitchTypeName = "Boisko piłkarskie",
+                            PitchTypePrice = 0m
+                        },
+                        new
+                        {
+                            PitchTypeId = 2,
+                            PitchTypeName = "Boisko do koszykówki",
+                            PitchTypePrice = 0m
+                        },
+                        new
+                        {
+                            PitchTypeId = 3,
+                            PitchTypeName = "Boisko do siatkówki",
+                            PitchTypePrice = 0m
+                        },
+                        new
+                        {
+                            PitchTypeId = 4,
+                            PitchTypeName = "Kort tenisowy",
+                            PitchTypePrice = 0m
+                        });
                 });
 
             modelBuilder.Entity("SWZOS_Database.Entities.Reservation", b =>
@@ -438,6 +490,23 @@ namespace SWZOS.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("USER_TYPES", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Employee"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Customer"
+                        });
                 });
 
             modelBuilder.Entity("SWZOS_Database.Entities.BlackList", b =>

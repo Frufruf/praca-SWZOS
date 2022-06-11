@@ -87,11 +87,45 @@ namespace SWZOS.Repositories
         //TODO (Rozbić to na dwie osobne metody)
         public ReservationFullFormModel ValidateReservation(ReservationFormModel model, ModelStateDictionary modelState)
         {
-            //TODO Sprawdzenie czy w wybranym terminie są dostępne boiska dla danego typu
+            //Blokowanie edycji typu boiska
+            if (model.IsEditForm)
+            {
+                var old = _db.Reservations.Where(a => a.ReservationId == model.ReservationId).FirstOrDefault();
+                if (old.Pitch.PitchTypeId != model.PitchTypeId)
+                {
+                    modelState.AddModelError("", "Nie możesz zmienić typu zarezerwowanego boiska, w tym celu anuluj obecną rezerwację i utwórz nową");
+                    return null;
+                }
+            }       
+            //Sprawdzenie czy w wybranym terminie są dostępne boiska dla danego typu
+            //wywoływane również przy edycji (w przypadku zmiany godziny trzeba przypisać nowe boisko)
+            var endDate = model.StartDate.AddMinutes(model.Duration);
+            var busyPitches = _db.Reservations.Where(a => a.ReservationId != model.ReservationId 
+                                        && a.Pitch.PitchTypeId == model.PitchTypeId
+                                        && a.ReservationStartDate > model.StartDate
+                                        && a.ReservationStartDate < endDate).Select(a => a.PitchId).ToList();
 
+            var reservationPitchId = _db.Pitches.Where(a => !busyPitches.Contains(a.PitchId)).Select(a => a.PitchId).FirstOrDefault();
+            if (reservationPitchId == 0)
+            {
+                modelState.AddModelError("", "Brak wolnych boisk w wybranym terminie");
+                return null;
+            }
 
             var reservation = new ReservationFullFormModel(model);
-            reservation.Price = CountReservationPrice(model);
+            reservation.PitchId = reservationPitchId;
+
+            //TODO Sprawdzenie czy dostępny jest zarezerwowany sprzęt
+            //Chyba najlepiej będzie ograniczyć ilość sprzętu który można zarezerwować
+            //tak aby na każde boisko mogło starczyć piłek itd
+            //Wtedy wystarczy tu sprawdzić czy ilość sprzętu nie przekracza maksymalnej
+            //dozwolonej wartości
+            if (model.EquipmentList != null && model.EquipmentList.Count > 0)
+            {
+
+            }
+          
+            reservation.Price = CountReservationPrice(model);            
             return reservation;
         }
 

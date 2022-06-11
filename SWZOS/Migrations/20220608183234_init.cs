@@ -30,7 +30,8 @@ namespace SWZOS.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NAME = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     QUANTITY = table.Column<int>(type: "int", nullable: false),
-                    DESCRIPTION = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true)
+                    DESCRIPTION = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true),
+                    PRICE = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -71,7 +72,8 @@ namespace SWZOS.Migrations
                 {
                     PITCH_TYPE_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PITCH_TYPE_NAME = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    PITCH_TYPE_NAME = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    PITCH_TYPE_PRICE = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -98,7 +100,6 @@ namespace SWZOS.Migrations
                     PITCH_ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PITCH_TYPE_ID = table.Column<int>(type: "int", nullable: false),
-                    PRICE = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ACTIVE_FLAG = table.Column<bool>(type: "bit", nullable: false),
                     DESCRIPTION = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true)
                 },
@@ -281,6 +282,38 @@ namespace SWZOS.Migrations
                         principalTable: "RESERVATIONS",
                         principalColumn: "RESERVATION_ID",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "BLACK_LIST_STATUS",
+                columns: new[] { "BLACK_LIST_STATUS_ID", "NAME" },
+                values: new object[,]
+                {
+                    { 1, "Waiting for approval" },
+                    { 2, "Approved" },
+                    { 3, "Rejected" },
+                    { 4, "Deleted" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PITCH_TYPES",
+                columns: new[] { "PITCH_TYPE_ID", "PITCH_TYPE_NAME", "PITCH_TYPE_PRICE" },
+                values: new object[,]
+                {
+                    { 1, "Boisko piłkarskie", 0m },
+                    { 2, "Boisko do koszykówki", 0m },
+                    { 3, "Boisko do siatkówki", 0m },
+                    { 4, "Kort tenisowy", 0m }
+                });
+
+            migrationBuilder.InsertData(
+                table: "USER_TYPES",
+                columns: new[] { "USER_TYPE_ID", "NAME" },
+                values: new object[,]
+                {
+                    { 1, "Admin" },
+                    { 2, "Employee" },
+                    { 3, "Customer" }
                 });
 
             migrationBuilder.CreateIndex(

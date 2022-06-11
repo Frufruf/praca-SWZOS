@@ -1,1 +1,22 @@
 ﻿@model List<SWZOS.Models.PriceList.PriceListTypeViewModel>
+
+<table>
+    <tr>
+        <th>Rodzaj usługi</th>
+        <th>Nazwa</th>
+        <th>Cena za godzinę</th>
+        <th>Opis</th>
+    </tr>
+    <tr>
+        @foreach (var type in Model)
+        {
+            foreach (var element in type.PriceList)
+            {
+                <td>@Html.DisplayFor(item => type.PriceListItemTypeName)</td>
+                <td>@Html.DisplayFor(item => element.Name)</td>
+                <td>@Html.DisplayFor(item => element.Price)</td>
+                <td>@Html.DisplayFor(item => element.Description)</td>
+            }
+        }
+    </tr>
+</table>
