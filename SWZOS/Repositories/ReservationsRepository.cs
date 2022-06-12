@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Serilog;
 using SWZOS.Models.Reservations;
 using SWZOS_Database;
 using SWZOS_Database.Entities;
@@ -103,7 +104,9 @@ namespace SWZOS.Repositories
             var busyPitches = _db.Reservations.Where(a => a.ReservationId != model.ReservationId 
                                         && a.Pitch.PitchTypeId == model.PitchTypeId
                                         && a.ReservationStartDate > model.StartDate
-                                        && a.ReservationStartDate < endDate).Select(a => a.PitchId).ToList();
+                                        && a.ReservationStartDate < endDate
+                                        && a.ReservationStatus != (int)ReservationStatusEnum.Canceled
+                                        && a.ReservationStatus != (int)ReservationStatusEnum.Deleted).Select(a => a.PitchId).ToList();
 
             var reservationPitchId = _db.Pitches.Where(a => !busyPitches.Contains(a.PitchId)).Select(a => a.PitchId).FirstOrDefault();
             if (reservationPitchId == 0)
@@ -111,20 +114,35 @@ namespace SWZOS.Repositories
                 modelState.AddModelError("", "Brak wolnych boisk w wybranym terminie");
                 return null;
             }
+          
+            if (model.EquipmentList != null && model.EquipmentList.Count > 0)
+            {
+                foreach (var equipment in model.EquipmentList)
+                {
+                    var eq = _db.Equipment.Where(a => a.Id == equipment.Id).FirstOrDefault();
+                    if (eq == null)
+                    {
+                        modelState.AddModelError("", "Wystąpił błąd przy próbie wypożyczenia sprzętu");
+                        return null;
+                    }
+                    //Sprawdzenie czy nie przekroczono maksymalnej dozwolonej ilości sprzętu dostępnego dla rezerwacji
+                    if (equipment.Quantity > eq.MaximumQuantityPerReservation)
+                    {
+                        modelState.AddModelError("", "Przekroczono maksymalną wartość dostępnego sprzętu dla " + eq.Name 
+                                                    + ". Możesz wypożyczyć maksymalnie " + eq.MaximumQuantityPerReservation + " sztuk.");
+                        return null;
+                    }
+                    //Sprawdzenie czy wypożyczony sprzęt odpowiada boisku
+                    if (!_db.PitchTypeEquipment.Where(a => a.PitchTypeId == model.PitchTypeId && a.EquipmentId == equipment.Id).Any())
+                    {
+                        modelState.AddModelError("", "Na wybrany typ obiektu nie możesz wypożyczyć " + eq.Name);
+                    }
+
+                }
+            }
 
             var reservation = new ReservationFullFormModel(model);
             reservation.PitchId = reservationPitchId;
-
-            //TODO Sprawdzenie czy dostępny jest zarezerwowany sprzęt
-            //Chyba najlepiej będzie ograniczyć ilość sprzętu który można zarezerwować
-            //tak aby na każde boisko mogło starczyć piłek itd
-            //Wtedy wystarczy tu sprawdzić czy ilość sprzętu nie przekracza maksymalnej
-            //dozwolonej wartości
-            if (model.EquipmentList != null && model.EquipmentList.Count > 0)
-            {
-
-            }
-          
             reservation.Price = CountReservationPrice(model);            
             return reservation;
         }
@@ -154,6 +172,8 @@ namespace SWZOS.Repositories
             reservation.ReservationDuration = model.Duration;
             reservation.Description = model.Description;
             
+
+            //Usunięcie i ponowne przypisanie wyposażenia do rezerwacji
             var equipment = _db.ReservationsEquipment.Where(a => a.ReservationId == reservation.ReservationId).ToList();
             _db.ReservationsEquipment.RemoveRange(equipment);
             _db.SaveChanges();
@@ -178,7 +198,6 @@ namespace SWZOS.Repositories
         public void DeleteReservaion(int reservationId)
         {
             var reservation = _db.Reservations.Where(a => a.ReservationId == reservationId).FirstOrDefault();
-
             if (reservation != null)
             {
                 reservation.ReservationStatus = (int)ReservationStatusEnum.Deleted;
@@ -190,7 +209,6 @@ namespace SWZOS.Repositories
         public void CancelReservation(int reservationId)
         {
             var reservation = _db.Reservations.Where(a => a.ReservationId == reservationId).FirstOrDefault();
-
             if (reservation != null)
             {
                 reservation.ReservationStatus = (int)ReservationStatusEnum.Canceled;

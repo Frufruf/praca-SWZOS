@@ -25,6 +25,7 @@ namespace SWZOS_Database
         public DbSet<ReservationEquipment> ReservationsEquipment { get; set; }
         public DbSet<Pitch> Pitches { get; set; }
         public DbSet<PitchType> PitchTypes { get; set; }
+        public DbSet<PitchTypeEquipment> PitchTypeEquipment { get; set; }
         public DbSet<BlackList> BlackList { get; set; }
         public DbSet<BlackListStatus> BlackListStatuses { get; set; }
         public DbSet<Payment> Payments { get; set; }

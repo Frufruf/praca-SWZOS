@@ -15,6 +15,7 @@ namespace SWZOS_Database.Entities
         //Cena za godzinę wynajmu
         public double PitchTypePrice { get; set; }
         public List<Pitch> Pitches { get; set; }
+        public List<PitchTypeEquipment> PitchTypeEquipment { get; set; }
 
     }
 }

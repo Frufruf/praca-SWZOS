@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using SWZOS.Models.BlackList;
 using SWZOS.Models.User;
 using SWZOS.Repositories;
 using System;
@@ -13,9 +14,12 @@ namespace SWZOS.Controllers
     public class UsersController : Controller
     {
         private UsersRepository _usersRepository;
-        public UsersController(UsersRepository usersRepository)
+        private BlackListRepository _blackListRepository;
+
+        public UsersController(UsersRepository usersRepository, BlackListRepository blackListRepository)
         {
             _usersRepository = usersRepository;
+            _blackListRepository = blackListRepository;
         }
 
         //[Authorize]
@@ -31,7 +35,7 @@ namespace SWZOS.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddUser(UserFormModel model)
+        public IActionResult AddUser(UserFormModel model)
         {
             _usersRepository.ValidateUserFormModel(model, ModelState); //Walidacja przy tworzeniu konta
             if (ModelState.IsValid)
@@ -52,10 +56,16 @@ namespace SWZOS.Controllers
         }
 
         [HttpGet]
+        public IActionResult AddEmployee()
+        {
+            return View();
+        }
+
+        [HttpGet]
         public IActionResult EditUser(int userId)
         {
             var user = _usersRepository.GetUserFormById(userId);
-            return View("~/Views/Users/UserForm.cshtml", user);
+            return View(user);
         }
 
         public JsonResult EditUser(UserFormModel model)
@@ -68,9 +78,11 @@ namespace SWZOS.Controllers
             throw new NotImplementedException();
         }
 
-        public JsonResult AddToBlackList()
+        public IActionResult AddToBlackList(BlackListFormModel model)
         {
-            throw new NotImplementedException();
+            _blackListRepository.AddToBlackList(model);
+            //TODO redirect do strony profilu użytkownika
+            return RedirectToAction("Index");
         }
     }
 }

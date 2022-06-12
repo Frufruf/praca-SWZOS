@@ -42,15 +42,15 @@ namespace SWZOS_Database.Configuration.Seeds
             );
 
             modelBuilder.Entity<Equipment>().HasData(
-                new Equipment { Id = 1, Name = "Piłka do piłki nożnej", Quantity = 20, Price = 3.00, Description = "Piłka do piłki nożnej o rozmiarze 5" },
-                new Equipment { Id = 2, Name = "Piłka do koszykówki", Quantity = 40, Price = 3.00, Description = "Piłka do koszykówki" },
-                new Equipment { Id = 3, Name = "Piłka do siatkówki", Quantity = 40, Price = 1.50, Description = "Piłka do siatkówki" },
-                new Equipment { Id = 4, Name = "Piłka do tenisa", Quantity = 200, Price = 0.00, Description = "Piłka do tenisa" },
-                new Equipment { Id = 5, Name = "Czerwone koszulki do gry", Quantity = 40, Price = 1.50, Description = "Koszulka sportowa" },
-                new Equipment { Id = 6, Name = "Niebieskie koszulki do gry", Quantity = 40, Price = 1.50, Description = "Koszulka sportowa" },
-                new Equipment { Id = 7, Name = "Białe koszulki do gry", Quantity = 40, Price = 1.50, Description = "Koszulka sportowa" },
-                new Equipment { Id = 8, Name = "Czarne koszulki do gry", Quantity = 40, Price = 1.50, Description = "Koszulka sportowa" },
-                new Equipment { Id = 9, Name = "Rakieta tenisowa", Quantity = 24, Price = 10.00, Description = "Rakieta do gry w tenisa" }
+                new Equipment { Id = 1, Name = "Piłka do piłki nożnej", Quantity = 20, Price = 3.00, Description = "Piłka do piłki nożnej o rozmiarze 5", MaximumQuantityPerReservation = 9 },
+                new Equipment { Id = 2, Name = "Piłka do koszykówki", Quantity = 35, Price = 3.00, Description = "Piłka do koszykówki", MaximumQuantityPerReservation = 10 },
+                new Equipment { Id = 3, Name = "Piłka do siatkówki", Quantity = 35, Price = 1.50, Description = "Piłka do siatkówki", MaximumQuantityPerReservation = 10 },
+                new Equipment { Id = 4, Name = "Piłka do tenisa", Quantity = 200, Price = 0.00, Description = "Piłka do tenisa", MaximumQuantityPerReservation = 30 },
+                new Equipment { Id = 5, Name = "Czerwone koszulki do gry", Quantity = 40, Price = 1.50, Description = "Koszulka sportowa", MaximumQuantityPerReservation = 18 },
+                new Equipment { Id = 6, Name = "Niebieskie koszulki do gry", Quantity = 40, Price = 1.50, Description = "Koszulka sportowa", MaximumQuantityPerReservation = 18 },
+                new Equipment { Id = 7, Name = "Białe koszulki do gry", Quantity = 40, Price = 1.50, Description = "Koszulka sportowa", MaximumQuantityPerReservation = 18 },
+                new Equipment { Id = 8, Name = "Czarne koszulki do gry", Quantity = 40, Price = 1.50, Description = "Koszulka sportowa", MaximumQuantityPerReservation = 18 },
+                new Equipment { Id = 9, Name = "Rakieta tenisowa", Quantity = 24, Price = 10.00, Description = "Rakieta do gry w tenisa", MaximumQuantityPerReservation = 4 }
             );
 
             modelBuilder.Entity<BlackListStatus>().HasData(
