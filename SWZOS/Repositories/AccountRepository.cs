@@ -16,6 +16,7 @@ namespace SWZOS.Repositories
 
         }
 
+        //TODO przerobić aby nie zwracało encji
         public User AuthenticateUser(LoginModel model)
         {
             var user = _db.Users.Where(u => u.Login == model.Login).FirstOrDefault();

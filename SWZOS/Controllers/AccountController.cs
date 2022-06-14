@@ -39,6 +39,7 @@ namespace SWZOS.Controllers
                 var userRole = "Customer";
                 var claims = new List<Claim>
                 {
+                    new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                     new Claim(ClaimTypes.Name, user.MailAddress),
                     new Claim("FullName", user.Name + " " + user.Surname),
                     new Claim(ClaimTypes.Role, userRole),
@@ -46,6 +47,7 @@ namespace SWZOS.Controllers
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
+                //TODO RedirectUri
                 var authProperties = new AuthenticationProperties
                 {
                     AllowRefresh = true,

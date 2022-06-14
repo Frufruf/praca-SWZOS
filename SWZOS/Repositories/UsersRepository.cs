@@ -10,6 +10,8 @@ using static SWZOS_Database.Enum;
 using SWZOS.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SWZOS.Utils;
+using SWZOS.Models.Reservations;
+using SWZOS.Models.Payments;
 
 namespace SWZOS.Repositories
 {
@@ -63,6 +65,41 @@ namespace SWZOS.Repositories
                 MailAddress = a.MailAddress,
                 PESEL = a.PESEL
             }).FirstOrDefault();
+        }
+
+        public UserViewModel GetUserViewModelById(int userId)
+        {
+            var user = _db.Users.Where(a => a.UserId == userId).Select(a => new UserViewModel
+            {
+                Id = userId,
+                Login = a.Login,
+                Name = a.Name,
+                Surname = a.Surname,
+                MailAddress = a.MailAddress,
+                PhoneNumber = a.PhoneNumber,
+                Reservations = a.Reservations.Select(b => new ReservationsViewModel
+                {
+                    UserId = userId,
+                    ReservationId = b.ReservationId,
+                    PitchId = b.PitchId,
+                    PitchTypeId = b.Pitch.PitchTypeId,
+                    StartDate = b.ReservationStartDate,
+                    EndDate = b.ReservationStartDate.AddMinutes(b.ReservationDuration),
+                    Price = b.ReservationPrice,
+                    Description = b.Description,
+                    Payments = new PaymentViewModel
+                    {
+                        PaymentId = b.Payment.PaymentId,
+                        FullFee = b.Payment.FullFee,
+                        PaidInAmmount = b.Payment.PaidInAmmount,
+                        AdvancePayment = b.Payment.AdvancePayment,
+                        StatusId = b.Payment.StatusId,
+                        Description = b.Description
+                    }
+                }).OrderBy(b => b.StartDate).ToList()
+            }).FirstOrDefault();
+
+            return user;
         }
 
         public void ValidateUserFormModel(UserFormModel user, ModelStateDictionary modelState)
