@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using SWZOS.Models.Reservations;
 using SWZOS.Repositories;
@@ -14,18 +15,21 @@ namespace SWZOS.Controllers
             _reservationsRepository = reservationsRepository;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             return View();
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult AddReservation()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult AddReservation(ReservationFormModel model)
         {
             var reservation = _reservationsRepository.ValidateReservation(model, ModelState);

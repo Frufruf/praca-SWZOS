@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SWZOS.Models.Account;
@@ -35,8 +36,19 @@ namespace SWZOS.Controllers
             var user = _accountRepository.AuthenticateUser(model);
             if (user != null)
             {
-                //TODO odpowiednie ustawienie roli
-                var userRole = "Customer";
+                var userRole = "";
+                switch (user.UserTypeId)
+                {
+                    case 1:
+                        userRole = "Admin";
+                        break;
+                    case 2:
+                        userRole = "Employee";
+                        break;
+                    default:
+                        userRole = "Customer";
+                        break;
+                }
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
@@ -81,12 +93,14 @@ namespace SWZOS.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult ChangePassword()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult ChangePassword(PasswordChangeModel model)
         {
             _accountRepository.ValidatePasswordChange(model, ModelState);

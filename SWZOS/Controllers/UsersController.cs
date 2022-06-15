@@ -23,7 +23,6 @@ namespace SWZOS.Controllers
             _blackListRepository = blackListRepository;
         }
 
-        //[Authorize]
         public IActionResult Index()
         {
             return View();
@@ -64,6 +63,7 @@ namespace SWZOS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult AddEmployee()
         {
             return View();
@@ -84,6 +84,11 @@ namespace SWZOS.Controllers
         public JsonResult DeleteUser(int userId)
         {
             throw new NotImplementedException();
+        }
+
+        public IActionResult AddToBlackList(int userId)
+        {
+            return View();
         }
 
         public IActionResult AddToBlackList(BlackListFormModel model)
