@@ -34,6 +34,26 @@ namespace SWZOS.Repositories
             return result;
         }
 
+        //Metoda pobierająca wszystkie rezerwacje w dniu dzisiejszym
+        public List<ReservationsViewModel> GetTodayReservations()
+        {
+            var result = _db.Reservations.Where(a => a.ReservationStartDate.Day == DateTime.Now.Day
+                                    && a.ReservationStatus != (int)ReservationStatusEnum.Canceled
+                                    && a.ReservationStatus != (int)ReservationStatusEnum.Deleted)
+            .Select(a => new ReservationsViewModel
+            {
+                UserId = a.UserId,
+                ReservationId = a.ReservationId,
+                PitchId = a.PitchId,
+                StartDate = a.ReservationStartDate,
+                EndDate = a.ReservationStartDate.AddMinutes(a.ReservationDuration),
+                Price = a.ReservationPrice,
+                Description = a.Description
+            }).ToList();
+
+            return result;
+        }
+
         public ReservationFormModel GetReservationById(int reservationId)
         {
             return _db.Reservations.Where(a => a.ReservationId == reservationId).Select(a => new ReservationFormModel
@@ -55,7 +75,7 @@ namespace SWZOS.Repositories
             var reservation = new Reservation
             {
                 PitchId = model.PitchId,
-                UserId = model.UserId, //TODO zalogowany użytkownik
+                UserId = model.UserId,
                 ReservationStartDate = model.StartDate,
                 ReservationDuration = model.Duration,
                 ReservationPrice = model.Price,

@@ -30,8 +30,9 @@ namespace SWZOS.Controllers
         
         public IActionResult Details()
         {
+            //TODO obsługa parsowania Id użytkownika
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = _usersRepository.GetUserViewModelById(Int32.Parse(userId));
+            var user = _usersRepository.GetUserViewModel(Int32.Parse(userId));
             return View(user);
         }
 
@@ -41,6 +42,7 @@ namespace SWZOS.Controllers
             return View();
         }
 
+        //TODO przenieść do AccountController
         [HttpPost]
         public IActionResult AddUser(UserFormModel model)
         {
@@ -50,6 +52,10 @@ namespace SWZOS.Controllers
                 try
                 {
                     _usersRepository.AddUser(model); //Dodanie użytkownika
+                    //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);
+                    //var message = new Message(new string[] { user.Email }, "Confirmation email link", confirmationLink, null);
+                    //await _emailSender.SendEmailAsync(message);
                     return RedirectToAction("Login", "Account"); //Przekierowanie na stronę logowania
                 }
                 catch (Exception ex)

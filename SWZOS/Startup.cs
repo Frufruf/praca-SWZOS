@@ -3,12 +3,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SWZOS.Models.User;
 using SWZOS.Repositories;
+using SWZOS.Services;
 using SWZOS_Database;
 using System;
 using System.Collections.Generic;
@@ -48,6 +50,8 @@ namespace SWZOS
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddDbContext<SWZOSContext>(a =>
                 a.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("SWZOS")));
+
+            services.AddTransient<IEmailSender, EmailSender>();
 
             #region DependencyInjection
 

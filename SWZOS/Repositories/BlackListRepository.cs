@@ -25,6 +25,18 @@ namespace SWZOS.Repositories
             }).ToList();
         }
 
+        public BlackListFormModel GetBlackListFormModelByUserId (int userId)
+        {
+            return _db.BlackList.Where(a => a.UserId == userId).Select(a => new BlackListFormModel
+            {
+                Id = a.Id,
+                UserId = a.UserId,
+                StatusId = a.StatusId,
+                FullName = a.User.Name + " " + a.User.Surname,
+                Reason = a.Reason
+            }).FirstOrDefault();
+        }
+
         public void AddToBlackList(BlackListFormModel model)
         {
             var entity = new BlackList

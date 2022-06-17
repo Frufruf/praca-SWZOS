@@ -49,7 +49,7 @@ namespace SWZOS.Repositories
         {
             var user = _db.Users.FirstOrDefault(u => u.UserId == model.Id);
 
-
+            user.PhoneNumber = model.PhoneNumber;
             throw new NotImplementedException();
         }
 
@@ -67,7 +67,7 @@ namespace SWZOS.Repositories
             }).FirstOrDefault();
         }
 
-        public UserViewModel GetUserViewModelById(int userId)
+        public UserViewModel GetUserViewModel(int userId)
         {
             var user = _db.Users.Where(a => a.UserId == userId).Select(a => new UserViewModel
             {
@@ -97,6 +97,21 @@ namespace SWZOS.Repositories
                         Description = b.Description
                     }
                 }).OrderBy(b => b.StartDate).ToList()
+            }).FirstOrDefault();
+
+            return user;
+        }
+
+        public UserSimpleModel GetUserSimpleModel (int userId)
+        {
+            var user = _db.Users.Where(a => a.UserId == userId).Select(a => new UserSimpleModel
+            {
+                Id = userId,
+                Login = a.Login,
+                Name = a.Name,
+                Surname = a.Surname,
+                MailAddress = a.MailAddress,
+                PhoneNumber = a.PhoneNumber,
             }).FirstOrDefault();
 
             return user;

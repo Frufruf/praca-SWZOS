@@ -4,6 +4,7 @@ using Serilog;
 using SWZOS.Models.Reservations;
 using SWZOS.Repositories;
 using System;
+using System.Security.Claims;
 
 namespace SWZOS.Controllers
 {
@@ -25,7 +26,8 @@ namespace SWZOS.Controllers
         [Authorize]
         public IActionResult AddReservation()
         {
-            return View();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return View(new ReservationFormModel { UserId = Int32.Parse(userId) });
         }
 
         [HttpPost]
