@@ -12,17 +12,88 @@ using SWZOS_Database;
 namespace SWZOS.Migrations
 {
     [DbContext(typeof(SWZOSContext))]
-    [Migration("20220608183234_init")]
+    [Migration("20220621200332_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IdentityRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IdentityUsers");
+                });
 
             modelBuilder.Entity("SWZOS_Database.Entities.BlackList", b =>
                 {
@@ -112,6 +183,9 @@ namespace SWZOS.Migrations
                         .HasColumnType("nvarchar(4000)")
                         .HasColumnName("DESCRIPTION");
 
+                    b.Property<int>("MaximumQuantityPerReservation")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -129,6 +203,89 @@ namespace SWZOS.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EQUIPMENT", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Piłka do piłki nożnej o rozmiarze 5",
+                            MaximumQuantityPerReservation = 9,
+                            Name = "Piłka do piłki nożnej",
+                            Price = 3m,
+                            Quantity = 20
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Piłka do koszykówki",
+                            MaximumQuantityPerReservation = 10,
+                            Name = "Piłka do koszykówki",
+                            Price = 3m,
+                            Quantity = 35
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Piłka do siatkówki",
+                            MaximumQuantityPerReservation = 10,
+                            Name = "Piłka do siatkówki",
+                            Price = 1.5m,
+                            Quantity = 35
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Piłka do tenisa",
+                            MaximumQuantityPerReservation = 30,
+                            Name = "Piłka do tenisa",
+                            Price = 0m,
+                            Quantity = 200
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "Koszulka sportowa",
+                            MaximumQuantityPerReservation = 18,
+                            Name = "Czerwone koszulki do gry",
+                            Price = 1.5m,
+                            Quantity = 40
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Description = "Koszulka sportowa",
+                            MaximumQuantityPerReservation = 18,
+                            Name = "Niebieskie koszulki do gry",
+                            Price = 1.5m,
+                            Quantity = 40
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Description = "Koszulka sportowa",
+                            MaximumQuantityPerReservation = 18,
+                            Name = "Białe koszulki do gry",
+                            Price = 1.5m,
+                            Quantity = 40
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Description = "Koszulka sportowa",
+                            MaximumQuantityPerReservation = 18,
+                            Name = "Czarne koszulki do gry",
+                            Price = 1.5m,
+                            Quantity = 40
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Description = "Rakieta do gry w tenisa",
+                            MaximumQuantityPerReservation = 4,
+                            Name = "Rakieta tenisowa",
+                            Price = 10m,
+                            Quantity = 24
+                        });
                 });
 
             modelBuilder.Entity("SWZOS_Database.Entities.Payment", b =>
@@ -255,6 +412,106 @@ namespace SWZOS.Migrations
                     b.HasIndex("PitchTypeId");
 
                     b.ToTable("PITCHES", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            PitchId = 1,
+                            ActiveFlag = true,
+                            Desription = "Boisko do piłki nożnej",
+                            PitchTypeId = 1
+                        },
+                        new
+                        {
+                            PitchId = 2,
+                            ActiveFlag = true,
+                            Desription = "Boisko do piłki nożnej",
+                            PitchTypeId = 1
+                        },
+                        new
+                        {
+                            PitchId = 3,
+                            ActiveFlag = true,
+                            Desription = "Boisko do koszykówki",
+                            PitchTypeId = 3
+                        },
+                        new
+                        {
+                            PitchId = 4,
+                            ActiveFlag = true,
+                            Desription = "Boisko do koszykówki",
+                            PitchTypeId = 3
+                        },
+                        new
+                        {
+                            PitchId = 5,
+                            ActiveFlag = true,
+                            Desription = "Boisko do koszykówki",
+                            PitchTypeId = 3
+                        },
+                        new
+                        {
+                            PitchId = 6,
+                            ActiveFlag = true,
+                            Desription = "Boisko do siatkówki",
+                            PitchTypeId = 4
+                        },
+                        new
+                        {
+                            PitchId = 7,
+                            ActiveFlag = true,
+                            Desription = "Boisko do siatkówki",
+                            PitchTypeId = 4
+                        },
+                        new
+                        {
+                            PitchId = 8,
+                            ActiveFlag = true,
+                            Desription = "Boisko do siatkówki",
+                            PitchTypeId = 4
+                        },
+                        new
+                        {
+                            PitchId = 9,
+                            ActiveFlag = true,
+                            Desription = "Kort tenisowy",
+                            PitchTypeId = 2
+                        },
+                        new
+                        {
+                            PitchId = 10,
+                            ActiveFlag = true,
+                            Desription = "Kort tenisowy",
+                            PitchTypeId = 2
+                        },
+                        new
+                        {
+                            PitchId = 11,
+                            ActiveFlag = true,
+                            Desription = "Kort tenisowy",
+                            PitchTypeId = 2
+                        },
+                        new
+                        {
+                            PitchId = 12,
+                            ActiveFlag = true,
+                            Desription = "Kort tenisowy",
+                            PitchTypeId = 2
+                        },
+                        new
+                        {
+                            PitchId = 13,
+                            ActiveFlag = true,
+                            Desription = "Kort tenisowy",
+                            PitchTypeId = 2
+                        },
+                        new
+                        {
+                            PitchId = 14,
+                            ActiveFlag = true,
+                            Desription = "Kort tenisowy",
+                            PitchTypeId = 2
+                        });
                 });
 
             modelBuilder.Entity("SWZOS_Database.Entities.PitchType", b =>
@@ -285,26 +542,43 @@ namespace SWZOS.Migrations
                         {
                             PitchTypeId = 1,
                             PitchTypeName = "Boisko piłkarskie",
-                            PitchTypePrice = 0m
+                            PitchTypePrice = 120m
                         },
                         new
                         {
                             PitchTypeId = 2,
                             PitchTypeName = "Boisko do koszykówki",
-                            PitchTypePrice = 0m
+                            PitchTypePrice = 80m
                         },
                         new
                         {
                             PitchTypeId = 3,
                             PitchTypeName = "Boisko do siatkówki",
-                            PitchTypePrice = 0m
+                            PitchTypePrice = 80m
                         },
                         new
                         {
                             PitchTypeId = 4,
                             PitchTypeName = "Kort tenisowy",
-                            PitchTypePrice = 0m
+                            PitchTypePrice = 50m
                         });
+                });
+
+            modelBuilder.Entity("SWZOS_Database.Entities.PitchTypeEquipment", b =>
+                {
+                    b.Property<int>("PitchTypeId")
+                        .HasColumnType("int")
+                        .HasColumnName("PITCH_TYPE_ID");
+
+                    b.Property<int>("EquipmentId")
+                        .HasColumnType("int")
+                        .HasColumnName("EQUIPMENT_ID");
+
+                    b.HasKey("PitchTypeId", "EquipmentId");
+
+                    b.HasIndex("EquipmentId");
+
+                    b.ToTable("PITCH_TYPE_EQUIPMENT", (string)null);
                 });
 
             modelBuilder.Entity("SWZOS_Database.Entities.Reservation", b =>
@@ -560,6 +834,25 @@ namespace SWZOS.Migrations
                     b.Navigation("PitchType");
                 });
 
+            modelBuilder.Entity("SWZOS_Database.Entities.PitchTypeEquipment", b =>
+                {
+                    b.HasOne("SWZOS_Database.Entities.Equipment", "Equipment")
+                        .WithMany("PitchTypeEquipment")
+                        .HasForeignKey("EquipmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SWZOS_Database.Entities.PitchType", "PitchType")
+                        .WithMany("PitchTypeEquipment")
+                        .HasForeignKey("PitchTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Equipment");
+
+                    b.Navigation("PitchType");
+                });
+
             modelBuilder.Entity("SWZOS_Database.Entities.Reservation", b =>
                 {
                     b.HasOne("SWZOS_Database.Entities.Pitch", "Pitch")
@@ -635,6 +928,8 @@ namespace SWZOS.Migrations
 
             modelBuilder.Entity("SWZOS_Database.Entities.Equipment", b =>
                 {
+                    b.Navigation("PitchTypeEquipment");
+
                     b.Navigation("ReservationsEquipment");
                 });
 
@@ -655,6 +950,8 @@ namespace SWZOS.Migrations
 
             modelBuilder.Entity("SWZOS_Database.Entities.PitchType", b =>
                 {
+                    b.Navigation("PitchTypeEquipment");
+
                     b.Navigation("Pitches");
                 });
 

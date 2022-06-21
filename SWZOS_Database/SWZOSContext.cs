@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using SWZOS_Database.Configuration.Seeds;
+using Microsoft.AspNetCore.Identity;
 
 namespace SWZOS_Database
 {
@@ -15,7 +16,9 @@ namespace SWZOS_Database
 
         }
 
-
+        public DbSet<IdentityUser> IdentityUsers { get; set; }
+        public DbSet<IdentityRole> IdentityRoles { get; set; }
+        //public DbSet<IdentityUserRole<>> IdentityUserRole { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserType> UserTypes { get; set; }
         public DbSet<Permission> Permissions { get; set; }

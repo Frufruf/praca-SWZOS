@@ -31,11 +31,51 @@ namespace SWZOS.Migrations
                     NAME = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     QUANTITY = table.Column<int>(type: "int", nullable: false),
                     DESCRIPTION = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true),
-                    PRICE = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    PRICE = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    MaximumQuantityPerReservation = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EQUIPMENT", x => x.ITEM_ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IdentityRoles",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IdentityRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IdentityUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IdentityUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -91,6 +131,30 @@ namespace SWZOS.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_USER_TYPES", x => x.USER_TYPE_ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PITCH_TYPE_EQUIPMENT",
+                columns: table => new
+                {
+                    PITCH_TYPE_ID = table.Column<int>(type: "int", nullable: false),
+                    EQUIPMENT_ID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PITCH_TYPE_EQUIPMENT", x => new { x.PITCH_TYPE_ID, x.EQUIPMENT_ID });
+                    table.ForeignKey(
+                        name: "FK_PITCH_TYPE_EQUIPMENT_EQUIPMENT_EQUIPMENT_ID",
+                        column: x => x.EQUIPMENT_ID,
+                        principalTable: "EQUIPMENT",
+                        principalColumn: "ITEM_ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PITCH_TYPE_EQUIPMENT_PITCH_TYPES_PITCH_TYPE_ID",
+                        column: x => x.PITCH_TYPE_ID,
+                        principalTable: "PITCH_TYPES",
+                        principalColumn: "PITCH_TYPE_ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -296,14 +360,30 @@ namespace SWZOS.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "EQUIPMENT",
+                columns: new[] { "ITEM_ID", "DESCRIPTION", "MaximumQuantityPerReservation", "NAME", "PRICE", "QUANTITY" },
+                values: new object[,]
+                {
+                    { 1, "Piłka do piłki nożnej o rozmiarze 5", 9, "Piłka do piłki nożnej", 3m, 20 },
+                    { 2, "Piłka do koszykówki", 10, "Piłka do koszykówki", 3m, 35 },
+                    { 3, "Piłka do siatkówki", 10, "Piłka do siatkówki", 1.5m, 35 },
+                    { 4, "Piłka do tenisa", 30, "Piłka do tenisa", 0m, 200 },
+                    { 5, "Koszulka sportowa", 18, "Czerwone koszulki do gry", 1.5m, 40 },
+                    { 6, "Koszulka sportowa", 18, "Niebieskie koszulki do gry", 1.5m, 40 },
+                    { 7, "Koszulka sportowa", 18, "Białe koszulki do gry", 1.5m, 40 },
+                    { 8, "Koszulka sportowa", 18, "Czarne koszulki do gry", 1.5m, 40 },
+                    { 9, "Rakieta do gry w tenisa", 4, "Rakieta tenisowa", 10m, 24 }
+                });
+
+            migrationBuilder.InsertData(
                 table: "PITCH_TYPES",
                 columns: new[] { "PITCH_TYPE_ID", "PITCH_TYPE_NAME", "PITCH_TYPE_PRICE" },
                 values: new object[,]
                 {
-                    { 1, "Boisko piłkarskie", 0m },
-                    { 2, "Boisko do koszykówki", 0m },
-                    { 3, "Boisko do siatkówki", 0m },
-                    { 4, "Kort tenisowy", 0m }
+                    { 1, "Boisko piłkarskie", 120m },
+                    { 2, "Boisko do koszykówki", 80m },
+                    { 3, "Boisko do siatkówki", 80m },
+                    { 4, "Kort tenisowy", 50m }
                 });
 
             migrationBuilder.InsertData(
@@ -314,6 +394,27 @@ namespace SWZOS.Migrations
                     { 1, "Admin" },
                     { 2, "Employee" },
                     { 3, "Customer" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PITCHES",
+                columns: new[] { "PITCH_ID", "ACTIVE_FLAG", "DESCRIPTION", "PITCH_TYPE_ID" },
+                values: new object[,]
+                {
+                    { 1, true, "Boisko do piłki nożnej", 1 },
+                    { 2, true, "Boisko do piłki nożnej", 1 },
+                    { 3, true, "Boisko do koszykówki", 3 },
+                    { 4, true, "Boisko do koszykówki", 3 },
+                    { 5, true, "Boisko do koszykówki", 3 },
+                    { 6, true, "Boisko do siatkówki", 4 },
+                    { 7, true, "Boisko do siatkówki", 4 },
+                    { 8, true, "Boisko do siatkówki", 4 },
+                    { 9, true, "Kort tenisowy", 2 },
+                    { 10, true, "Kort tenisowy", 2 },
+                    { 11, true, "Kort tenisowy", 2 },
+                    { 12, true, "Kort tenisowy", 2 },
+                    { 13, true, "Kort tenisowy", 2 },
+                    { 14, true, "Kort tenisowy", 2 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -337,6 +438,11 @@ namespace SWZOS.Migrations
                 table: "PAYMENTS",
                 column: "RESERVATION_ID",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PITCH_TYPE_EQUIPMENT_EQUIPMENT_ID",
+                table: "PITCH_TYPE_EQUIPMENT",
+                column: "EQUIPMENT_ID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PITCHES_PITCH_TYPE_ID",
@@ -380,7 +486,16 @@ namespace SWZOS.Migrations
                 name: "BLACK_LIST");
 
             migrationBuilder.DropTable(
+                name: "IdentityRoles");
+
+            migrationBuilder.DropTable(
+                name: "IdentityUsers");
+
+            migrationBuilder.DropTable(
                 name: "PAYMENTS");
+
+            migrationBuilder.DropTable(
+                name: "PITCH_TYPE_EQUIPMENT");
 
             migrationBuilder.DropTable(
                 name: "RESERVATIONS_EQUIPMENT");
