@@ -128,7 +128,8 @@ namespace SWZOS.Repositories
                                         && a.ReservationStatus != (int)ReservationStatusEnum.Canceled
                                         && a.ReservationStatus != (int)ReservationStatusEnum.Deleted).Select(a => a.PitchId).ToList();
 
-            var reservationPitchId = _db.Pitches.Where(a => !busyPitches.Contains(a.PitchId)).Select(a => a.PitchId).FirstOrDefault();
+            var reservationPitchId = _db.Pitches.Where(a => (a.ActiveFlag || a.OutOfServiceEndDate < model.StartDate)
+                                        && !busyPitches.Contains(a.PitchId)).Select(a => a.PitchId).FirstOrDefault();
             if (reservationPitchId == 0)
             {
                 modelState.AddModelError("", "Brak wolnych boisk w wybranym terminie");

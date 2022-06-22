@@ -46,10 +46,10 @@ namespace SWZOS_Database.Configuration.Seeds
                 new Equipment { Id = 2, Name = "Piłka do koszykówki", Quantity = 35, Price = 3.00, Description = "Piłka do koszykówki", MaximumQuantityPerReservation = 10 },
                 new Equipment { Id = 3, Name = "Piłka do siatkówki", Quantity = 35, Price = 1.50, Description = "Piłka do siatkówki", MaximumQuantityPerReservation = 10 },
                 new Equipment { Id = 4, Name = "Piłka do tenisa", Quantity = 200, Price = 0.00, Description = "Piłka do tenisa", MaximumQuantityPerReservation = 30 },
-                new Equipment { Id = 5, Name = "Czerwone koszulki do gry", Quantity = 40, Price = 1.50, Description = "Koszulka sportowa", MaximumQuantityPerReservation = 18 },
-                new Equipment { Id = 6, Name = "Niebieskie koszulki do gry", Quantity = 40, Price = 1.50, Description = "Koszulka sportowa", MaximumQuantityPerReservation = 18 },
-                new Equipment { Id = 7, Name = "Białe koszulki do gry", Quantity = 40, Price = 1.50, Description = "Koszulka sportowa", MaximumQuantityPerReservation = 18 },
-                new Equipment { Id = 8, Name = "Czarne koszulki do gry", Quantity = 40, Price = 1.50, Description = "Koszulka sportowa", MaximumQuantityPerReservation = 18 },
+                new Equipment { Id = 5, Name = "Czerwone lejbiki do gry", Quantity = 40, Price = 1.50, Description = "Lejbik sportowy", MaximumQuantityPerReservation = 18 },
+                new Equipment { Id = 6, Name = "Niebieskie lejbiki do gry", Quantity = 40, Price = 1.50, Description = "Lejbik sportowy", MaximumQuantityPerReservation = 18 },
+                new Equipment { Id = 7, Name = "Białe lejbiki do gry", Quantity = 40, Price = 1.50, Description = "Lejbik sportowy", MaximumQuantityPerReservation = 18 },
+                new Equipment { Id = 8, Name = "Czarne lejbiki do gry", Quantity = 40, Price = 1.50, Description = "Lejbik sportowy", MaximumQuantityPerReservation = 18 },
                 new Equipment { Id = 9, Name = "Rakieta tenisowa", Quantity = 24, Price = 10.00, Description = "Rakieta do gry w tenisa", MaximumQuantityPerReservation = 4 }
             );
 

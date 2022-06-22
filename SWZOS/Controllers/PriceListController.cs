@@ -16,5 +16,11 @@ namespace SWZOS.Controllers
             var model = _priceListRepository.GetPriceListFull();
             return View(model);
         }
+
+        //TODO edycja ceny zarówno dla boisk jak i sprzętu
+        public IActionResult EditPrice()
+        {
+            return View();
+        }
     }
 }
