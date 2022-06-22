@@ -11,11 +11,11 @@ namespace SWZOS_Database.Configuration
     {
         public void Configure(EntityTypeBuilder<Pitch> builder)
         {
-            builder.HasKey(e => e.Id);
+            builder.HasKey(e => e.PitchId);
 
             builder.ToTable("PITCHES");
 
-            builder.Property(e => e.Id)
+            builder.Property(e => e.PitchId)
                 .HasColumnName("PITCH_ID")
                 .IsRequired();
 
@@ -24,7 +24,16 @@ namespace SWZOS_Database.Configuration
                 .IsRequired();
 
             builder.Property(e => e.ActiveFlag)
-                .HasColumnName("ACTIVE_FLAG");
+                .HasColumnName("ACTIVE_FLAG")
+                .IsRequired();
+
+            builder.Property(e => e.Desription)
+                .HasColumnName("DESCRIPTION")
+                .HasMaxLength(4000);
+
+            builder.HasMany(e => e.Reservations)
+                .WithOne(r => r.Pitch)
+                .HasForeignKey(r => r.PitchId);
         }
     }
 }

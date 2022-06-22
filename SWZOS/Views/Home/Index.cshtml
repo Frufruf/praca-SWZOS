@@ -1,8 +1,13 @@
-﻿@{
+﻿<script>
+    var LoginUrl = '@Url.Action("Login", "Account")';
+
+</script>
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <h1 class="display-6">System wspomagania zarządzania obiektem sportowym</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+<script src="~/js/Home/Home.js"></script>

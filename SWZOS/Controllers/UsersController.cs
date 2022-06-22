@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using SWZOS.Models.BlackList;
 using SWZOS.Models.User;
 using SWZOS.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace SWZOS.Controllers
@@ -11,49 +15,71 @@ namespace SWZOS.Controllers
     public class UsersController : Controller
     {
         private UsersRepository _usersRepository;
-        public UsersController(UsersRepository usersRepository)
+        private BlackListRepository _blackListRepository;
+
+        public UsersController(UsersRepository usersRepository, BlackListRepository blackListRepository)
         {
             _usersRepository = usersRepository;
+            _blackListRepository = blackListRepository;
         }
+
         public IActionResult Index()
         {
             return View();
+        }    
+        
+        public IActionResult Details()
+        {
+            //TODO obsługa parsowania Id użytkownika
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = _usersRepository.GetUserViewModel(Int32.Parse(userId));
+            return View(user);
         }
 
         [HttpGet]
         public IActionResult AddUser()
         {
-            var model = new UserFormModel
-            {
-                IsEditForm = false
-            };
-            return View("~/Views/Users/UserForm.cshtml", model);
+            return View();
         }
 
+        //TODO przenieść do AccountController
         [HttpPost]
-        public JsonResult AddUser(UserFormModel model)
+        public IActionResult AddUser(UserFormModel model)
         {
+            _usersRepository.ValidateUserFormModel(model, ModelState); //Walidacja przy tworzeniu konta
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _usersRepository.AddUser(model);
-                    return Json(new { success = true });
+                    _usersRepository.AddUser(model); //Dodanie użytkownika
+                    //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);
+                    //var message = new Message(new string[] { user.Email }, "Confirmation email link", confirmationLink, null);
+                    //await _emailSender.SendEmailAsync(message);
+                    return RedirectToAction("Login", "Account"); //Przekierowanie na stronę logowania
                 }
                 catch (Exception ex)
                 {
-                    var errorMessage = ex.Message;
-                    return Json(new { success = false, errorMessage = errorMessage });
+                    Log.Logger.Error(ex.Message);
+                    ModelState.AddModelError("", "Wystąpił nieoczekiwany błąd");
+                    return View(model);
                 }
             }
-            return Json(new { success = false });
+            return View(model);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddEmployee()
+        {
+            return View();
         }
 
         [HttpGet]
         public IActionResult EditUser(int userId)
         {
-            var user = _usersRepository.GetUserById(userId);
-            throw new NotImplementedException();
+            var user = _usersRepository.GetUserFormById(userId);
+            return View(user);
         }
 
         public JsonResult EditUser(UserFormModel model)
@@ -64,6 +90,18 @@ namespace SWZOS.Controllers
         public JsonResult DeleteUser(int userId)
         {
             throw new NotImplementedException();
+        }
+
+        public IActionResult AddToBlackList(int userId)
+        {
+            return View();
+        }
+
+        public IActionResult AddToBlackList(BlackListFormModel model)
+        {
+            _blackListRepository.AddToBlackList(model);
+            //TODO redirect do strony profilu użytkownika
+            return RedirectToAction("Index");
         }
     }
 }

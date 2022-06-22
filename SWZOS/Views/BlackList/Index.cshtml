@@ -1,0 +1,17 @@
+﻿@model List<SWZOS.Models.BlackList.BlackListViewModel>
+
+<table>
+  <tr>
+    <th>Imię i nazwisko</th>
+    <th>Status</th>
+    <th>Powód</th>
+  </tr>
+  @foreach (var element in Model)
+  {
+    <tr>
+        <td>@Html.Raw(element.FullName)</td>
+        <td>@Html.Raw(element.StatusName)</td>
+        <td>@Html.Raw(element.Reason)</td>
+    </tr>
+  }
+</table>
