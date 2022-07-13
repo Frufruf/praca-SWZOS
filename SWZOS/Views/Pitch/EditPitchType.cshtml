@@ -1,5 +1,21 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model SWZOS.Models.Pitches.PitchTypeModel
+<div class="container">
+    <form class="form-horizontal" id="EditPitchTypeForm" asp-action="EditPitchType">       
+        <div class="row align-items-center">
+            <div class="col-12">
+                <input asp-for="PitchTypeId" hidden/>
+                <div class="form-group">
+                    <label class="form-label" asp-for="PitchTypeName">Nazwa typu boiska</label>
+                    <input class="form-control" type="text" asp-for="PitchTypeName" />
+                    <span class="text-danger" asp-validation-for="PitchTypeName"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" asp-for="PitchTypePrice">Cena za godzinę wynajmu:</label>
+                    <input class="form-control" type="text" asp-for="PitchTypePrice" />
+                    <span class="text-danger" asp-validation-for="PitchTypePrice"></span>
+                </div>
+            </div>
+        </div>
+        <input id="SubmitEditPitchTypeForm" type="submit" value="Zapisz"/>
+    </form>
+</div>

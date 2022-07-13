@@ -1,6 +1,8 @@
-﻿using Serilog;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Serilog;
 using SWZOS.Models.Pitches;
 using SWZOS_Database;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using static SWZOS_Database.Enum;
@@ -72,6 +74,26 @@ namespace SWZOS.Repositories
             _db.SaveChanges();
         }
 
+        public void ValidateEditPitchModel(PitchModel model, ModelStateDictionary modelState)
+        {
+            if (model.OutOfServiceStartDate != null && model.OutOfServiceEndDate == null)
+            {
+                modelState.AddModelError("OutOfServiceEndDate", "Brak końcowej daty wyłączenia boiska z użytku");
+            }
+            if (model.OutOfServiceStartDate == null && model.OutOfServiceEndDate != null)
+            {
+                modelState.AddModelError("OutOfServiceStartDate", "Brak początkowej daty wyłączenia boiska z użytku");
+            }
+            if (model.OutOfServiceStartDate != null && model.OutOfServiceEndDate != null && String.IsNullOrEmpty(model.OutOfServiceReason))
+            {
+                modelState.AddModelError("OutOfServiceReason", "Musisz podać powód wyłączenia boiska");
+            }
+            if (model.ActiveFlag == false && model.OutOfServiceStartDate == null)
+            {
+                modelState.AddModelError("", "Musisz podać zakres dat wyłączenia boiska z użytku");
+            }
+        }
+
         public void EditPitch(PitchModel model)
         {
             var transaction = _db.Database.BeginTransaction();
@@ -82,18 +104,28 @@ namespace SWZOS.Repositories
                 Log.Logger.Error("Przy edycji boiska wystąpił błąd, pitch == null");
                 return;
             }
-
-            pitch.ActiveFlag = model.ActiveFlag;
+                      
             pitch.Desription = model.Desription;
             pitch.OutOfServiceStartDate = model.OutOfServiceStartDate;
             pitch.OutOfServiceEndDate = model.OutOfServiceEndDate;
             pitch.OutOfServiceReason = model.OutOfServiceReason;
+
+            if (model.OutOfServiceStartDate != null 
+                && DateTime.Now.Day >= model.OutOfServiceStartDate.Value.Day 
+                && DateTime.Now.Day <= model.OutOfServiceEndDate.Value.Day)
+            {
+                pitch.ActiveFlag = false;
+            }
+            else
+            {
+                pitch.ActiveFlag = model.ActiveFlag;
+            }
             SaveChanges();
             
             //TODO
             //Boisko wyłączone z użytku trzeba przenieść wszystkie rezerwacje
             //a w razie braku takiej możliwości usunąć i wysłać powiadomienie
-            if (model.ActiveFlag == false)
+            if (model.ActiveFlag == false || (model.OutOfServiceStartDate != null && model.OutOfServiceEndDate != null))
             {
                 var reservations = _db.Reservations.Where(a => a.PitchId == pitch.PitchId).ToList();
 

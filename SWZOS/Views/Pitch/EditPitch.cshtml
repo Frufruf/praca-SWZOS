@@ -1,5 +1,49 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model SWZOS.Models.Pitches.PitchModel
+
+<div class="container">
+    <form class="form-horizontal" id="EditPitchForm" asp-action="EditPitch">
+        <div class="row align-items-center">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input asp-for="PitchId" disabled hidden/>
+            <div class="col-12">
+                <div class="form-group">
+                    <label class="form-label" asp-for="PitchTypeName">Typ boiska</label>
+                    <input class="form-control" type="text" asp-for="PitchTypeName" disabled/>
+                    <span class="text-danger" asp-validation-for="PitchTypeName"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" asp-for="Desription">Opis</label>
+                    <input class="form-control" type="text" asp-for="Desription" />
+                    <span class="text-danger" asp-validation-for="Desription"></span>
+                </div>
+                @*TODO poprawić tego checkboxa (wysyła zawsze false)*@
+                @*<div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" asp-for="ActiveFlag">
+                    <label class="form-check-label" for="ActiveFlag">Aktywne</label>
+                </div>*@
+                <div>
+                    <label class="form-label" asp-for="ActiveFlag">Aktywne</label>
+                    <input class="form-control" type="checkbox" asp-for="ActiveFlag"/>
+                    <span class="text-danger" asp-validation-for="ActiveFlag"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" asp-for="OutOfServiceStartDate">Początkowa data wyłączenia z użytku</label>
+                    <input class="form-control" type="date" asp-for="OutOfServiceStartDate"/>
+                    <span class="text-danger" asp-validation-for="OutOfServiceStartDate"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" asp-for="OutOfServiceEndDate">Końcowa data wyłączenia z użytku</label>
+                    <input class="form-control" type="date" asp-for="OutOfServiceEndDate"/>
+                    <span class="text-danger" asp-validation-for="OutOfServiceEndDate"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" asp-for="OutOfServiceReason">Powód wyłączenia z użytku:</label>
+                    <textarea class="form-control" type="text" asp-for="OutOfServiceReason"></textarea>
+                    <span class="text-danger" asp-validation-for="OutOfServiceReason"></span>
+                </div>
+            </div>
+        </div>
+        <input id="SubmitEditPitchForm" type="submit" value="Zapisz"/>
+    </form>
+</div>

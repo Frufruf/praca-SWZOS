@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using SWZOS.Models.Pitches;
 using SWZOS.Repositories;
+using System;
 
 namespace SWZOS.Controllers
 {
@@ -46,10 +48,20 @@ namespace SWZOS.Controllers
         [HttpPost]
         public IActionResult EditPitch(PitchModel model)
         {
+            _pitchesRepository.ValidateEditPitchModel(model, ModelState);
             if (ModelState.IsValid)
             {
-                _pitchesRepository.EditPitch(model);
-                return RedirectToAction("Index");
+                try
+                {
+                    _pitchesRepository.EditPitch(model);
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    Log.Logger.Error(ex.Message);
+                    ModelState.AddModelError("", "W trakcie edycji boiska wystąpił nieoczekiwany błąd, skontaktuj się z administratorem systemu");
+                    return View(model);
+                }
             }
             return View(model);
         }

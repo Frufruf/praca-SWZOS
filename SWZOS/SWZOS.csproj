@@ -34,7 +34,6 @@
 
   <ItemGroup>
     <Folder Include="Models\Identity\Roles\" />
-    <Folder Include="wwwroot\js\NewFolder\" />
   </ItemGroup>
 
 </Project>
