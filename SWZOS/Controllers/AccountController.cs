@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using static SWZOS_Database.Enum;
 
 namespace SWZOS.Controllers
 {
@@ -32,7 +33,7 @@ namespace SWZOS.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public IActionResult AddEmployee(int userTypeId)
+        public IActionResult AddEmployee()
         {
             return View();
         }
@@ -41,7 +42,22 @@ namespace SWZOS.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult AddEmployee(UserFormModel model)
         {
-            throw new NotImplementedException();
+            _usersRepository.ValidateUserFormModel(model, ModelState);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _usersRepository.AddUser(model, (int)UserTypesEnum.Employee);
+                    return RedirectToAction("Index", "Admin"); //Przekierowanie na stronę administracji
+                }
+                catch (Exception ex)
+                {
+                    Log.Logger.Error(ex.Message);
+                    ModelState.AddModelError("", "Wystąpił nieoczekiwany błąd");
+                    return View(model);
+                }
+            }
+            return View(model);
         }
 
         [HttpGet]

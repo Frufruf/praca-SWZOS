@@ -22,7 +22,7 @@ namespace SWZOS.Repositories
 
         }
 
-        public void AddUser(UserFormModel model)
+        public void AddUser(UserFormModel model, int? userTypeId = null)
         {
             var hashedPassword = PasswordHash.GetHashedPasswordModel(model.Password);
 
@@ -34,7 +34,7 @@ namespace SWZOS.Repositories
                 PESEL = model.PESEL,
                 MailAddress = model.MailAddress,
                 PhoneNumber = model.PhoneNumber,
-                UserTypeId = (int)UserTypesEnum.Customer,
+                UserTypeId = userTypeId != null ? (int)userTypeId : (int)UserTypesEnum.Customer,
                 ActiveFlag = true,
                 PasswordExpirationDate = DateTime.Now.AddDays(365),
                 PasswordHash = hashedPassword.Hash,
