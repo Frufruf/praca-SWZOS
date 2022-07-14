@@ -1,7 +1,9 @@
 ﻿using Serilog;
 using SWZOS.Models.Equipment;
+using SWZOS.Models.Pitches;
 using SWZOS_Database;
 using SWZOS_Database.Entities;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SWZOS.Repositories
@@ -13,9 +15,36 @@ namespace SWZOS.Repositories
 
         }
 
-        public void GetFullEquipment()
+        public List<EquipmentViewModel> GetFullEquipment()
         {
+            return _db.Equipment.Select(a => new EquipmentViewModel
+            {
+                Id = a.Id,
+                Name = a.Name,
+                Quantity = a.Quantity,
+                Description = a.Description,
+                MaximumAmountPerReservation = a.MaximumQuantityPerReservation,
+                Price = a.Price,
+                PitchTypes = a.PitchTypeEquipment.Select(b => new PitchTypeModel
+                {
+                    PitchTypeId = b.PitchTypeId,
+                    PitchTypeName = b.PitchType.PitchTypeName
+                }).ToList()
+            }).ToList();
+        }
 
+        public EquipmentFormModel GetEquipmentFormModel(int id)
+        {
+            return _db.Equipment.Where(a => a.Id == id).Select(a => new EquipmentFormModel
+            {
+                Id = a.Id,
+                Name = a.Name,
+                Quantity = a.Quantity,
+                Price = a.Price,
+                Description = a.Description,
+                MaximumQuantityPerReservation = a.MaximumQuantityPerReservation,
+                PitchTypeIds = a.PitchTypeEquipment.Select(b => b.PitchTypeId).ToList()
+            }).FirstOrDefault();
         }
 
         public void Add(EquipmentFormModel model)

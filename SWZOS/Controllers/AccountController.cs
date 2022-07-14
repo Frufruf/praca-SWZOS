@@ -74,6 +74,7 @@ namespace SWZOS.Controllers
             {
                 try
                 {
+                    //TODO potwierdzanie maila
                     _usersRepository.AddUser(model); //Dodanie użytkownika
                     //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     //var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);

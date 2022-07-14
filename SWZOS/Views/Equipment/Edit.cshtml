@@ -1,9 +1,10 @@
 ﻿@model SWZOS.Models.Equipment.EquipmentFormModel
 
 <div class="container">
-    <form class="form-horizontal" id="AddEquipmentForm" asp-action="Add">
+    <form class="form-horizontal" id="EditEquipmentForm" asp-action="Edit">
         <div class="row align-items-center">
             <div class="col-12">
+                <input asp-for="Id" hidden/>
                 <div class="form-group">
                     <label class="form-label" asp-for="Name">Nazwa sprzętu:</label>
                     <input class="form-control" type="text" asp-for="Name" required/>
@@ -40,7 +41,7 @@
                     <span class="text-danger" asp-validation-for="PitchTypeIds"></span>
                 </div>
             </div>
-            <input id="SubmitAddEquipmentForm" type="submit" value="Zapisz"/>
+            <input id="SubmitEditEquipmentForm" type="submit" value="Zapisz"/>
         </div>
     </form>
 </div>

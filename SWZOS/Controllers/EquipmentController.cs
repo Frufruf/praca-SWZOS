@@ -14,7 +14,8 @@ namespace SWZOS.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var model = _equipmentRepository.GetFullEquipment();
+            return View(model);
         }
 
         [HttpGet]
@@ -34,7 +35,13 @@ namespace SWZOS.Controllers
             return View(model);
         }
 
-        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var model = _equipmentRepository.GetEquipmentFormModel(id);
+            return View(model);
+        }
+
+        [HttpPost]
         public IActionResult Edit(EquipmentFormModel model)
         {
             if (ModelState.IsValid)
