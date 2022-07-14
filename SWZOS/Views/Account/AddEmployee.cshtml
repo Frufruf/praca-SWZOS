@@ -1,0 +1,52 @@
+﻿@model SWZOS.Models.User.UserFormModel
+<div class="container">
+    <form class="form-horizontal" id="AddEmployeeForm" asp-action="AddEmployee">
+        <div class="row align-items-center">
+            <div class="col-6">
+                <div class="form-group">
+                    <label class="form-label" asp-for="Login">Login:</label>
+                    <input class="form-control" type="text" asp-for="Login" required/>
+                    <span class="text-danger" asp-validation-for="Login"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" asp-for="MailAddress">Email:</label>
+                    <input class="form-control" type="email" asp-for="MailAddress" required/>    
+                    <span class="text-danger" asp-validation-for="MailAddress"></span>               
+                </div>
+                <div class="form-group">
+                    <label class="form-label" asp-for="Password">Hasło:</label>
+                    <input class="form-control" type="password" asp-for="Password" required/>
+                    <span class="text-danger" asp-validation-for="Password"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" asp-for="ConfirmedPassword">Potwierdź hasło:</label>
+                    <input class="form-control" type="password" asp-for="ConfirmedPassword" required/>
+                    <span class="text-danger" asp-validation-for="ConfirmedPassword"></span>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-group">
+                    <label class="form-label" asp-for="Name">Imię:</label>
+                    <input class="form-control" type="text" asp-for="Name" required/>
+                    <span class="text-danger" asp-validation-for="Name"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" asp-for="Surname">Nazwisko:</label>
+                    <input class="form-control" type="text" id="Surname" name="Surname" asp-for="Surname" required/>
+                    <span class="text-danger" asp-validation-for="Surname"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" asp-for="PESEL">PESEL:</label>
+                    <input class="form-control" type="text" id="PESEL" name="PESEL" asp-for="PESEL" />
+                    <span class="text-danger" asp-validation-for="PESEL"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" asp-for="PhoneNumber">Numer telefonu:</label>
+                    <input class="form-control" type="text" id="PhoneNumber" name="PhoneNumber" asp-for="PhoneNumber" />
+                    <span class="text-danger" asp-validation-for="PhoneNumber"></span>
+                </div>
+            </div>
+            <input id="SubmitEmployeeForm" type="submit" value="Zapisz"/>
+        </div>
+    </form>
+</div>

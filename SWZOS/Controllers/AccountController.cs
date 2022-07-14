@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using SWZOS.Models.Account;
 using SWZOS.Models.User;
 using SWZOS.Repositories;
@@ -15,13 +16,63 @@ namespace SWZOS.Controllers
 {
     public class AccountController : Controller
     {
+        private UsersRepository _usersRepository;
         private AccountRepository _accountRepository;
         private IHttpContextAccessor _httpContextAccessor;
 
-        public AccountController(AccountRepository accountRepository, IHttpContextAccessor httpContextAccessor)
+        public AccountController(
+            UsersRepository usersRepository,
+            AccountRepository accountRepository, 
+            IHttpContextAccessor httpContextAccessor)
         {
+            _usersRepository = usersRepository;
             _accountRepository = accountRepository;
             _httpContextAccessor = httpContextAccessor;
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddEmployee(int userTypeId)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddEmployee(UserFormModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpGet]
+        public IActionResult AddUser()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddUser(UserFormModel model)
+        {
+            _usersRepository.ValidateUserFormModel(model, ModelState); //Walidacja przy tworzeniu konta
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _usersRepository.AddUser(model); //Dodanie użytkownika
+                    //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);
+                    //var message = new Message(new string[] { user.Email }, "Confirmation email link", confirmationLink, null);
+                    //await _emailSender.SendEmailAsync(message);
+                    return RedirectToAction("Login", "Account"); //Przekierowanie na stronę logowania
+                }
+                catch (Exception ex)
+                {
+                    Log.Logger.Error(ex.Message);
+                    ModelState.AddModelError("", "Wystąpił nieoczekiwany błąd");
+                    return View(model);
+                }
+            }
+            return View(model);
         }
 
         [HttpGet]

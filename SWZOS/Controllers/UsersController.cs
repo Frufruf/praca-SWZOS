@@ -15,12 +15,10 @@ namespace SWZOS.Controllers
     public class UsersController : Controller
     {
         private UsersRepository _usersRepository;
-        private BlackListRepository _blackListRepository;
 
-        public UsersController(UsersRepository usersRepository, BlackListRepository blackListRepository)
+        public UsersController(UsersRepository usersRepository)
         {
             _usersRepository = usersRepository;
-            _blackListRepository = blackListRepository;
         }
 
         public IActionResult Index()
@@ -28,52 +26,11 @@ namespace SWZOS.Controllers
             return View();
         }    
         
-        public IActionResult Details()
+        public IActionResult Details(int userId)
         {
-            //TODO obsługa parsowania Id użytkownika
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = _usersRepository.GetUserViewModel(Int32.Parse(userId));
+            var user = _usersRepository.GetUserViewModel(userId);
             return View(user);
-        }
-
-        [HttpGet]
-        public IActionResult AddUser()
-        {
-            return View();
-        }
-
-        //TODO przenieść do AccountController
-        [HttpPost]
-        public IActionResult AddUser(UserFormModel model)
-        {
-            _usersRepository.ValidateUserFormModel(model, ModelState); //Walidacja przy tworzeniu konta
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _usersRepository.AddUser(model); //Dodanie użytkownika
-                    //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);
-                    //var message = new Message(new string[] { user.Email }, "Confirmation email link", confirmationLink, null);
-                    //await _emailSender.SendEmailAsync(message);
-                    return RedirectToAction("Login", "Account"); //Przekierowanie na stronę logowania
-                }
-                catch (Exception ex)
-                {
-                    Log.Logger.Error(ex.Message);
-                    ModelState.AddModelError("", "Wystąpił nieoczekiwany błąd");
-                    return View(model);
-                }
-            }
-            return View(model);
-        }
-
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public IActionResult AddEmployee()
-        {
-            return View();
-        }
+        }        
 
         [HttpGet]
         public IActionResult EditUser(int userId)
@@ -92,16 +49,5 @@ namespace SWZOS.Controllers
             throw new NotImplementedException();
         }
 
-        public IActionResult AddToBlackList(int userId)
-        {
-            return View();
-        }
-
-        public IActionResult AddToBlackList(BlackListFormModel model)
-        {
-            _blackListRepository.AddToBlackList(model);
-            //TODO redirect do strony profilu użytkownika
-            return RedirectToAction("Index");
-        }
     }
 }
