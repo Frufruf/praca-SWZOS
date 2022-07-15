@@ -26,7 +26,7 @@
                         <td>@item.Price</td>
                         <td>@item.MaximumAmountPerReservation</td>
                         <td>@String.Join(", ", item.PitchTypes.Select(a => a.PitchTypeName).ToList())</td>
-                        <td><button class="btn-primary btn-secondary" onclick="EditEquipment(@item.Id)">Edytuj</button></td>
+                        <td><button class="btn btn-primary" onclick="EditEquipment(@item.Id)">Edytuj</button></td>
                     </tr> 
                 }
             </table>

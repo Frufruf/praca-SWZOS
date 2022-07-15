@@ -20,6 +20,12 @@ namespace SWZOS.Controllers
             return View();
         }
 
+        //public IActionResult Details(int pitchId)
+        //{
+
+        //    return View();
+        //}
+
         [HttpGet]
         public IActionResult EditPitchType(int typeId)
         {

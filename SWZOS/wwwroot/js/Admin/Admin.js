@@ -12,9 +12,9 @@
         window.location.href = AdminUrl.BlackListUrl;
     });
 
-    //$("#priceListButton").on("click", function () {
-    //    window.location.href = AdminUrl.PriceListUrl;
-    //});
+    $("#priceListButton").on("click", function () {
+        window.location.href = AdminUrl.PriceListUrl;
+    });
 
     //$("#approvalsButton").on("click", function () {
     //    window.location.href = AdminUrl.ApprovalUrl;
