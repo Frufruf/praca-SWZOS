@@ -25,12 +25,21 @@ namespace SWZOS.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Index()
         {
             var model = _blackListRepository.GetBlackListFull();
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
+        public IActionResult Approvals()
+        {
+            var model = _blackListRepository.GetRecordsToApprove();
+            return View(model);
+        }
+
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Details(int id)
         {
             var model = _blackListRepository.GetBlackListEntry(id);
@@ -38,9 +47,14 @@ namespace SWZOS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult AddToBlackList(int userId)
         {
             var user = _usersRepository.GetUserSimpleModel(userId);
+            if (user.UserTypeId == (int)UserTypesEnum.Admin || user.UserTypeId == (int)UserTypesEnum.Employee)
+            {
+                return RedirectToAction("Index");
+            }
             return View(new BlackListFormModel { UserId = userId, FullName = user.Name + " " + user.Surname });
         }
 

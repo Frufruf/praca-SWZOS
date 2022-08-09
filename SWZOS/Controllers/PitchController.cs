@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using SWZOS.Models.Pitches;
 using SWZOS.Repositories;
@@ -15,14 +16,15 @@ namespace SWZOS.Controllers
             _pitchesRepository = pitchesRepository;
         }
 
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Index()
         {
-            return View();
+            var model = _pitchesRepository.GetAllPitches();
+            return View(model);
         }
 
         //public IActionResult Details(int pitchId)
         //{
-
         //    return View();
         //}
 
@@ -45,6 +47,7 @@ namespace SWZOS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult EditPitch(int pitchId)
         {
             var model = _pitchesRepository.GetPitch(pitchId);
@@ -52,6 +55,7 @@ namespace SWZOS.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult EditPitch(PitchModel model)
         {
             _pitchesRepository.ValidateEditPitchModel(model, ModelState);

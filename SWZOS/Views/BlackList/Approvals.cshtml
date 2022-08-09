@@ -5,7 +5,9 @@
         Details: "@Url.Action("Details", "BlackList")"
     }
 </script>
-<div class="container">
+@if (@Model.Count > 0)
+{
+    <div class="container">
     <div class="row align-items-center">
         <div class="row">
             <table border="1" cellpadding="5" cellspacing="5" width="100%">
@@ -27,5 +29,10 @@
             </table>    
         </div>
     </div>
-</div>
+    </div>
+}
+else
+{
+    <h1>Brak wpisów do zatwierdzenia</h1>
+}
 <script src="~/js/BlackList/Index.js"></script>

@@ -18,6 +18,20 @@ namespace SWZOS.Repositories
         {
             return _db.BlackList.Select(a => new BlackListViewModel 
             { 
+                Id = a.Id,
+                UserId = a.UserId,
+                StatusId = a.StatusId,
+                StatusName = a.BlackListStatus.Name,
+                FullName = a.User.Name + " " + a.User.Surname,
+                Reason = a.Reason
+            }).ToList();
+        }
+
+        public List<BlackListViewModel> GetRecordsToApprove()
+        {
+            return _db.BlackList.Where(a => a.StatusId == (int)BlackListStatusEnum.WaitingForApproval).Select(a => new BlackListViewModel
+            {
+                Id = a.Id,
                 UserId = a.UserId,
                 StatusId = a.StatusId,
                 StatusName = a.BlackListStatus.Name,

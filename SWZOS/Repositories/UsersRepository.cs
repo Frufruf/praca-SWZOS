@@ -50,7 +50,7 @@ namespace SWZOS.Repositories
             var user = _db.Users.FirstOrDefault(u => u.UserId == model.Id);
 
             user.PhoneNumber = model.PhoneNumber;
-            throw new NotImplementedException();
+            SaveChanges();
         }
 
         public UserFormModel GetUserFormById(int userId)
@@ -107,6 +107,7 @@ namespace SWZOS.Repositories
             var user = _db.Users.Where(a => a.UserId == userId).Select(a => new UserSimpleModel
             {
                 Id = userId,
+                UserTypeId = a.UserTypeId,
                 Login = a.Login,
                 Name = a.Name,
                 Surname = a.Surname,

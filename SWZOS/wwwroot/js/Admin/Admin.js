@@ -16,8 +16,12 @@
         window.location.href = AdminUrl.PriceListUrl;
     });
 
-    //$("#approvalsButton").on("click", function () {
-    //    window.location.href = AdminUrl.ApprovalUrl;
-    //});
+    $("#approvalsButton").on("click", function () {
+        window.location.href = AdminUrl.ApprovalUrl;
+    });
+
+    $("#addEmployeeButton").on("click", function () {
+        window.location.href = AdminUrl.AddEmployeeUrl;
+    });
 
 });

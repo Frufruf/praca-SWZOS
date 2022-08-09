@@ -23,23 +23,23 @@
             </div>
             <div class="form-group">
                 <label class="form-label" asp-for="Reason">Powód:</label>
-                <textarea class="form-control" type="password" asp-for="Reason" disabled/>
+                <textarea class="form-control" type="password" asp-for="Reason" disabled></textarea>
             </div>
             <div class="form-group">
-                <label class="form-label" asp-for="StatusName">Powód:</label>
+                <label class="form-label" asp-for="StatusName">Status:</label>
                 <input class="form-control" type="text" asp-for="StatusName" disabled/>
             </div>
         </div>
         @if (name != null && role == "Admin")
         {
             <div class="col-4">
-                <button class="btn btn-primary" id="approveBlackListEntry" disabled="@if(@Model.StatusId != 1) {<text>disabled</text>}">Zatwierdź</button>
+                <button class="btn btn-primary" id="approveBlackListEntry" disabled="@if(Model.StatusId != 1) {<text>disabled</text>}">Zatwierdź</button>
             </div>
             <div class="col-4">
-                <button class="btn btn-primary" id="rejectBlackListEntry" disabled="@if(@Model.StatusId != 1) {<text>disabled</text>}">Odrzuć</button>
+                <button class="btn btn-primary" id="rejectBlackListEntry" disabled="@if(Model.StatusId != 1) {<text>disabled</text>}">Odrzuć</button>
             </div>
             <div class="col-4">
-                <button class="btn btn-primary" id="deleteBlackListEntry" disabled="@if(@Model.StatusId == 1) {<text>disabled</text>}">Usuń</button>
+                <button class="btn btn-primary" id="deleteBlackListEntry" disabled="@if(Model.StatusId == 1) {<text>disabled</text>}">Usuń</button>
             </div> 
         }
     </div>

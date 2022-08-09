@@ -39,9 +39,11 @@ namespace SWZOS.Controllers
             return View(user);
         }
 
-        public JsonResult EditUser(UserFormModel model)
+        [HttpPost]
+        public ActionResult EditUser(UserFormModel model)
         {
-            throw new NotImplementedException();
+            _usersRepository.EditUser(model);
+            return RedirectToAction("Details", model.Id);
         }
 
         public JsonResult DeleteUser(int userId)

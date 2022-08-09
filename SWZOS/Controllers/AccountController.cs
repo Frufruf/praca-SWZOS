@@ -187,7 +187,7 @@ namespace SWZOS.Controllers
             {
                 _accountRepository.ChangePassword(model);
                 //TODO jaki widok zwrócić po zmianie hasła
-                return RedirectToAction("Login");
+                return RedirectToAction("Index", "Home");
             }
             return View(model);
         }

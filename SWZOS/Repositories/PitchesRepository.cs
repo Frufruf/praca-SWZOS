@@ -44,7 +44,7 @@ namespace SWZOS.Repositories
                 PitchTypeId = a.PitchTypeId,
                 PitchTypeName = a.PitchType.PitchTypeName,
                 ActiveFlag = a.ActiveFlag,
-                Desription = a.Desription,
+                Description = a.Desription,
                 OutOfServiceStartDate = a.OutOfServiceStartDate,
                 OutOfServiceEndDate = a.OutOfServiceEndDate,
                 OutOfServiceReason = a.OutOfServiceReason
@@ -59,7 +59,7 @@ namespace SWZOS.Repositories
                 PitchTypeId = a.PitchTypeId,
                 PitchTypeName = a.PitchType.PitchTypeName,
                 ActiveFlag = a.ActiveFlag,
-                Desription = a.Desription,
+                Description = a.Desription,
                 OutOfServiceStartDate = a.OutOfServiceStartDate,
                 OutOfServiceEndDate = a.OutOfServiceEndDate,
                 OutOfServiceReason = a.OutOfServiceReason
@@ -105,7 +105,7 @@ namespace SWZOS.Repositories
                 return;
             }
                       
-            pitch.Desription = model.Desription;
+            pitch.Desription = model.Description;
             pitch.OutOfServiceStartDate = model.OutOfServiceStartDate;
             pitch.OutOfServiceEndDate = model.OutOfServiceEndDate;
             pitch.OutOfServiceReason = model.OutOfServiceReason;
