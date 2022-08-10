@@ -38,6 +38,10 @@ namespace SWZOS_Database.Configuration
                 .HasColumnName("PRICE")
                 .HasColumnType("decimal(18, 2)")
                 .IsRequired();
+
+            builder.Property(e => e.MaximumQuantityPerReservation)
+                .HasColumnName("MAX_QUANTITY_PER_RESERVATION")
+                .IsRequired();
         }
     }
 }

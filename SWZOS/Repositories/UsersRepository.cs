@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SWZOS.Utils;
 using SWZOS.Models.Reservations;
 using SWZOS.Models.Payments;
+using SWZOS.Models.Identity.User;
 
 namespace SWZOS.Repositories
 {
@@ -130,6 +131,34 @@ namespace SWZOS.Repositories
             {
                 modelState.AddModelError("MailAddress", "Podany adres email jest już wykorzystywany");
             }
+        }
+
+        public List<UserViewModel> SearchCustomers(UserSearchModel searchModel)
+        {
+            var users = _db.Users.Where(a => a.UserTypeId == (int)UserTypesEnum.Customer).AsQueryable();
+
+            if (!String.IsNullOrEmpty(searchModel.Email))
+            {
+                users = users.Where(a => a.MailAddress.ToLower() == searchModel.Email.ToLower()).AsQueryable();
+                 
+            }
+            if (!String.IsNullOrEmpty(searchModel.Name))
+            {
+                users = users.Where(a => a.Name.ToLower() == searchModel.Name.ToLower()).AsQueryable();
+            }
+            if (!String.IsNullOrEmpty(searchModel.Surname))
+            {
+                users = users.Where(a => a.Surname.ToLower() == searchModel.Surname.ToLower()).AsQueryable();
+            }
+            return users.Select(a => new UserViewModel
+            {
+                Id = a.UserId,
+                Name = a.Name,
+                Surname = a.Surname,
+                MailAddress = a.MailAddress,
+                Login = a.Login,
+                PhoneNumber = a.PhoneNumber
+            }).ToList();
         }
 
     }

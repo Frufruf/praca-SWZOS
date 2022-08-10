@@ -97,5 +97,6 @@ namespace SWZOS.Repositories
             result.StatusId = (int)BlackListStatusEnum.Rejected;
             _db.SaveChanges();
         }
+        
     }
 }

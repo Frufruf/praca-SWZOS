@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SWZOS.Models.BlackList;
+using SWZOS.Models.Identity.User;
 using SWZOS.Repositories;
 using System;
 using System.Security.Claims;
@@ -101,6 +102,17 @@ namespace SWZOS.Controllers
         {
             _blackListRepository.RejectBlackListEntry(userId);
             return RedirectToAction("Details", "Users", new { userId = userId });
+        }
+
+        public JsonResult SearchUsers(UserSearchModel searchModel)
+        {
+            if (searchModel == null || (String.IsNullOrEmpty(searchModel.Email) 
+                && String.IsNullOrEmpty(searchModel.Name) && String.IsNullOrEmpty(searchModel.Surname)))
+            {
+                return Json(new { success = false, errorMessage = "Nie wprowadzono żadnych wartości" });
+            }
+            var model = _usersRepository.SearchCustomers(searchModel);
+            return Json(new { success = true, users = model });
         }
     }
 }
