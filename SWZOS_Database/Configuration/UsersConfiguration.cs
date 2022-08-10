@@ -34,10 +34,6 @@ namespace SWZOS_Database.Configuration
                 .HasMaxLength(50)
                 .IsRequired();
 
-            builder.Property(e => e.PESEL)
-                .HasColumnName("PESEL")
-                .HasMaxLength(11);
-
             builder.Property(e => e.PhoneNumber)
                 .HasColumnName("PHONE_NUMBER");
 

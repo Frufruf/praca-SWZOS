@@ -31,7 +31,6 @@ namespace SWZOS.Repositories
                 Login = model.Login,
                 Name = model.Name,
                 Surname = model.Surname,
-                PESEL = model.PESEL,
                 MailAddress = model.MailAddress,
                 PhoneNumber = model.PhoneNumber,
                 UserTypeId = userTypeId != null ? (int)userTypeId : (int)UserTypesEnum.Customer,
@@ -62,8 +61,7 @@ namespace SWZOS.Repositories
                 Name = a.Name,
                 Surname = a.Surname,
                 PhoneNumber = a.PhoneNumber,
-                MailAddress = a.MailAddress,
-                PESEL = a.PESEL
+                MailAddress = a.MailAddress
             }).FirstOrDefault();
         }
 

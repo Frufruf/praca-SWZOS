@@ -10,8 +10,6 @@ namespace SWZOS_Database.Entities
         public string Login { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-        //TODO PESEL do wyrzucenia?
-        public string PESEL { get; set; }
         public string PhoneNumber { get; set; }
         public string MailAddress { get; set; }
         //public bool EmailConfirmed { get; set; }
@@ -24,6 +22,5 @@ namespace SWZOS_Database.Entities
         public UserType UserType { get; set; }
         public BlackList BlackList { get; set; }
         public List<Reservation> Reservations { get; set; } 
-        public List<UserPermission> UserPermissions { get; set; }
     }
 }

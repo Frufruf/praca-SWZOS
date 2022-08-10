@@ -18,8 +18,6 @@ namespace SWZOS_Database
 
         public DbSet<User> Users { get; set; }
         public DbSet<UserType> UserTypes { get; set; }
-        public DbSet<Permission> Permissions { get; set; }
-        public DbSet<UserPermission> UserPermissions { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<Equipment> Equipment { get; set; }
         public DbSet<ReservationEquipment> ReservationsEquipment { get; set; }
