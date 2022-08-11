@@ -10,6 +10,7 @@ namespace SWZOS.Models.Reservations
         public int ReservationId { get; set; }
         public int PitchId { get; set; }
         public int PitchTypeId { get; set; }
+        public string PitchTypeName { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public double Price { get; set; }

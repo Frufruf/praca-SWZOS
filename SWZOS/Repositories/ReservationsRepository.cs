@@ -35,9 +35,10 @@ namespace SWZOS.Repositories
         }
 
         //Metoda pobierająca wszystkie rezerwacje w dniu dzisiejszym
-        public List<ReservationsViewModel> GetTodayReservations()
+        public List<ReservationsViewModel> GetReservationsByDate(DateTime startDate, DateTime endDate)
         {
-            var result = _db.Reservations.Where(a => a.ReservationStartDate.Day == DateTime.Now.Day
+            var result = _db.Reservations.Where(a => a.ReservationStartDate.Day >= startDate.Day 
+                                    && a.ReservationStartDate.Day <= endDate.Day 
                                     && a.ReservationStatus != (int)ReservationStatusEnum.Canceled
                                     && a.ReservationStatus != (int)ReservationStatusEnum.Deleted)
             .Select(a => new ReservationsViewModel

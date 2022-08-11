@@ -3,7 +3,8 @@
 <script>
     let BlackListUrl = {
         Details: "@Url.Action("Details", "BlackList")",
-        Search: "@Url.Action("SearchUsers", "BlackList")"
+        Search: "@Url.Action("SearchUsers", "BlackList")",
+        UserProfile: "@Url.Action("Details","Users")"
     }
 </script>
 <div class="container">
@@ -44,23 +45,26 @@
                     <tbody></tbody>
                 </table>
             </div>
-            <h1>CZARNA LISTA</h1>
-            <table border="1" cellpadding="5" cellspacing="5" width="100%">
-                <tr>
-                    <th>Imię i nazwisko</th>
-                    <th>Status</th>
-                    <th>Powód</th>
-                    <th>Akcje</th>
-                </tr>
-                @foreach (var element in Model)
-                {
+            <table id="blackListTable" border="1" cellpadding="5" cellspacing="5" width="100%">
+                <thead>
                     <tr>
-                        <td>@element.FullName</td>
-                        <td>@element.StatusName</td>
-                        <td>@element.Reason</td>
-                        <td><button class="btn btn-primary" onclick="Details(@element.Id)">Szczegóły</button></td>
+                        <th>Imię i nazwisko</th>
+                        <th>Status</th>
+                        <th>Powód</th>
+                        <th>Akcje</th>
                     </tr>
-                }
+                </thead>
+                <tbody>
+                    @foreach (var element in Model)
+                    {
+                        <tr>
+                            <td>@element.FullName</td>
+                            <td>@element.StatusName</td>
+                            <td>@element.Reason</td>
+                            <td><button class="btn btn-primary" onclick="Details(@element.Id)">Szczegóły</button></td>
+                        </tr>
+                    }
+                </tbody>
             </table>    
         </div>
     </div>

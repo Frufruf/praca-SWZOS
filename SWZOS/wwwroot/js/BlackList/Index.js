@@ -1,4 +1,7 @@
 ﻿$(function () {
+
+    $("#blackListTable").DataTable();
+
     $("#searchUsers").on("click", function () {
         let searchModel = {
             name: $("#userName").val(),
@@ -21,7 +24,7 @@
                             + model.users[i].surname + '</td><td>'
                             + model.users[i].mailAddress + '<td></td>'
                             + model.users[i].phoneNumber + '</td><td>'
-                            + '<a href="">Profil</a></tr>');
+                            + '<a href="' + BlackListUrl.UserProfile + "?userId=" + model.users[i].id + '">Profil</a></tr>');
                     }
                 } else {
                     window.alert(model.errorMessage);

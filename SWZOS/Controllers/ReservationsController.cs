@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using SWZOS.Models.Reservations;
 using SWZOS.Repositories;
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace SWZOS.Controllers
@@ -11,22 +13,37 @@ namespace SWZOS.Controllers
     public class ReservationsController : Controller
     {
         private ReservationsRepository _reservationsRepository;
-        public ReservationsController(ReservationsRepository reservationsRepository)
+        private IHttpContextAccessor _httpContextAccessor;
+
+        public ReservationsController(ReservationsRepository reservationsRepository,
+            IHttpContextAccessor httpContextAccessor)
         {
             _reservationsRepository = reservationsRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [Authorize]
         public IActionResult Index()
         {
-            return View();
+            var role = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+            var model = new List<ReservationsViewModel>();
+            if (role == "Admin" || role == "Employee")
+            {
+                model = _reservationsRepository.GetReservationsByDate(DateTime.Now, DateTime.Now);
+            }
+            else
+            {
+                var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                model = _reservationsRepository.GetUserReservations(Int32.Parse(userId));
+            }
+            return View(model);
         }
 
         [HttpGet]
         [Authorize]
         public IActionResult AddReservation()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             return View(new ReservationFormModel { UserId = Int32.Parse(userId) });
         }
 
@@ -100,5 +117,6 @@ namespace SWZOS.Controllers
             _reservationsRepository.DeleteReservaion(reservationId);
             return RedirectToAction("Index");
         }
+
     }
 }

@@ -82,6 +82,7 @@ namespace SWZOS.Repositories
                     ReservationId = b.ReservationId,
                     PitchId = b.PitchId,
                     PitchTypeId = b.Pitch.PitchTypeId,
+                    PitchTypeName = b.Pitch.PitchType.PitchTypeName,
                     StartDate = b.ReservationStartDate,
                     EndDate = b.ReservationStartDate.AddMinutes(b.ReservationDuration),
                     Price = b.ReservationPrice,
