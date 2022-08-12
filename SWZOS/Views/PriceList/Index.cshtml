@@ -14,9 +14,9 @@
     }
 </script>
 <div class="container">
-    <div class="row align-items-center">
-        <div class="row">
-            <table border="1" cellpadding="5" cellspacing="5" width="100%">
+    <div class="align-items-center">
+        <table id="priceListTable" border="1" cellpadding="5" cellspacing="5" width="100%">
+            <thead>
                 <tr>
                     <th>Rodzaj usługi</th>
                     <th>Nazwa</th>
@@ -27,6 +27,8 @@
                         <th>Akcje</th>
                     }
                 </tr>
+            </thead>
+            <tbody>
                 @foreach (var type in Model)
                 {
                     @foreach (var element in type.PriceList)
@@ -43,8 +45,8 @@
                         </tr>
                     }
                 }
-            </table>          
-        </div>
+            </tbody>
+        </table>       
     </div>
 </div>
 <script src="~/js/PriceList/Index.js"></script>

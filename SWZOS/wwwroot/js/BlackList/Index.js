@@ -1,6 +1,7 @@
 ﻿$(function () {
 
     $("#blackListTable").DataTable();
+    //$("#searchedUsersTable").DataTable();
 
     $("#searchUsers").on("click", function () {
         let searchModel = {

@@ -6,6 +6,7 @@ using SWZOS.Models.Reservations;
 using SWZOS.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 
 namespace SWZOS.Controllers
@@ -13,12 +14,15 @@ namespace SWZOS.Controllers
     public class ReservationsController : Controller
     {
         private ReservationsRepository _reservationsRepository;
+        private EquipmentRepository _equipmentRepository;
         private IHttpContextAccessor _httpContextAccessor;
 
         public ReservationsController(ReservationsRepository reservationsRepository,
+            EquipmentRepository equipmentRepository,
             IHttpContextAccessor httpContextAccessor)
         {
             _reservationsRepository = reservationsRepository;
+            _equipmentRepository = equipmentRepository;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -41,15 +45,24 @@ namespace SWZOS.Controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult AddReservation()
+        public IActionResult AddReservation(int pitchTypeId)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return View(new ReservationFormModel { UserId = Int32.Parse(userId) });
+            var pitchEquipment = _equipmentRepository.GetPitchEquipment(pitchTypeId);
+            var model = new ReservationFormModel
+            {
+                UserId = Int32.Parse(userId),
+                StartDate = DateTime.Today,
+                PitchTypeId = pitchTypeId,
+                PitchEquipment = pitchEquipment,
+                Duration = 60
+            };
+            return View(model);
         }
 
         [HttpPost]
         [Authorize]
-        public IActionResult AddReservation(ReservationFormModel model)
+        public JsonResult AddReservation(ReservationFormModel model)
         {
             var reservation = _reservationsRepository.ValidateReservation(model, ModelState);
             if (ModelState.IsValid)
@@ -59,17 +72,16 @@ namespace SWZOS.Controllers
                     try
                     {
                         _reservationsRepository.AddReservation(reservation);
-                        return RedirectToAction("Index");
+                        return Json(new { success = true });
                     }
                     catch (Exception ex)
                     {
                         Log.Logger.Error(ex.Message);
                     }
                 }
-                ModelState.AddModelError("", "Wystąpił nieoczekiwany błąd");
-                return View(model);
+                ModelState.AddModelError("", "Wystąpił nieoczekiwany błąd"); 
             }
-            return View(model);
+            return Json(new { success = false, errors = ModelState.Select(a => a.Value.Errors).Where(a => a.Count > 0).ToList() });
         }
 
         [HttpGet]

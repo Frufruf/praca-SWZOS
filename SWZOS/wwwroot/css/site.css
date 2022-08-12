@@ -76,7 +76,8 @@ body {
 }
 
 table {
-    border-collapse: collapse;
+    border-collapse: collapse;  
+    margin: 0 auto;
 }
 
 table tr {

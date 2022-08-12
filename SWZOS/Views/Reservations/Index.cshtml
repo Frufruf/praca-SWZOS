@@ -1,7 +1,11 @@
-﻿@*@using NonFactors.Mvc.Grid*@
-@model List<SWZOS.Models.Reservations.ReservationsViewModel>
+﻿@model List<SWZOS.Models.Reservations.ReservationsViewModel>
+<script>
+    let ReservationUrl = {
+        AddReservation: "@Url.Action("AddReservation", "Reservations")"
+    }
+</script>
 <div class="container">
-     <div class="row align-items-center">
+     <div class="align-items-center">
         <div class="col-12">
             <div class="form-group">
                 <button class="btn btn-primary adminButton" type="button" id="addFootballPitchReservation">Boisko piłkarskie</button>
@@ -16,20 +20,33 @@
                 <button class="btn btn-primary adminButton" type="button" id="addVolleyballPitchReservation">Boisko do siatkówki</button>
             </div>
         </div>
-        @*@(Html
-            .Grid(Model)
-            .Build(columns =>
-            {
-                columns.Add(model => model.PitchId).Titled("ID boiska");
-                columns.Add(model => model.PitchTypeName).Titled("Typ boiska");
-                columns.Add(model => model.StartDate).Titled("Czas rozpoczęcia");
-                columns.Add(model => model.EndDate).Titled("Czas zakończenia");
-                columns.Add(model => model.Price).Titled("Cena");
-                columns.Add(model => model.Description).Titled("Opis");
-            })
-            .Using(GridFilterMode.Header)
-            .Empty("Brak rezerwacji")
-            .Filterable()
-            .Sortable())*@
+        <table id="reservationsTable" border="1" cellpadding="5" cellspacing="5" width="100%">
+            <thead>
+                <tr>
+                    <th>ID boiska</th>
+                    <th>Rodzaj boiska</th>
+                    <th>Czas rozpoczęcia</th>
+                    <th>Czas zakończenia</th>
+                    <th>Kwota należnego</th>
+                    <th>Opis</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var element in Model)
+                {
+                    <tr>
+                        <td>@element.PitchId</td>
+                        <td>@element.PitchTypeName</td>
+                        <td>@element.StartDate</td>
+                        <td>@element.EndDate</td>
+                        <td>@element.Price</td>
+                        <td>@element.Description</td>
+                        <td><button class="btn btn-primary" onclick="Details(@element.ReservationId)">Szczegóły</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>   
      </div>
 </div>
+<script src="~/js/Reservations/Index.js"></script>

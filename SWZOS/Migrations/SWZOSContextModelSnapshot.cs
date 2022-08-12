@@ -111,7 +111,8 @@ namespace SWZOS.Migrations
                         .HasColumnName("DESCRIPTION");
 
                     b.Property<int>("MaximumQuantityPerReservation")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MAX_QUANTITY_PER_RESERVATION");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -490,6 +491,93 @@ namespace SWZOS.Migrations
                     b.HasIndex("EquipmentId");
 
                     b.ToTable("PITCH_TYPE_EQUIPMENT", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            PitchTypeId = 1,
+                            EquipmentId = 1
+                        },
+                        new
+                        {
+                            PitchTypeId = 3,
+                            EquipmentId = 2
+                        },
+                        new
+                        {
+                            PitchTypeId = 4,
+                            EquipmentId = 3
+                        },
+                        new
+                        {
+                            PitchTypeId = 2,
+                            EquipmentId = 4
+                        },
+                        new
+                        {
+                            PitchTypeId = 1,
+                            EquipmentId = 5
+                        },
+                        new
+                        {
+                            PitchTypeId = 3,
+                            EquipmentId = 5
+                        },
+                        new
+                        {
+                            PitchTypeId = 4,
+                            EquipmentId = 5
+                        },
+                        new
+                        {
+                            PitchTypeId = 1,
+                            EquipmentId = 6
+                        },
+                        new
+                        {
+                            PitchTypeId = 3,
+                            EquipmentId = 6
+                        },
+                        new
+                        {
+                            PitchTypeId = 4,
+                            EquipmentId = 6
+                        },
+                        new
+                        {
+                            PitchTypeId = 1,
+                            EquipmentId = 7
+                        },
+                        new
+                        {
+                            PitchTypeId = 3,
+                            EquipmentId = 7
+                        },
+                        new
+                        {
+                            PitchTypeId = 4,
+                            EquipmentId = 7
+                        },
+                        new
+                        {
+                            PitchTypeId = 1,
+                            EquipmentId = 8
+                        },
+                        new
+                        {
+                            PitchTypeId = 3,
+                            EquipmentId = 8
+                        },
+                        new
+                        {
+                            PitchTypeId = 4,
+                            EquipmentId = 8
+                        },
+                        new
+                        {
+                            PitchTypeId = 2,
+                            EquipmentId = 9
+                        });
                 });
 
             modelBuilder.Entity("SWZOS_Database.Entities.Reservation", b =>

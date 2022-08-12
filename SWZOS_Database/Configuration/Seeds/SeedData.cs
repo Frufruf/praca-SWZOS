@@ -53,6 +53,26 @@ namespace SWZOS_Database.Configuration.Seeds
                 new Equipment { Id = 9, Name = "Rakieta tenisowa", Quantity = 24, Price = 10.00, Description = "Rakieta do gry w tenisa", MaximumQuantityPerReservation = 4 }
             );
 
+            modelBuilder.Entity<PitchTypeEquipment>().HasData(
+                new PitchTypeEquipment { EquipmentId = 1, PitchTypeId = 1 },
+                new PitchTypeEquipment { EquipmentId = 2, PitchTypeId = 3 },
+                new PitchTypeEquipment { EquipmentId = 3, PitchTypeId = 4 },
+                new PitchTypeEquipment { EquipmentId = 4, PitchTypeId = 2 },
+                new PitchTypeEquipment { EquipmentId = 5, PitchTypeId = 1 },
+                new PitchTypeEquipment { EquipmentId = 5, PitchTypeId = 3 },
+                new PitchTypeEquipment { EquipmentId = 5, PitchTypeId = 4 },
+                new PitchTypeEquipment { EquipmentId = 6, PitchTypeId = 1 },
+                new PitchTypeEquipment { EquipmentId = 6, PitchTypeId = 3 },
+                new PitchTypeEquipment { EquipmentId = 6, PitchTypeId = 4 },
+                new PitchTypeEquipment { EquipmentId = 7, PitchTypeId = 1 },
+                new PitchTypeEquipment { EquipmentId = 7, PitchTypeId = 3 },
+                new PitchTypeEquipment { EquipmentId = 7, PitchTypeId = 4 },
+                new PitchTypeEquipment { EquipmentId = 8, PitchTypeId = 1 },
+                new PitchTypeEquipment { EquipmentId = 8, PitchTypeId = 3 },
+                new PitchTypeEquipment { EquipmentId = 8, PitchTypeId = 4 },
+                new PitchTypeEquipment { EquipmentId = 9, PitchTypeId = 2 }
+            );
+
             modelBuilder.Entity<BlackListStatus>().HasData(
                 new BlackListStatus { Id = 1, Name = "Waiting for approval" },
                 new BlackListStatus { Id = 2, Name = "Approved" },

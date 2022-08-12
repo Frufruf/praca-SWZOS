@@ -71,8 +71,6 @@ namespace SWZOS.Repositories
         //Metoda dodająca rezerwację wraz ze sprzętem do bazy
         public void AddReservation(ReservationFullFormModel model)
         {
-            var transaction = _db.Database.BeginTransaction();
-
             var reservation = new Reservation
             {
                 PitchId = model.PitchId,
@@ -87,21 +85,22 @@ namespace SWZOS.Repositories
             _db.Reservations.Add(reservation);
             _db.SaveChanges();
 
-            var equipmentList = new List<ReservationEquipment>();
-            foreach (var equipment in model.EquipmentList)
+            if (model.EquipmentList != null)
             {
-                var reservationEquipment = new ReservationEquipment
+                var equipmentList = new List<ReservationEquipment>();
+                foreach (var equipment in model.EquipmentList)
                 {
-                    ReservationId = reservation.ReservationId,
-                    EquipmentId = equipment.Id,
-                    Quantity = equipment.Quantity
-                };
-                equipmentList.Add(reservationEquipment);
+                    var reservationEquipment = new ReservationEquipment
+                    {
+                        ReservationId = reservation.ReservationId,
+                        EquipmentId = equipment.Id,
+                        Quantity = equipment.Quantity
+                    };
+                    equipmentList.Add(reservationEquipment);
+                }
+                _db.ReservationsEquipment.AddRange(equipmentList);
+                _db.SaveChanges();
             }
-            _db.ReservationsEquipment.AddRange(equipmentList);
-            _db.SaveChanges();
-
-            transaction.Commit();
         }
 
         //Metoda służąca do sprawdzenia poprawności tworzonej rezerwacji
@@ -176,10 +175,13 @@ namespace SWZOS.Repositories
             var pitchPrice = _db.PitchTypes.Where(a => a.PitchTypeId == model.PitchTypeId).FirstOrDefault().PitchTypePrice;
             price += pitchPrice * (model.Duration / 60.0);
 
-            foreach (var equipment in model.EquipmentList)
+            if (model.EquipmentList != null)
             {
-                var equipmentPrice = _db.Equipment.Where(a => a.Id == equipment.Id).FirstOrDefault().Price;
-                price += equipmentPrice * equipment.Quantity * (model.Duration / 60.0);
+                foreach (var equipment in model.EquipmentList)
+                {
+                    var equipmentPrice = _db.Equipment.Where(a => a.Id == equipment.Id).FirstOrDefault().Price;
+                    price += equipmentPrice * equipment.Quantity * (model.Duration / 60.0);
+                }
             }
             return price;
         }

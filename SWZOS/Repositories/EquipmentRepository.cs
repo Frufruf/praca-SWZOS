@@ -33,6 +33,16 @@ namespace SWZOS.Repositories
             }).ToList();
         }
 
+        public List<EquipmentSimpleModel> GetPitchEquipment(int pitchTypeId)
+        {
+            return _db.PitchTypeEquipment.Where(a => a.PitchTypeId == pitchTypeId).Select(a => new EquipmentSimpleModel
+            {
+                Id = a.EquipmentId,
+                Name = a.Equipment.Name,
+                Quantity = a.Equipment.Quantity
+            }).ToList();
+        }
+
         public EquipmentFormModel GetEquipmentFormModel(int id)
         {
             return _db.Equipment.Where(a => a.Id == id).Select(a => new EquipmentFormModel

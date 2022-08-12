@@ -1,5 +1,7 @@
 ﻿$(function () {
 
+    $("#equipmentTable").DataTable();
+
 });
 
 function EditEquipment(equipmentId) {
