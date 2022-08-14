@@ -74,6 +74,11 @@ namespace SWZOS.Repositories
             _db.SaveChanges();
         }
 
+        public double GetPitchPrice(int pitchTypeId)
+        {
+            return _db.PitchTypes.Where(a => a.PitchTypeId == pitchTypeId).Select(a => a.PitchTypePrice).FirstOrDefault();
+        }
+
         public void ValidateEditPitchModel(PitchModel model, ModelStateDictionary modelState)
         {
             if (model.OutOfServiceStartDate != null && model.OutOfServiceEndDate == null)

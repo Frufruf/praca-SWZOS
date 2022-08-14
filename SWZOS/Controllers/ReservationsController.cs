@@ -15,14 +15,17 @@ namespace SWZOS.Controllers
     {
         private ReservationsRepository _reservationsRepository;
         private EquipmentRepository _equipmentRepository;
+        private PitchesRepository _pitchesRepository;
         private IHttpContextAccessor _httpContextAccessor;
 
         public ReservationsController(ReservationsRepository reservationsRepository,
             EquipmentRepository equipmentRepository,
+            PitchesRepository pitchesRepository,
             IHttpContextAccessor httpContextAccessor)
         {
             _reservationsRepository = reservationsRepository;
             _equipmentRepository = equipmentRepository;
+            _pitchesRepository = pitchesRepository;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -55,7 +58,8 @@ namespace SWZOS.Controllers
                 StartDate = DateTime.Today,
                 PitchTypeId = pitchTypeId,
                 PitchEquipment = pitchEquipment,
-                Duration = 60
+                Duration = 60,
+                PitchPrice = _pitchesRepository.GetPitchPrice(pitchTypeId)
             };
             return View(model);
         }

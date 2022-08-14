@@ -1,6 +1,9 @@
 ﻿@model SWZOS.Models.Reservations.ReservationFormModel
 <script>
-    let ReservationsUrl = "@Url.Action("Index", "Reservations")";
+    let ReservationsUrl = '@Url.Action("Index", "Reservations")';
+    let equipmentCounter = 0;
+    let pitchEquipment = @Html.Raw(Json.Serialize(Model.PitchEquipment));
+    let pitchPrice = @Model.PitchPrice;
 </script>
 <div class="container">
     <form method="post" class="form-horizontal" id="AddReservationForm" asp-action="AddReservation">
@@ -20,7 +23,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">Cena:</label>
-                    <input class="form-control" id="priceCounterInput" disabled/>                 
+                    <input class="form-control" id="priceCounterInput" disabled value="@Model.PitchPrice"/>                 
                 </div>
                 <div class="form-group">
                     <label class="form-label" asp-for="Description">Dodatkowe uwagi</label>
@@ -40,7 +43,7 @@
     <div id="equipmentDiv" hidden>
         <div class="form-group">
             <label class="form-label">Wyposażenie:</label>
-            <select class="form-control" step="30" required>
+            <select class="form-control equipmentSelect" step="30" required>
                 @foreach(var item in Model.PitchEquipment)
                 {
                     <option value="@item.Id">@item.Name</option>

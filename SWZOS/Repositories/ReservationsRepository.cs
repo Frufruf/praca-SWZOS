@@ -46,6 +46,7 @@ namespace SWZOS.Repositories
                 UserId = a.UserId,
                 ReservationId = a.ReservationId,
                 PitchId = a.PitchId,
+                PitchTypeName = a.Pitch.PitchType.PitchTypeName,
                 StartDate = a.ReservationStartDate,
                 EndDate = a.ReservationStartDate.AddMinutes(a.ReservationDuration),
                 Price = a.ReservationPrice,
@@ -117,7 +118,17 @@ namespace SWZOS.Repositories
                     modelState.AddModelError("", "Nie możesz zmienić typu zarezerwowanego boiska, w tym celu anuluj obecną rezerwację i utwórz nową");
                     return null;
                 }
-            }       
+            }
+
+            //Sprawdzenie czy rezerwacja znajduje się przedziale godzin otwarcia
+            var startHour = new DateTime(model.StartDate.Day).AddHours(10);
+            var endHour = new DateTime(model.StartDate.Day).AddHours(23);
+            if (model.StartDate < startHour || model.StartDate.AddMinutes(model.Duration) > endHour)
+            {
+                modelState.AddModelError("", "Czas rezerwacji wykracza poza godziny działania obiektu");
+                return null;
+            }
+
             //Sprawdzenie czy w wybranym terminie są dostępne boiska dla danego typu
             //wywoływane również przy edycji (w przypadku zmiany godziny trzeba przypisać nowe boisko)
             var endDate = model.StartDate.AddMinutes(model.Duration);

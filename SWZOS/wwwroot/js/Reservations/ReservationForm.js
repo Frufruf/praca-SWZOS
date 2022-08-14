@@ -1,6 +1,16 @@
-﻿let equipmentCounter = 0;
+﻿$(function () {
 
-$(function () {
+    $("#Duration").on("change", function () {
+        CalculatePrice();
+    });
+
+    $("#equipmentFormDiv").on("change", ".equipmentSelect", function () {
+        CalculatePrice();
+    });
+
+    $("#equipmentFormDiv").on("change", ".equipmentQuantity", function () {
+        CalculatePrice();
+    });
 
     $("#addEquipment").on("click", function () {
         equipmentCounter++;
@@ -13,6 +23,7 @@ $(function () {
 
         let removeButton = $("#equipmentDiv_" + equipmentCounter + " .removeEquipment");
         removeButton.attr("id", "removeEquipment_" + equipmentCounter);
+        CalculatePrice();
     });
 
     $("#SubmitReservationForm").on("click", function (e) {       
@@ -56,6 +67,22 @@ $(function () {
     });
 
 });
+
+function CalculatePrice() {
+    console.log("Calculating price...");
+    let duration = $("#Duration").val();
+    let fullPrice = pitchPrice * (duration / 60.0);
+    let equipment = $(".equipmentForm");
+
+    equipment.each(function (index, element) {
+        let itemId = $(element).find("select").val();
+        let quantity = $(element).find(".equipmentQuantity").val();
+        let itemPrice = pitchEquipment.find(a => a.id == itemId).price;
+
+        fullPrice += (itemPrice * quantity) + (duration / 60.0);
+    });
+    $("#priceCounterInput").val(fullPrice);
+}
 
 function RemoveEquipment(button) {
     let id = $(button).attr("id").split("_")[1];

@@ -13,6 +13,7 @@ namespace SWZOS.Models.Reservations
         public int Duration { get; set; }
         public string Description { get; set; }
         public bool IsEditForm { get; set; }
+        public double PitchPrice { get; set; }
         public List<EquipmentSimpleModel> EquipmentList { get; set; }
         public List<EquipmentSimpleModel> PitchEquipment { get; set; }
     }

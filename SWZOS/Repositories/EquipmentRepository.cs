@@ -39,7 +39,9 @@ namespace SWZOS.Repositories
             {
                 Id = a.EquipmentId,
                 Name = a.Equipment.Name,
-                Quantity = a.Equipment.Quantity
+                Quantity = a.Equipment.Quantity,
+                Price = a.Equipment.Price,
+                MaximumAmountPerReservation = a.Equipment.MaximumQuantityPerReservation
             }).ToList();
         }
 

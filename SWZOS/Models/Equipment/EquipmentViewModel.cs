@@ -6,8 +6,6 @@ namespace SWZOS.Models.Equipment
     public class EquipmentViewModel: EquipmentSimpleModel
     {
         public string Description { get; set; }
-        public int MaximumAmountPerReservation { get; set; }
-        public double Price { get; set; }
         public List<PitchTypeModel> PitchTypes { get; set; }
     }
 }
