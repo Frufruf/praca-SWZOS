@@ -137,7 +137,8 @@ namespace SWZOS.Repositories
                                         && a.ReservationStartDate > model.StartDate
                                         && a.ReservationStartDate < endDate
                                         && a.ReservationStatus != (int)ReservationStatusEnum.Canceled
-                                        && a.ReservationStatus != (int)ReservationStatusEnum.Deleted).Select(a => a.PitchId).ToList();
+                                        && a.ReservationStatus != (int)ReservationStatusEnum.Deleted)
+                                        .Select(a => a.PitchId).ToList();
 
             var reservationPitchId = _db.Pitches.Where(a => (a.ActiveFlag || a.OutOfServiceEndDate < model.StartDate)
                                         && !busyPitches.Contains(a.PitchId)).Select(a => a.PitchId).FirstOrDefault();

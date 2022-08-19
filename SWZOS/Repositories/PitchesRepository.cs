@@ -130,9 +130,11 @@ namespace SWZOS.Repositories
             //TODO
             //Boisko wyłączone z użytku trzeba przenieść wszystkie rezerwacje
             //a w razie braku takiej możliwości usunąć i wysłać powiadomienie
-            if (model.ActiveFlag == false || (model.OutOfServiceStartDate != null && model.OutOfServiceEndDate != null))
+            if (model.OutOfServiceStartDate != null && model.OutOfServiceEndDate != null)
             {
-                var reservations = _db.Reservations.Where(a => a.PitchId == pitch.PitchId).ToList();
+                var reservations = _db.Reservations.Where(a => a.PitchId == pitch.PitchId 
+                                        && a.ReservationStartDate > model.OutOfServiceStartDate
+                                        && a.ReservationStartDate < model.OutOfServiceEndDate).ToList();
 
                 foreach (var res in reservations)
                 {

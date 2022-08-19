@@ -49,7 +49,8 @@ namespace SWZOS
             services.AddMvc();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddDbContext<SWZOSContext>(a =>
-                a.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("SWZOS")));
+                a.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), 
+                b => b.MigrationsAssembly("SWZOS")));
 
             services.AddTransient<IEmailSender, EmailSender>();
 

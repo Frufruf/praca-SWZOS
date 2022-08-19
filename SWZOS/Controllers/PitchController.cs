@@ -38,7 +38,7 @@ namespace SWZOS.Controllers
         [HttpPost]
         public IActionResult EditPitchType(PitchTypeModel model)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && model.PitchTypePrice > 0.00)
             {
                 _pitchesRepository.EditPitchType(model);
                 return RedirectToAction("Index");
@@ -69,7 +69,8 @@ namespace SWZOS.Controllers
                 catch (Exception ex)
                 {
                     Log.Logger.Error(ex.Message);
-                    ModelState.AddModelError("", "W trakcie edycji boiska wystąpił nieoczekiwany błąd, skontaktuj się z administratorem systemu");
+                    ModelState.AddModelError("", "W trakcie edycji boiska wystąpił nieoczekiwany błąd, " +
+                        "skontaktuj się z administratorem systemu");
                     return View(model);
                 }
             }
