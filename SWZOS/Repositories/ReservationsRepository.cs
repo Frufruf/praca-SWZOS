@@ -106,7 +106,6 @@ namespace SWZOS.Repositories
 
         //Metoda służąca do sprawdzenia poprawności tworzonej rezerwacji
         //zwracająca model uzupełniony o zliczoną cenę 
-        //TODO (Rozbić to na dwie osobne metody)
         public ReservationFullFormModel ValidateReservation(ReservationFormModel model, ModelStateDictionary modelState)
         {
             //Blokowanie edycji typu boiska

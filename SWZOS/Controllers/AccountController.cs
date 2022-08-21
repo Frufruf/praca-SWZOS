@@ -48,7 +48,7 @@ namespace SWZOS.Controllers
                 try
                 {
                     _usersRepository.AddUser(model, (int)UserTypesEnum.Employee);
-                    return RedirectToAction("Index", "Admin"); //Przekierowanie na stronę administracji
+                    return RedirectToAction("Index", "Admin");
                 }
                 catch (Exception ex)
                 {
@@ -186,7 +186,6 @@ namespace SWZOS.Controllers
             if (ModelState.IsValid)
             {
                 _accountRepository.ChangePassword(model);
-                //TODO jaki widok zwrócić po zmianie hasła
                 return RedirectToAction("Index", "Home");
             }
             return View(model);

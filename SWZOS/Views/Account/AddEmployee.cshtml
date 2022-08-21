@@ -1,7 +1,7 @@
 ﻿@model SWZOS.Models.User.UserFormModel
 <div class="container">
     <form class="form-horizontal" id="AddEmployeeForm" asp-action="AddEmployee">
-        <div class="row align-items-center">
+        <div class="form-row">
             <div class="col-6">
                 <div class="form-group">
                     <label class="form-label" asp-for="Login">Login:</label>
@@ -41,7 +41,9 @@
                     <span class="text-danger" asp-validation-for="PhoneNumber"></span>
                 </div>
             </div>
-            <input id="SubmitEmployeeForm" type="submit" value="Zapisz"/>
+            <div class="col-12">
+                <input id="SubmitEmployeeForm" type="submit" value="Zapisz"/>
+            </div>
         </div>
     </form>
 </div>
