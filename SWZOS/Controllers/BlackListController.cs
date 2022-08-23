@@ -14,6 +14,7 @@ namespace SWZOS.Controllers
     {
         private BlackListRepository _blackListRepository;
         private UsersRepository _usersRepository;
+        private ReservationsRepository _reservationsRepository;
         private IHttpContextAccessor _httpContextAccessor;
 
         public BlackListController(
@@ -69,6 +70,7 @@ namespace SWZOS.Controllers
                 if (role == "Admin")
                 {
                     model.StatusId = (int)BlackListStatusEnum.Approved;
+                    _reservationsRepository.CancelAllUsersReservations(model.UserId);
                 }
                 else
                 {
@@ -93,6 +95,7 @@ namespace SWZOS.Controllers
         public IActionResult ApproveBlackListEntry(int userId)
         {
             _blackListRepository.ApproveBlackListEntry(userId);
+            _reservationsRepository.CancelAllUsersReservations(userId);
             return RedirectToAction("Details", "Users", new { userId = userId });
         }
 

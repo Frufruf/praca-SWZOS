@@ -39,8 +39,7 @@ namespace SWZOS.Repositories
         {
             var result = _db.Reservations.Where(a => a.ReservationStartDate.Day >= startDate.Day 
                                     && a.ReservationStartDate.Day <= endDate.Day 
-                                    && a.ReservationStatus != (int)ReservationStatusEnum.Canceled
-                                    && a.ReservationStatus != (int)ReservationStatusEnum.Deleted)
+                                    && a.ReservationStatus != (int)ReservationStatusEnum.Canceled)
             .Select(a => new ReservationsViewModel
             {
                 UserId = a.UserId,
@@ -155,8 +154,7 @@ namespace SWZOS.Repositories
                                         && a.Pitch.PitchTypeId == model.PitchTypeId
                                         && a.ReservationStartDate > model.StartDate
                                         && a.ReservationStartDate < endDate
-                                        && a.ReservationStatus != (int)ReservationStatusEnum.Canceled
-                                        && a.ReservationStatus != (int)ReservationStatusEnum.Deleted)
+                                        && a.ReservationStatus != (int)ReservationStatusEnum.Canceled)
                                         .Select(a => a.PitchId).ToList();
 
             var reservationPitchId = _db.Pitches.Where(a => (a.ActiveFlag || a.OutOfServiceEndDate < model.StartDate)
@@ -247,18 +245,7 @@ namespace SWZOS.Repositories
             _db.ReservationsEquipment.AddRange(equipmentList);
             _db.SaveChanges();
             transaction.Commit();
-        }
-
-        //Metoda usuwająca rezerwację z systemu
-        public void DeleteReservaion(int reservationId)
-        {
-            var reservation = _db.Reservations.Where(a => a.ReservationId == reservationId).FirstOrDefault();
-            if (reservation != null)
-            {
-                reservation.ReservationStatus = (int)ReservationStatusEnum.Deleted;
-                _db.SaveChanges();
-            }
-        }
+        }        
 
         //Metoda anulująca rezerwację
         public void CancelReservation(int reservationId)
@@ -269,6 +256,18 @@ namespace SWZOS.Repositories
                 reservation.ReservationStatus = (int)ReservationStatusEnum.Canceled;
                 _db.SaveChanges();
             }
+        }
+
+        public void CancelAllUsersReservations(int userId)
+        {
+            var reservations = _db.Reservations.Where(a => a.UserId == userId && a.ReservationStartDate > DateTime.Now).ToList();
+
+            foreach (var res in reservations)
+            {
+                res.ReservationStatus = (int)ReservationStatusEnum.Canceled;
+            }
+
+            _db.SaveChanges();
         }
     }
 }

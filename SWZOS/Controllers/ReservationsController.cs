@@ -138,12 +138,5 @@ namespace SWZOS.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
-        public IActionResult DeleteReservation(int reservationId)
-        {
-            _reservationsRepository.DeleteReservaion(reservationId);
-            return RedirectToAction("Index");
-        }
-
     }
 }

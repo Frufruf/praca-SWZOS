@@ -143,8 +143,7 @@ namespace SWZOS.Repositories
                                         && a.Pitch.PitchTypeId == pitch.PitchTypeId
                                         && a.ReservationStartDate > res.ReservationStartDate
                                         && a.ReservationStartDate < endDate
-                                        && a.ReservationStatus != (int)ReservationStatusEnum.Canceled
-                                        && a.ReservationStatus != (int)ReservationStatusEnum.Deleted).Select(a => a.PitchId).ToList();
+                                        && a.ReservationStatus != (int)ReservationStatusEnum.Canceled).Select(a => a.PitchId).ToList();
 
                     var reservationPitchId = _db.Pitches.Where(a => a.PitchId != pitch.PitchId
                                         && (a.ActiveFlag || a.OutOfServiceEndDate < res.ReservationStartDate)
