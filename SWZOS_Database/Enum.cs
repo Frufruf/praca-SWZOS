@@ -39,7 +39,10 @@ namespace SWZOS_Database
 
         public enum PaymentStatusEnum
         {
-
+            NotPaid = 1,
+            Paid = 2,
+            Delayed = 3,
+            Overpaid = 4
         }
 
         //Rodzaje pozycji w cenniku

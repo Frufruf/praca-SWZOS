@@ -72,6 +72,8 @@ namespace SWZOS.Repositories
         //Metoda dodająca rezerwację wraz ze sprzętem do bazy
         public void AddReservation(ReservationFullFormModel model)
         {
+            var transaction = _db.Database.BeginTransaction();
+
             var reservation = new Reservation
             {
                 PitchId = model.PitchId,
@@ -102,6 +104,19 @@ namespace SWZOS.Repositories
                 _db.ReservationsEquipment.AddRange(equipmentList);
                 _db.SaveChanges();
             }
+
+            _db.Payments.Add(new Payment
+            {
+                ReservationId = reservation.ReservationId,
+                UserId = model.UserId,
+                FullFee = model.Price,
+                AdvancePayment = model.Price > 500.00 ? model.Price * 0.2 : 0.00,
+                PaidInAmmount = 0.00,
+                StatusId = (int)PaymentStatusEnum.NotPaid
+            });
+            _db.SaveChanges();
+
+            transaction.Commit();
         }
 
         //Metoda służąca do sprawdzenia poprawności tworzonej rezerwacji
@@ -125,6 +140,11 @@ namespace SWZOS.Repositories
             if (model.StartDate < startHour || model.StartDate.AddMinutes(model.Duration) > endHour)
             {
                 modelState.AddModelError("", "Czas rezerwacji wykracza poza godziny działania obiektu");
+                return null;
+            }
+            if (model.StartDate < DateTime.Now)
+            {
+                modelState.AddModelError("", "Wybrany termin już minął");
                 return null;
             }
 

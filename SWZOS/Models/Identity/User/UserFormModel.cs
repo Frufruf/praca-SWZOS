@@ -21,7 +21,6 @@ namespace SWZOS.Models.User
         [Required]
         public string Surname { get; set; }
         public string PhoneNumber { get; set; }
-        public string PESEL { get; set; }
         [Required]
         public string MailAddress { get; set; }
     }

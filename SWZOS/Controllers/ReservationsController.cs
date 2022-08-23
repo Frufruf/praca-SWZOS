@@ -30,18 +30,29 @@ namespace SWZOS.Controllers
         }
 
         [Authorize]
-        public IActionResult Index()
+        public IActionResult Index(DateTime? startDate, DateTime? endDate)
         {
             var role = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
-            var model = new List<ReservationsViewModel>();
+            var model = new ReservationsPageViewModel
+            {
+                StartDate = startDate != null ? (DateTime)startDate : DateTime.Now,
+                EndDate = endDate != null ? (DateTime)endDate : DateTime.Now
+            };
             if (role == "Admin" || role == "Employee")
             {
-                model = _reservationsRepository.GetReservationsByDate(DateTime.Now, DateTime.Now);
+                if (startDate != null && endDate != null)
+                {
+                    model.Reservations = _reservationsRepository.GetReservationsByDate((DateTime)startDate, (DateTime)endDate);
+                }
+                else
+                {
+                    model.Reservations = _reservationsRepository.GetReservationsByDate(DateTime.Now, DateTime.Now);
+                }
             }
             else
             {
                 var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                model = _reservationsRepository.GetUserReservations(Int32.Parse(userId));
+                model.Reservations = _reservationsRepository.GetUserReservations(Int32.Parse(userId));
             }
             return View(model);
         }

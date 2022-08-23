@@ -1,4 +1,9 @@
 ﻿$(function () {
+    let startDateArray = startDate.split(".").reverse();
+    let endDateArray = endDate.split(".").reverse();
+
+    $("#startDate").val(startDateArray.join("-"));
+    $("#endDate").val(endDateArray.join("-"));
 
     $("#reservationsTable").DataTable();
 
@@ -17,4 +22,15 @@
     $("#addVolleyballPitchReservation").on("click", function () {
         window.location.href = ReservationUrl.AddReservation + "?pitchTypeId=4"
     });
+
+    $("#searchReservations").on("click", function () {
+        startDate = $("#startDate").val();
+        endDate = $("#endDate").val();
+
+        window.location.href = ReservationUrl.Index + "?startDate=" + startDate + "&endDate=" + endDate;
+    });
 })
+
+function EditReservation(reservationId) {
+    window.location.href = ReservationUrl.EditReservation + "?reservationId=" + reservationId;
+}

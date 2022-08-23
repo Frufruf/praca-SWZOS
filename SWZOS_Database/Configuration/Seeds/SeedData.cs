@@ -79,6 +79,12 @@ namespace SWZOS_Database.Configuration.Seeds
                 new BlackListStatus { Id = 3, Name = "Rejected" },
                 new BlackListStatus { Id = 4, Name = "Deleted" }
             );
+
+            modelBuilder.Entity<Global>().HasData(
+                new Global { Key = "HomePageDescription", Value = "", Description = "Tekst wyświetlany na stronie głównej aplikacji" },
+                new Global { Key = "OpenHour", Value = "10:00:00", Description = "Godzina otwarcia obiektu" },
+                new Global { Key = "CloseHour", Value = "23:00:00", Description = "Godzina zamknięcia obiektu" }
+            );
         }
     }
 }

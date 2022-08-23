@@ -71,6 +71,7 @@ namespace SWZOS.Repositories
             var user = _db.Users.Where(a => a.UserId == userId).Select(a => new UserViewModel
             {
                 Id = userId,
+                UserTypeId = a.UserTypeId,
                 Login = a.Login,
                 Name = a.Name,
                 Surname = a.Surname,
@@ -87,7 +88,7 @@ namespace SWZOS.Repositories
                     EndDate = b.ReservationStartDate.AddMinutes(b.ReservationDuration),
                     Price = b.ReservationPrice,
                     Description = b.Description,
-                    Payments = new PaymentViewModel
+                    Payments = b.Payment != null ? new PaymentViewModel
                     {
                         PaymentId = b.Payment.PaymentId,
                         FullFee = b.Payment.FullFee,
@@ -95,7 +96,7 @@ namespace SWZOS.Repositories
                         AdvancePayment = b.Payment.AdvancePayment,
                         StatusId = b.Payment.StatusId,
                         Description = b.Description
-                    }
+                    } : new PaymentViewModel { }
                 }).OrderBy(b => b.StartDate).ToList()
             }).FirstOrDefault();
 
@@ -122,7 +123,7 @@ namespace SWZOS.Repositories
         {
             if (user.Password != user.ConfirmedPassword) 
             {
-                modelState.AddModelError("ConfirmedPassowrd", "Wprowadzone hasło różni się");
+                modelState.AddModelError("Password", "Wprowadzone hasła różnią się");
             }
             if (_db.Users.Where(u => u.Login == user.Login).FirstOrDefault() != null) 
             {

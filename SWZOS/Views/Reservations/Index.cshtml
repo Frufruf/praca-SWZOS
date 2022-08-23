@@ -1,8 +1,13 @@
-﻿@model List<SWZOS.Models.Reservations.ReservationsViewModel>
+﻿@model SWZOS.Models.Reservations.ReservationsPageViewModel
 <script>
     let ReservationUrl = {
-        AddReservation: "@Url.Action("AddReservation", "Reservations")"
+        AddReservation: "@Url.Action("AddReservation", "Reservations")",
+        Index: "@Url.Action("Index", "Reservations")",
+        EditReservation: "@Url.Action("EditReservation", "Reservations")"
     }
+
+    let startDate = "@Model.StartDate.ToShortDateString()";
+    let endDate = "@Model.EndDate.ToShortDateString()";
 </script>
 <div class="container">
      <div class="align-items-center">
@@ -23,6 +28,21 @@
                     <button class="btn btn-primary adminButton" type="button" id="addVolleyballPitchReservation">Boisko do siatkówki</button>
                 </div>
             </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <input id="startDate" type="date" />
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <input id="endDate" type="date" />
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <button id="searchReservations">Filtruj rezerwacje</button>
+                </div>
+            </div>
         </div>
         <table id="reservationsTable" border="1" cellpadding="5" cellspacing="5" width="100%">
             <thead>
@@ -37,7 +57,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var element in Model)
+                @foreach (var element in Model.Reservations)
                 {
                     <tr>
                         <td>@element.PitchId</td>
@@ -46,7 +66,7 @@
                         <td>@element.EndDate</td>
                         <td>@element.Price</td>
                         <td>@element.Description</td>
-                        <td><button class="btn btn-primary" onclick="Details(@element.ReservationId)">Szczegóły</button></td>
+                        <td>@if (element.StartDate > DateTime.Now) { <text><button class="btn btn-primary" onclick="EditReservation(@element.ReservationId)">Szczegóły</button></text>}</td>
                     </tr>
                 }
             </tbody>
