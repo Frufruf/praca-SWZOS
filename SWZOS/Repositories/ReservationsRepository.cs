@@ -134,9 +134,9 @@ namespace SWZOS.Repositories
             }
 
             //Sprawdzenie czy rezerwacja znajduje się przedziale godzin otwarcia
-            var startHour = new DateTime(model.StartDate.Day).AddHours(10);
-            var endHour = new DateTime(model.StartDate.Day).AddHours(23);
-            if (model.StartDate < startHour || model.StartDate.AddMinutes(model.Duration) > endHour)
+            TimeSpan startHour = new TimeSpan(10, 0, 0); 
+            TimeSpan endHour = new TimeSpan(23, 0, 0);
+            if (model.StartDate.TimeOfDay < startHour || model.StartDate.AddMinutes(model.Duration).TimeOfDay > endHour)
             {
                 modelState.AddModelError("", "Czas rezerwacji wykracza poza godziny działania obiektu");
                 return null;

@@ -26,7 +26,7 @@
         CalculatePrice();
     });
 
-    $("#SubmitReservationForm").on("click", function (e) {       
+    $("#SubmitReservationForm").on("click", function () {
         let equipmentList = [];
         let equipment = $(".equipmentForm");
 
@@ -55,13 +55,15 @@
                 if (data.success) {
                     window.location.href = ReservationsUrl;
                 } else {
-                    for (let i = 0; i < data.errors; i++) {
-                        console.log(data.errors[i]);
-                    }
+                    console.log(data.errors);
+                    $("#validationDiv").html(data.errors[0].errorMessage).addClass("text-danger");
                 }
             },
-            error: function () {
-
+            error: function (jqXHR, textStatus, errorThrown) {
+                window.alert("Wystąpił nieoczekiwany błąd");
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
             }
         });
     });

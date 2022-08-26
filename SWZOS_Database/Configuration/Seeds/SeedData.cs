@@ -80,6 +80,14 @@ namespace SWZOS_Database.Configuration.Seeds
                 new BlackListStatus { Id = 4, Name = "Deleted" }
             );
 
+            modelBuilder.Entity<PaymentStatus>().HasData(
+                new PaymentStatus { PaymentStatusId = 1, Name = "NotPaid" },
+                new PaymentStatus { PaymentStatusId = 2, Name = "Paid" },
+                new PaymentStatus { PaymentStatusId = 3, Name = "Delayed" },
+                new PaymentStatus { PaymentStatusId = 4, Name = "Overpaid" },
+                new PaymentStatus { PaymentStatusId = 5, Name = "Canceled" }
+            );
+
             modelBuilder.Entity<Global>().HasData(
                 new Global { Key = "HomePageDescription", Value = "", Description = "Tekst wyświetlany na stronie głównej aplikacji" },
                 new Global { Key = "OpenHour", Value = "10:00:00", Description = "Godzina otwarcia obiektu" },

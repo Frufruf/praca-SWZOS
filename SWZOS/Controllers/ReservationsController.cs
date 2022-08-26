@@ -96,7 +96,7 @@ namespace SWZOS.Controllers
                 }
                 ModelState.AddModelError("", "Wystąpił nieoczekiwany błąd"); 
             }
-            return Json(new { success = false, errors = ModelState.Select(a => a.Value.Errors).Where(a => a.Count > 0).ToList() });
+            return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).ToList() });
         }
 
         [HttpGet]
