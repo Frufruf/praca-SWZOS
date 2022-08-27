@@ -248,14 +248,21 @@ namespace SWZOS.Repositories
         }        
 
         //Metoda anulująca rezerwację
-        public void CancelReservation(int reservationId)
+        public bool CancelReservation(int reservationId, int userId, bool isEmployee = false)
         {
             var reservation = _db.Reservations.Where(a => a.ReservationId == reservationId).FirstOrDefault();
             if (reservation != null)
             {
-                reservation.ReservationStatus = (int)ReservationStatusEnum.Canceled;
-                _db.SaveChanges();
+                if (reservation.UserId == userId || isEmployee)
+                {
+                    var payment = _db.Payments.Where(a => a.ReservationId == reservationId).FirstOrDefault();
+                    reservation.ReservationStatus = (int)ReservationStatusEnum.Canceled;                   
+                    payment.StatusId = (int)PaymentStatusEnum.Canceled;
+                    _db.SaveChanges();
+                    return true;
+                }
             }
+            return false;
         }
 
         public void CancelAllUsersReservations(int userId)

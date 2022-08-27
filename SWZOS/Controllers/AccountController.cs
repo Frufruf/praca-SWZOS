@@ -120,7 +120,7 @@ namespace SWZOS.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                    new Claim(ClaimTypes.Name, user.MailAddress),
+                    new Claim(ClaimTypes.Name, user.Login),
                     new Claim("FullName", user.Name + " " + user.Surname),
                     new Claim(ClaimTypes.Role, userRole),
                 };
@@ -182,6 +182,8 @@ namespace SWZOS.Controllers
         [Authorize]
         public IActionResult ChangePassword(PasswordChangeModel model)
         {
+            model.Login = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            model.UserId = Int32.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
             _accountRepository.ValidatePasswordChange(model, ModelState);
             if (ModelState.IsValid)
             {

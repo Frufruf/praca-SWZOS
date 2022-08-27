@@ -34,3 +34,23 @@
 function EditReservation(reservationId) {
     window.location.href = ReservationUrl.EditReservation + "?reservationId=" + reservationId;
 }
+
+function CancelReservation(reservationId) {
+    $.ajax({
+        type: "POST",
+        url: ReservationUrl.CancelReservation + "?reservationId=" + reservationId,
+        success: function (data) {
+            if (data.success) {
+                window.alert("Rezerwacja została anulowana");
+            } else {
+                window.alert("Nie udało się anulować rezerwacji");
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            window.alert("Wystąpił nieoczekiwany błąd");
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+        }
+    });
+}

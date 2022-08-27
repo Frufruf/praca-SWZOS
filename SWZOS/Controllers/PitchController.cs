@@ -29,6 +29,7 @@ namespace SWZOS.Controllers
         //}
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult EditPitchType(int typeId)
         {
             var model = _pitchesRepository.GetPitchType(typeId);
@@ -36,6 +37,7 @@ namespace SWZOS.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult EditPitchType(PitchTypeModel model)
         {
             if (ModelState.IsValid && model.PitchTypePrice > 0.00)

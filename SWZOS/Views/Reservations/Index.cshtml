@@ -3,7 +3,8 @@
     let ReservationUrl = {
         AddReservation: "@Url.Action("AddReservation", "Reservations")",
         Index: "@Url.Action("Index", "Reservations")",
-        EditReservation: "@Url.Action("EditReservation", "Reservations")"
+        EditReservation: "@Url.Action("EditReservation", "Reservations")",
+        CancelReservation: "@Url.Action("CancelReservation", "Reservations")"
     }
 
     let startDate = "@Model.StartDate.ToShortDateString()";
@@ -66,7 +67,12 @@
                         <td>@element.EndDate</td>
                         <td>@element.Price</td>
                         <td>@element.Description</td>
-                        <td>@if (element.StartDate > DateTime.Now) { <text><button class="btn btn-primary" onclick="EditReservation(@element.ReservationId)">Szczegóły</button></text>}</td>
+                        <td>@if (element.StartDate > DateTime.Now) { 
+                            <text>
+                                <button class="btn btn-primary" onclick="EditReservation(@element.ReservationId)">Szczegóły</button>
+                                <button class="btn btn-primary" onclick="CancelReservation(@element.ReservationId)">Anuluj</button>
+                            </text>
+                        }</td>
                     </tr>
                 }
             </tbody>

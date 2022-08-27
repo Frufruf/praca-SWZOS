@@ -37,10 +37,8 @@ namespace SWZOS.Repositories
             {
                 modelState.AddModelError("NewPassword", "Nowe hasło musi posiadać co najmniej 5 znaków");
             }
-            //TODO Podmienić na currentUser
-            var login = _db.Users.Where(u => u.UserId == model.UserId).FirstOrDefault().Login;
-            var user = AuthenticateUser(new LoginModel() { Login = login, Password = model.CurrentPassword }); 
-
+            
+            var user = AuthenticateUser(new LoginModel() { Login = model.Login, Password = model.CurrentPassword }); 
             if (user == null)
             {
                 modelState.AddModelError("CurrentPassword", "Niepoprawne hasło");

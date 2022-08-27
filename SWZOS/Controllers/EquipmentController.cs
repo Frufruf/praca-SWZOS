@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SWZOS.Models.Equipment;
 using SWZOS.Repositories;
+using System.Data;
 
 namespace SWZOS.Controllers
 {
@@ -12,6 +14,7 @@ namespace SWZOS.Controllers
             _equipmentRepository = equipmentRepository;
         }
 
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Index()
         {
             var model = _equipmentRepository.GetFullEquipment();
@@ -19,12 +22,14 @@ namespace SWZOS.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Add()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Add(EquipmentFormModel model)
         {
             if (ModelState.IsValid)
@@ -35,6 +40,8 @@ namespace SWZOS.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Edit(int id)
         {
             var model = _equipmentRepository.GetEquipmentFormModel(id);
@@ -42,6 +49,7 @@ namespace SWZOS.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Edit(EquipmentFormModel model)
         {
             if (ModelState.IsValid)

@@ -100,6 +100,7 @@ namespace SWZOS.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult EditReservation(int reservationId)
         {
             var model = _reservationsRepository.GetReservationById(reservationId);
@@ -108,6 +109,7 @@ namespace SWZOS.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult EditReservation(ReservationFormModel model)
         {
             var reservation = _reservationsRepository.ValidateReservation(model, ModelState);
@@ -132,10 +134,21 @@ namespace SWZOS.Controllers
         }
 
         [HttpPost]
-        public IActionResult CancelReservation(int reservationId)
+        [Authorize]
+        public JsonResult CancelReservation(int reservationId)
         {
-            _reservationsRepository.CancelReservation(reservationId);
-            return RedirectToAction("Index");
+            var userId = Int32.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var role = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+            var success = false;
+            if (role == "Admin" || role == "Employee")
+            {
+                success = _reservationsRepository.CancelReservation(reservationId, userId, true);
+            }
+            else
+            {
+                success = _reservationsRepository.CancelReservation(reservationId, userId);
+            }
+            return Json(success);
         }
 
     }

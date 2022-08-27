@@ -13,12 +13,13 @@ namespace SWZOS.Controllers
             _homeRepository = homeRepository;
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Index()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult GlobalTable()
         {
             var model = _homeRepository.GetAllValues();
