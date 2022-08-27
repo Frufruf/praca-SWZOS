@@ -63,6 +63,7 @@ namespace SWZOS
             services.AddScoped<BlackListRepository, BlackListRepository>();
             services.AddScoped<PitchesRepository, PitchesRepository>();
             services.AddScoped<EquipmentRepository, EquipmentRepository>();
+            services.AddScoped<HomeRepository, HomeRepository>();
 
             #endregion
         }

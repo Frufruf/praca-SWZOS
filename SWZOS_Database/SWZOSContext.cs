@@ -28,6 +28,7 @@ namespace SWZOS_Database
         public DbSet<BlackListStatus> BlackListStatuses { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<PaymentStatus> PaymentStatuses { get; set; }
+        public DbSet<Global> Global { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

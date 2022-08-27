@@ -13,7 +13,8 @@
         BlackListUrl: "@Url.Action("Index","BlackList")",
         PriceListUrl: "@Url.Action("Index","PriceList")",
         ApprovalUrl: "@Url.Action("Approvals", "BlackList")",
-        AddEmployeeUrl: "@Url.Action("AddEmployee", "Account")"
+        AddEmployeeUrl: "@Url.Action("AddEmployee", "Account")",
+        GlobalUrl: "@Url.Action("GlobalTable", "Admin")"
     };
 </script>
 <div class="container">
@@ -38,6 +39,9 @@
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary adminButton" type="button" id="addEmployeeButton">Dodaj pracownika</button>
+                </div>
+                <div>
+                    <button class="btn btn-primary adminButton" type="button" id="editGlobalTable">Edytuj informacje</button>
                 </div>
             }
         </div>

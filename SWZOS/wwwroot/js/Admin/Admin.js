@@ -24,4 +24,8 @@
         window.location.href = AdminUrl.AddEmployeeUrl;
     });
 
+    $("#editGlobalTable").on("click", function () {
+        window.location.href = AdminUrl.GlobalUrl;
+    });
+
 });

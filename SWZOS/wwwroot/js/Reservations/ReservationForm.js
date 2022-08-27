@@ -89,6 +89,7 @@ function CalculatePrice() {
 function RemoveEquipment(button) {
     let id = $(button).attr("id").split("_")[1];
     $("#equipmentDiv_" + id).remove();
+    CalculatePrice();
 }
 
 function ValidateReservation() {
