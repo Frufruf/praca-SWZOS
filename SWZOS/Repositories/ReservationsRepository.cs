@@ -45,6 +45,7 @@ namespace SWZOS.Repositories
                 UserId = a.UserId,
                 ReservationId = a.ReservationId,
                 PitchId = a.PitchId,
+                PitchTypeId = a.Pitch.PitchTypeId,
                 PitchTypeName = a.Pitch.PitchType.PitchTypeName,
                 StartDate = a.ReservationStartDate,
                 EndDate = a.ReservationStartDate.AddMinutes(a.ReservationDuration),
@@ -250,7 +251,7 @@ namespace SWZOS.Repositories
         //Metoda anulująca rezerwację
         public bool CancelReservation(int reservationId, int userId, bool isEmployee = false)
         {
-            var reservation = _db.Reservations.Where(a => a.ReservationId == reservationId).FirstOrDefault();
+            var reservation = _db.Reservations.Where(a => a.ReservationId == reservationId && a.ReservationStartDate > DateTime.Now).FirstOrDefault();
             if (reservation != null)
             {
                 if (reservation.UserId == userId || isEmployee)

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SWZOS_Database;
 
@@ -11,9 +12,10 @@ using SWZOS_Database;
 namespace SWZOS.Migrations
 {
     [DbContext(typeof(SWZOSContext))]
-    partial class SWZOSContextModelSnapshot : ModelSnapshot
+    [Migration("20220828140255_pitch_equipment_fix")]
+    partial class pitch_equipment_fix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -798,120 +800,6 @@ namespace SWZOS.Migrations
                     b.HasIndex("UserTypeId");
 
                     b.ToTable("USERS", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            ActiveFlag = true,
-                            DeletedFlag = false,
-                            Login = "kbrydak",
-                            MailAddress = "krzysztof.brydak@gmail.com",
-                            Name = "Krzysztof",
-                            PasswordExpirationDate = new DateTime(2023, 8, 28, 16, 18, 21, 575, DateTimeKind.Local).AddTicks(7136),
-                            PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
-                            PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
-                            Surname = "Brydak",
-                            UserTypeId = 1
-                        },
-                        new
-                        {
-                            UserId = 2,
-                            ActiveFlag = true,
-                            DeletedFlag = false,
-                            Login = "employee_a",
-                            MailAddress = "employee_a@swzos.pl",
-                            Name = "Jan",
-                            PasswordExpirationDate = new DateTime(2023, 8, 28, 16, 18, 21, 575, DateTimeKind.Local).AddTicks(7176),
-                            PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
-                            PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
-                            Surname = "Śliwa",
-                            UserTypeId = 2
-                        },
-                        new
-                        {
-                            UserId = 3,
-                            ActiveFlag = true,
-                            DeletedFlag = false,
-                            Login = "employee_b",
-                            MailAddress = "employee_b@swzos.pl",
-                            Name = "Grzegorz",
-                            PasswordExpirationDate = new DateTime(2023, 8, 28, 16, 18, 21, 575, DateTimeKind.Local).AddTicks(7180),
-                            PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
-                            PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
-                            Surname = "Nowak",
-                            UserTypeId = 2
-                        },
-                        new
-                        {
-                            UserId = 4,
-                            ActiveFlag = true,
-                            DeletedFlag = false,
-                            Login = "dzony_a",
-                            MailAddress = "dzony_a@swzos.pl",
-                            Name = "Łukasz",
-                            PasswordExpirationDate = new DateTime(2023, 8, 28, 16, 18, 21, 575, DateTimeKind.Local).AddTicks(7183),
-                            PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
-                            PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
-                            Surname = "Piotrowski",
-                            UserTypeId = 3
-                        },
-                        new
-                        {
-                            UserId = 5,
-                            ActiveFlag = true,
-                            DeletedFlag = false,
-                            Login = "dzony_b",
-                            MailAddress = "dzony_b@swzos.pl",
-                            Name = "Michał",
-                            PasswordExpirationDate = new DateTime(2023, 8, 28, 16, 18, 21, 575, DateTimeKind.Local).AddTicks(7186),
-                            PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
-                            PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
-                            Surname = "Skórka",
-                            UserTypeId = 3
-                        },
-                        new
-                        {
-                            UserId = 6,
-                            ActiveFlag = true,
-                            DeletedFlag = false,
-                            Login = "dzony_c",
-                            MailAddress = "dzony_c@swzos.pl",
-                            Name = "Piotr",
-                            PasswordExpirationDate = new DateTime(2023, 8, 28, 16, 18, 21, 575, DateTimeKind.Local).AddTicks(7189),
-                            PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
-                            PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
-                            Surname = "Koza",
-                            UserTypeId = 3
-                        },
-                        new
-                        {
-                            UserId = 7,
-                            ActiveFlag = true,
-                            DeletedFlag = false,
-                            Login = "dzony_d",
-                            MailAddress = "dzony_d@swzos.pl",
-                            Name = "Krzysztof",
-                            PasswordExpirationDate = new DateTime(2023, 8, 28, 16, 18, 21, 575, DateTimeKind.Local).AddTicks(7193),
-                            PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
-                            PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
-                            Surname = "Pałka",
-                            UserTypeId = 3
-                        },
-                        new
-                        {
-                            UserId = 8,
-                            ActiveFlag = true,
-                            DeletedFlag = false,
-                            Login = "dzony_e",
-                            MailAddress = "dzony_e@swzos.pl",
-                            Name = "Filip",
-                            PasswordExpirationDate = new DateTime(2023, 8, 28, 16, 18, 21, 575, DateTimeKind.Local).AddTicks(7196),
-                            PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
-                            PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
-                            Surname = "Wilczek",
-                            UserTypeId = 3
-                        });
                 });
 
             modelBuilder.Entity("SWZOS_Database.Entities.UserType", b =>

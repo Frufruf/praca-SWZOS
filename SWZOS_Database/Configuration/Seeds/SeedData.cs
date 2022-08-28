@@ -17,6 +17,17 @@ namespace SWZOS_Database.Configuration.Seeds
                 new UserType { Id = 3, Name = "Customer"}
             );
 
+            modelBuilder.Entity<User>().HasData(
+                new User { UserId = 1, Login = "kbrydak", Name = "Krzysztof", Surname = "Brydak", MailAddress = "krzysztof.brydak@gmail.com", UserTypeId = 1, PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=", PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=", PasswordExpirationDate = DateTime.Now.AddDays(365), ActiveFlag = true, DeletedFlag = false },
+                new User { UserId = 2, Login = "employee_a", Name = "Jan", Surname = "Śliwa", MailAddress = "employee_a@swzos.pl", UserTypeId = 2, PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=", PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=", PasswordExpirationDate = DateTime.Now.AddDays(365), ActiveFlag = true, DeletedFlag = false },
+                new User { UserId = 3, Login = "employee_b", Name = "Grzegorz", Surname = "Nowak", MailAddress = "employee_b@swzos.pl", UserTypeId = 2, PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=", PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=", PasswordExpirationDate = DateTime.Now.AddDays(365), ActiveFlag = true, DeletedFlag = false },
+                new User { UserId = 4, Login = "dzony_a", Name = "Łukasz", Surname = "Piotrowski", MailAddress = "dzony_a@swzos.pl", UserTypeId = 3, PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=", PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=", PasswordExpirationDate = DateTime.Now.AddDays(365), ActiveFlag = true, DeletedFlag = false },
+                new User { UserId = 5, Login = "dzony_b", Name = "Michał", Surname = "Skórka", MailAddress = "dzony_b@swzos.pl", UserTypeId = 3, PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=", PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=", PasswordExpirationDate = DateTime.Now.AddDays(365), ActiveFlag = true, DeletedFlag = false },
+                new User { UserId = 6, Login = "dzony_c", Name = "Piotr", Surname = "Koza", MailAddress = "dzony_c@swzos.pl", UserTypeId = 3, PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=", PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=", PasswordExpirationDate = DateTime.Now.AddDays(365), ActiveFlag = true, DeletedFlag = false },
+                new User { UserId = 7, Login = "dzony_d", Name = "Krzysztof", Surname = "Pałka", MailAddress = "dzony_d@swzos.pl", UserTypeId = 3, PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=", PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=", PasswordExpirationDate = DateTime.Now.AddDays(365), ActiveFlag = true, DeletedFlag = false },
+                new User { UserId = 8, Login = "dzony_e", Name = "Filip", Surname = "Wilczek", MailAddress = "dzony_e@swzos.pl", UserTypeId = 3, PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=", PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=", PasswordExpirationDate = DateTime.Now.AddDays(365), ActiveFlag = true, DeletedFlag = false }
+            );
+
             modelBuilder.Entity<PitchType>().HasData(
                 new PitchType { PitchTypeId = 1, PitchTypeName = "Boisko piłkarskie", PitchTypePrice = 120.00 },
                 new PitchType { PitchTypeId = 2, PitchTypeName = "Boisko do koszykówki", PitchTypePrice = 80.00 },
@@ -55,22 +66,22 @@ namespace SWZOS_Database.Configuration.Seeds
 
             modelBuilder.Entity<PitchTypeEquipment>().HasData(
                 new PitchTypeEquipment { EquipmentId = 1, PitchTypeId = 1 },
-                new PitchTypeEquipment { EquipmentId = 2, PitchTypeId = 3 },
-                new PitchTypeEquipment { EquipmentId = 3, PitchTypeId = 4 },
-                new PitchTypeEquipment { EquipmentId = 4, PitchTypeId = 2 },
+                new PitchTypeEquipment { EquipmentId = 2, PitchTypeId = 2 },
+                new PitchTypeEquipment { EquipmentId = 3, PitchTypeId = 3 },
+                new PitchTypeEquipment { EquipmentId = 4, PitchTypeId = 4 },
                 new PitchTypeEquipment { EquipmentId = 5, PitchTypeId = 1 },
+                new PitchTypeEquipment { EquipmentId = 5, PitchTypeId = 2 },
                 new PitchTypeEquipment { EquipmentId = 5, PitchTypeId = 3 },
-                new PitchTypeEquipment { EquipmentId = 5, PitchTypeId = 4 },
                 new PitchTypeEquipment { EquipmentId = 6, PitchTypeId = 1 },
+                new PitchTypeEquipment { EquipmentId = 6, PitchTypeId = 2 },
                 new PitchTypeEquipment { EquipmentId = 6, PitchTypeId = 3 },
-                new PitchTypeEquipment { EquipmentId = 6, PitchTypeId = 4 },
                 new PitchTypeEquipment { EquipmentId = 7, PitchTypeId = 1 },
+                new PitchTypeEquipment { EquipmentId = 7, PitchTypeId = 2 },
                 new PitchTypeEquipment { EquipmentId = 7, PitchTypeId = 3 },
-                new PitchTypeEquipment { EquipmentId = 7, PitchTypeId = 4 },
                 new PitchTypeEquipment { EquipmentId = 8, PitchTypeId = 1 },
+                new PitchTypeEquipment { EquipmentId = 8, PitchTypeId = 2 },
                 new PitchTypeEquipment { EquipmentId = 8, PitchTypeId = 3 },
-                new PitchTypeEquipment { EquipmentId = 8, PitchTypeId = 4 },
-                new PitchTypeEquipment { EquipmentId = 9, PitchTypeId = 2 }
+                new PitchTypeEquipment { EquipmentId = 9, PitchTypeId = 4 }
             );
 
             modelBuilder.Entity<BlackListStatus>().HasData(
