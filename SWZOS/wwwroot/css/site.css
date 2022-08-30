@@ -95,3 +95,7 @@ table td {
     justify-content: center;
     text-align: center;
 }
+
+.tableDiv {
+    margin-bottom: 5px; /* or whatever */
+}

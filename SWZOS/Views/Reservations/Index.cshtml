@@ -45,38 +45,43 @@
                 </div>
             </div>
         </div>
-        <table id="reservationsTable" border="1" cellpadding="5" cellspacing="5" width="100%">
-            <thead>
-                <tr>
-                    <th>ID boiska</th>
-                    <th>Rodzaj boiska</th>
-                    <th>Czas rozpoczęcia</th>
-                    <th>Czas zakończenia</th>
-                    <th>Kwota należnego</th>
-                    <th>Opis</th>
-                    <th>Akcje</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var element in Model.Reservations)
-                {
+        <div class="tableDiv">
+            <table id="reservationsTable" border="1" cellpadding="5" cellspacing="5" width="100%">
+                <thead>
                     <tr>
-                        <td>@element.PitchId</td>
-                        <td>@element.PitchTypeName</td>
-                        <td>@element.StartDate</td>
-                        <td>@element.EndDate</td>
-                        <td>@element.Price</td>
-                        <td>@element.Description</td>
-                        <td>@if (element.StartDate > DateTime.Now) { 
-                            <text>
-                                <button class="btn btn-primary" onclick="EditReservation(@element.ReservationId)">Szczegóły</button>
-                                <button class="btn btn-primary" onclick="CancelReservation(@element.ReservationId)">Anuluj</button>
-                            </text>
-                        }</td>
+                        <th>ID boiska</th>
+                        <th>Rodzaj boiska</th>
+                        <th>Czas rozpoczęcia</th>
+                        <th>Czas zakończenia</th>
+                        <th>Kwota należnego</th>
+                        <th>Opis</th>
+                        <th>Akcje</th>
                     </tr>
-                }
-            </tbody>
-        </table>   
+                </thead>
+                <tbody>
+                    @foreach (var element in Model.Reservations)
+                    {
+                        <tr>
+                            <td>@element.PitchId</td>
+                            <td>@element.PitchTypeName</td>
+                            <td>@element.StartDate</td>
+                            <td>@element.EndDate</td>
+                            <td>@element.Price</td>
+                            <td>@element.Description</td>
+                            <td>
+                                @if (element.StartDate > DateTime.Now)
+                                {
+                                    <text>
+                                        <button class="btn btn-primary" onclick="EditReservation(@element.ReservationId)">Szczegóły</button>
+                                        <button class="btn btn-primary" onclick="CancelReservation(@element.ReservationId)">Anuluj</button>
+                                    </text>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
      </div>
 </div>
 <script src="~/js/Reservations/Index.js"></script>

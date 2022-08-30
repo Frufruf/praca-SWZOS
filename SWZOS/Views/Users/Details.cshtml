@@ -1,7 +1,17 @@
-﻿@model SWZOS.Models.User.UserViewModel
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Http
+@using static SWZOS_Database.Enum
+
+@model SWZOS.Models.User.UserViewModel
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    string role = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+}
 <script>
     let UserUrl = {
-        EditReservation: "@Url.Action("EditReservation", "Reservations")"
+        EditReservation: "@Url.Action("EditReservation", "Reservations")",
+        AddToBlackList: "@Url.Action("AddToBlackList", "BlackList")",
+        EditProfile: "@Url.Action("EditUser", "Users")"
     }
 </script>
 <div>
@@ -21,56 +31,75 @@
             </div>
         </div>
     </div>
-    <table id="userReservationsTable" border="1" cellpadding="5" cellspacing="5" width="100%">
-        <thead>
-            <tr>
-                <th>ID boiska</th>
-                <th>Rodzaj boiska</th>
-                <th>Czas rozpoczęcia</th>
-                <th>Czas zakończenia</th>
-                <th>Kwota należnego</th>
-                <th>Opis</th>
-                <th>Akcje</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var element in Model.Reservations)
-            {
+    <div class="tableDiv">
+        <table id="userReservationsTable" border="1" cellpadding="5" cellspacing="5" width="100%">
+            <thead>
                 <tr>
-                    <td>@element.PitchId</td>
-                    <td>@element.PitchTypeName</td>
-                    <td>@element.StartDate</td>
-                    <td>@element.EndDate</td>
-                    <td>@element.Price</td>
-                    <td>@element.Description</td>
-                    <td>@if (element.StartDate > DateTime.Now) { <text><button class="btn btn-primary" onclick="EditReservation(@element.ReservationId)">Szczegóły</button></text>}</td>
+                    <th>ID boiska</th>
+                    <th>Rodzaj boiska</th>
+                    <th>Czas rozpoczęcia</th>
+                    <th>Czas zakończenia</th>
+                    <th>Kwota należnego</th>
+                    <th>Opis</th>
+                    <th>Akcje</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-    <table id="userPaymentsTable" border="1" cellpadding="5" cellspacing="5" width="100%">
-        <thead>
-            <tr>
-                <th>ID rezerwacji</th>
-                <th>Pełna kwota</th>
-                <th>Kwota zaliczki</th>
-                <th>Wpłacono</th>
-                <th>Status</th>
-                <th>Opis</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var element in Model.Reservations)
-            {
+            </thead>
+            <tbody>
+                @foreach (var element in Model.Reservations)
+                {
+                    <tr>
+                        <td>@element.PitchId</td>
+                        <td>@element.PitchTypeName</td>
+                        <td>@element.StartDate</td>
+                        <td>@element.EndDate</td>
+                        <td>@element.Price</td>
+                        <td>@element.Description</td>
+                        <td>@if (element.StartDate > DateTime.Now)
+                            {
+                                <text><button class="btn btn-primary" onclick="EditReservation(@element.ReservationId)">Szczegóły</button></text>
+                            }</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tableDiv">
+        <table id="userPaymentsTable" border="1" cellpadding="5" cellspacing="5" width="100%">
+            <thead>
                 <tr>
-                    <td>@element.ReservationId</td>
-                    <td>@element.Payments.FullFee</td>
-                    <td>@element.Payments.AdvancePayment</td>
-                    <td>@element.Payments.PaidInAmmount</td>
-                    <td>@element.Payments.StatusId</td>
-                    <td>@element.Payments.Description</td>
+                    <th>ID rezerwacji</th>
+                    <th>Pełna kwota</th>
+                    <th>Kwota zaliczki</th>
+                    <th>Wpłacono</th>
+                    <th>Status</th>
+                    <th>Opis</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var element in Model.Reservations)
+                {
+                    <tr>
+                        <td>@element.ReservationId</td>
+                        <td>@element.Payments.FullFee</td>
+                        <td>@element.Payments.AdvancePayment</td>
+                        <td>@element.Payments.PaidInAmmount</td>
+                        <td>@element.Payments.StatusId</td>
+                        <td>@element.Payments.Description</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <button class="btn btn-primary adminButton" type="button" id="editProfile">Edytuj informacje</button>
+        </div>
+        @if (Model.UserTypeId == (int)UserTypesEnum.Customer && (role == "Admin" || role == "Employee"))
+        {
+            <div class="col-6">
+                <button class="btn btn-primary adminButton" type="button" id="addToBlackList" onclick="AddToBlackList(@Model.Id)">Dodaj na czarną listę</button>
+            </div>
+        }
+    </div>
 </div>
+<script src="~/js/Users/Details.js"></script>

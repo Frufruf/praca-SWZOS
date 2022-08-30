@@ -81,7 +81,7 @@ function CalculatePrice() {
         let quantity = $(element).find(".equipmentQuantity").val();
         let itemPrice = pitchEquipment.find(a => a.id == itemId).price;
 
-        fullPrice += (itemPrice * quantity) + (duration / 60.0);
+        fullPrice += (itemPrice * quantity) * (duration / 60.0);
     });
     $("#priceCounterInput").val(fullPrice);
 }
