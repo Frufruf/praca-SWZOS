@@ -39,9 +39,10 @@ function CancelReservation(reservationId) {
     $.ajax({
         type: "POST",
         url: ReservationUrl.CancelReservation + "?reservationId=" + reservationId,
-        success: function (data) {
-            if (data.success) {
+        success: function (success) {
+            if (success) {
                 window.alert("Rezerwacja została anulowana");
+                window.location.reload();
             } else {
                 window.alert("Nie udało się anulować rezerwacji");
             }

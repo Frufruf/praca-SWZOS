@@ -37,8 +37,8 @@ namespace SWZOS.Repositories
         //Metoda pobierająca wszystkie rezerwacje w dniu dzisiejszym
         public List<ReservationsViewModel> GetReservationsByDate(DateTime startDate, DateTime endDate)
         {
-            var result = _db.Reservations.Where(a => a.ReservationStartDate.Day >= startDate.Day 
-                                    && a.ReservationStartDate.Day <= endDate.Day 
+            var result = _db.Reservations.Where(a => a.ReservationStartDate >= startDate 
+                                    && a.ReservationStartDate <= endDate 
                                     && a.ReservationStatus != (int)ReservationStatusEnum.Canceled)
             .Select(a => new ReservationsViewModel
             {
@@ -159,7 +159,7 @@ namespace SWZOS.Repositories
                                         .Select(a => a.PitchId).ToList();
 
             var reservationPitchId = _db.Pitches.Where(a => (a.ActiveFlag || a.OutOfServiceEndDate < model.StartDate)
-                                        && !busyPitches.Contains(a.PitchId)).Select(a => a.PitchId).FirstOrDefault();
+                                        && !busyPitches.Contains(a.PitchId) && a.PitchTypeId == model.PitchTypeId).Select(a => a.PitchId).FirstOrDefault();
             if (reservationPitchId == 0)
             {
                 modelState.AddModelError("", "Brak wolnych boisk w wybranym terminie");
