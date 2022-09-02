@@ -31,5 +31,26 @@ namespace SWZOS.Repositories
                 Description = a.Description
             }).ToList();
         }
+
+        public GlobalViewModel GetModelByKey(string key)
+        {
+            return _db.Global.Where(a => a.Key == key).Select(a => new GlobalViewModel
+            {   
+                Key = a.Key,
+                Value = a.Value, 
+                Description = a.Description
+            }).FirstOrDefault();
+        }
+
+        public void EditValue(GlobalViewModel model)
+        {
+            var entity = _db.Global.Where(a => a.Key == model.Key).FirstOrDefault();
+            if (entity != null)
+            {
+                entity.Value = model.Value;
+                entity.Description = model.Description;
+                SaveChanges();
+            }
+        }
     }
 }

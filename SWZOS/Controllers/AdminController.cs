@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SWZOS.Models.Admin;
 using SWZOS.Repositories;
 
 namespace SWZOS.Controllers
@@ -24,6 +25,22 @@ namespace SWZOS.Controllers
         {
             var model = _homeRepository.GetAllValues();
             return View(model);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult EditValue(string key)
+        {
+            var model = _homeRepository.GetModelByKey(key);
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public IActionResult EditValue(GlobalViewModel model)
+        {
+            _homeRepository.EditValue(model);
+            return RedirectToAction("GlobalTable");
         }
     }
 }
