@@ -58,7 +58,8 @@ namespace SWZOS.Controllers
                 }
                 else
                 {
-                    model.Reservations = _reservationsRepository.GetUserReservations(Int32.Parse(userId), DateTime.Now, DateTime.Now);
+                    model.Reservations = _reservationsRepository.GetUserReservations(Int32.Parse(userId), DateTime.Now, DateTime.Now.AddDays(7));
+                    model.EndDate = DateTime.Now.AddDays(7);
                 }
             }
             return View(model);
@@ -117,7 +118,7 @@ namespace SWZOS.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult EditReservation(ReservationFormModel model)
+        public JsonResult EditReservation(ReservationFormModel model)
         {
             var reservation = _reservationsRepository.ValidateReservation(model, ModelState);
             if (ModelState.IsValid)
@@ -127,7 +128,7 @@ namespace SWZOS.Controllers
                     try
                     {
                         _reservationsRepository.EditReservation(reservation);
-                        return RedirectToAction("Index");
+                        return Json(new { success = true });
                     }
                     catch (Exception ex)
                     {
@@ -135,9 +136,8 @@ namespace SWZOS.Controllers
                     }
                 }
                 ModelState.AddModelError("", "Wystąpił nieoczekiwany błąd");
-                return View(model);
             }
-            return View(model);
+            return Json(new { success = false, errors = ModelState.Values.SelectMany(v => v.Errors).ToList() });
         }
 
         [HttpPost]

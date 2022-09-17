@@ -28,45 +28,11 @@
     });
 
     $("#SubmitReservationForm").on("click", function () {
-        let equipmentList = [];
-        let equipment = $(".equipmentForm");
+        SubmitReservationForm(false, $("#AddReservationForm").attr("action"));
+    });
 
-        equipment.each(function (index, element) {
-            equipmentList.push({
-                id: $(element).find("select").val(),
-                quantity: $(element).find(".equipmentQuantity").val()
-            });
-        });
-
-        let reservation = {
-            userId: $("#UserId").val(),
-            pitchTypeId: $("#PitchTypeId").val(),
-            startDate: $("#StartDate").val(),
-            duration: $("#Duration").val(),
-            description: $("#Description").val(),
-            isEditForm: false,
-            equipmentList: equipmentList
-        };
-
-        $.ajax({
-            type: "POST",
-            url: $("#AddReservationForm").attr("action"),
-            data: reservation,
-            success: function (data) {
-                if (data.success) {
-                    window.location.href = ReservationsUrl;
-                } else {
-                    console.log(data.errors);
-                    $("#validationDiv").html(data.errors[0].errorMessage).addClass("text-danger");
-                }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                window.alert("Wystąpił nieoczekiwany błąd");
-                console.log(jqXHR);
-                console.log(textStatus);
-                console.log(errorThrown);
-            }
-        });
+    $("#SubmitEditReservationForm").on("click", function () {
+        SubmitReservationForm(true, $("#EditReservationForm").attr("action"));
     });
 
 });
@@ -91,6 +57,53 @@ function RemoveEquipment(button) {
     let id = $(button).attr("id").split("_")[1];
     $("#equipmentDiv_" + id).remove();
     CalculatePrice();
+}
+
+function SubmitReservationForm(isEditForm, actionUrl) {
+    let equipmentList = [];
+    let equipment = $(".equipmentForm");
+
+    equipment.each(function (index, element) {
+        equipmentList.push({
+            id: $(element).find("select").val(),
+            quantity: $(element).find(".equipmentQuantity").val()
+        });
+    });
+
+    let reservation = {
+        reservationId: 0,
+        userId: $("#UserId").val(),
+        pitchTypeId: $("#PitchTypeId").val(),
+        startDate: $("#StartDate").val(),
+        duration: $("#Duration").val(),
+        description: $("#Description").val(),
+        isEditForm: isEditForm,
+        equipmentList: equipmentList
+    };
+
+    if (isEditForm) {
+        reservation.reservationId = $("#ReservationId").val();
+    }
+
+    $.ajax({
+        type: "POST",
+        url: actionUrl,
+        data: reservation,
+        success: function (data) {
+            if (data.success) {
+                window.location.href = ReservationsUrl;
+            } else {
+                console.log(data.errors);
+                $("#validationDiv").html(data.errors[0].errorMessage).addClass("text-danger");
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            window.alert("Wystąpił nieoczekiwany błąd");
+            console.log(jqXHR);
+            console.log(textStatus);
+            console.log(errorThrown);
+        }
+    });
 }
 
 function ValidateReservation() {

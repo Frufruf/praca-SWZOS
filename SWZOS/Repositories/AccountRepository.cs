@@ -27,7 +27,7 @@ namespace SWZOS.Repositories
             return null;
         }
 
-        public void ValidatePasswordChange(PasswordChangeModel model, ModelStateDictionary modelState)
+        public void ValidatePasswordChange(PasswordChangeModel model, string login, ModelStateDictionary modelState)
         {
             if (model.NewPassword != model.ConfirmedPassword)
             {
@@ -38,7 +38,7 @@ namespace SWZOS.Repositories
                 modelState.AddModelError("NewPassword", "Nowe hasło musi posiadać co najmniej 5 znaków");
             }
             
-            var user = AuthenticateUser(new LoginModel() { Login = model.Login, Password = model.CurrentPassword }); 
+            var user = AuthenticateUser(new LoginModel() { Login = login, Password = model.CurrentPassword }); 
             if (user == null)
             {
                 modelState.AddModelError("CurrentPassword", "Niepoprawne hasło");
@@ -46,9 +46,9 @@ namespace SWZOS.Repositories
             
         }
 
-        public void ChangePassword(PasswordChangeModel model)
+        public void ChangePassword(PasswordChangeModel model, int userId)
         {
-            var user = _db.Users.Where(u => u.UserId == model.UserId).FirstOrDefault();
+            var user = _db.Users.Where(u => u.UserId == userId).FirstOrDefault();
             var hashedPassword = PasswordHash.GetHashedPasswordModel(model.NewPassword);
 
             user.PasswordHash = hashedPassword.Hash;

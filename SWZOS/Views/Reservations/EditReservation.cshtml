@@ -11,6 +11,7 @@
             <div class="col-6">
                 <input asp-for="UserId" hidden/>
                 <input asp-for="PitchTypeId" hidden/>
+                <input asp-for="ReservationId" hidden />
                 <div class="form-group">
                     <label class="form-label" asp-for="StartDate">Czas rozpoczęcia</label>
                     <input class="form-control dateTimePicker" asp-for="StartDate"/>
@@ -33,7 +34,7 @@
                 <div class="form-group">
                     <button class="btn btn-primary" type="button" id="addEquipment">Dodaj sprzęt do rezerwacji</button>
                 </div>
-                <button class="btn btn-primary" type="button" id="SubmitReservationForm">Zapisz</button>
+                <button class="btn btn-primary" type="button" id="SubmitEditReservationForm">Zapisz</button>
             </div>
             <div id="equipmentFormDiv" class="col-6">
                 @for (var i = 0; i < Model.EquipmentList.Count; i++)

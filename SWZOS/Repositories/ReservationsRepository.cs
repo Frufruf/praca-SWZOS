@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using SWZOS.Models.Equipment;
 using SWZOS.Models.Reservations;
@@ -26,6 +27,7 @@ namespace SWZOS.Repositories
                                     && a.UserId == userId).Select(a => new ReservationsViewModel
             {
                 UserId = a.UserId,
+                UserFullName = a.User.Name + " " + a.User.Surname,
                 ReservationId = a.ReservationId,
                 PitchId = a.PitchId,
                 PitchTypeName = a.Pitch.PitchType.PitchTypeName,
@@ -47,6 +49,7 @@ namespace SWZOS.Repositories
             .Select(a => new ReservationsViewModel
             {
                 UserId = a.UserId,
+                UserFullName = a.User.Name + " " + a.User.Surname,
                 ReservationId = a.ReservationId,
                 PitchId = a.PitchId,
                 PitchTypeId = a.Pitch.PitchTypeId,
@@ -150,7 +153,7 @@ namespace SWZOS.Repositories
             //Blokowanie edycji typu boiska
             if (model.IsEditForm)
             {
-                var old = _db.Reservations.Where(a => a.ReservationId == model.ReservationId).FirstOrDefault();
+                var old = _db.Reservations.Include(a => a.Pitch).Where(a => a.ReservationId == model.ReservationId).FirstOrDefault();
                 if (old.Pitch.PitchTypeId != model.PitchTypeId)
                 {
                     modelState.AddModelError("", "Nie możesz zmienić typu zarezerwowanego boiska, w tym celu anuluj obecną rezerwację i utwórz nową");
@@ -177,13 +180,16 @@ namespace SWZOS.Repositories
             var endDate = model.StartDate.AddMinutes(model.Duration);
             var busyPitches = _db.Reservations.Where(a => a.ReservationId != model.ReservationId 
                                         && a.Pitch.PitchTypeId == model.PitchTypeId
-                                        && a.ReservationStartDate > model.StartDate
-                                        && a.ReservationStartDate < endDate
+                                        && ((a.ReservationStartDate < model.StartDate 
+                                        && a.ReservationStartDate.AddMinutes(a.ReservationDuration) > model.StartDate)
+                                        || a.ReservationStartDate >= model.StartDate
+                                        && a.ReservationStartDate < endDate)
                                         && a.ReservationStatus != (int)ReservationStatusEnum.Canceled)
                                         .Select(a => a.PitchId).ToList();
 
             var reservationPitchId = _db.Pitches.Where(a => (a.ActiveFlag || a.OutOfServiceEndDate < model.StartDate)
-                                        && !busyPitches.Contains(a.PitchId) && a.PitchTypeId == model.PitchTypeId).Select(a => a.PitchId).FirstOrDefault();
+                                            && !busyPitches.Contains(a.PitchId) && a.PitchTypeId == model.PitchTypeId)
+                                            .Select(a => a.PitchId).FirstOrDefault();
             if (reservationPitchId == 0)
             {
                 modelState.AddModelError("", "Brak wolnych boisk w wybranym terminie");
@@ -249,26 +255,31 @@ namespace SWZOS.Repositories
             reservation.ReservationStartDate = model.StartDate;
             reservation.ReservationDuration = model.Duration;
             reservation.Description = model.Description;
+            reservation.ReservationPrice = model.Price;
             
 
             //Usunięcie i ponowne przypisanie wyposażenia do rezerwacji
             var equipment = _db.ReservationsEquipment.Where(a => a.ReservationId == reservation.ReservationId).ToList();
             _db.ReservationsEquipment.RemoveRange(equipment);
             _db.SaveChanges();
-
-            var equipmentList = new List<ReservationEquipment>();
-            foreach (var eq in model.EquipmentList)
+        
+            if  (model.EquipmentList != null && model.EquipmentList.Count > 0)
             {
-                var reservationEquipment = new ReservationEquipment
+                var equipmentList = new List<ReservationEquipment>();
+                foreach (var eq in model.EquipmentList)
                 {
-                    ReservationId = reservation.ReservationId,
-                    EquipmentId = eq.Id,
-                    Quantity = eq.Quantity
-                };
-                equipmentList.Add(reservationEquipment);
+                    var reservationEquipment = new ReservationEquipment
+                    {
+                        ReservationId = reservation.ReservationId,
+                        EquipmentId = eq.Id,
+                        Quantity = eq.Quantity
+                    };
+                    equipmentList.Add(reservationEquipment);
+                }
+                _db.ReservationsEquipment.AddRange(equipmentList);
+                _db.SaveChanges();
             }
-            _db.ReservationsEquipment.AddRange(equipmentList);
-            _db.SaveChanges();
+            
             transaction.Commit();
         }        
 

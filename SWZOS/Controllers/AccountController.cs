@@ -182,13 +182,13 @@ namespace SWZOS.Controllers
         [Authorize]
         public IActionResult ChangePassword(PasswordChangeModel model)
         {
-            model.Login = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
-            model.UserId = Int32.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
-            _accountRepository.ValidatePasswordChange(model, ModelState);
+            var login = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            var userId = Int32.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            _accountRepository.ValidatePasswordChange(model, login, ModelState);
             if (ModelState.IsValid)
             {
-                _accountRepository.ChangePassword(model);
-                return RedirectToAction("Index", "Home");
+                _accountRepository.ChangePassword(model, userId);
+                return RedirectToAction("Logout");
             }
             return View(model);
         }

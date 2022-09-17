@@ -5,7 +5,9 @@
     $("#startDate").val(startDateArray.join("-"));
     $("#endDate").val(endDateArray.join("-"));
 
-    $("#reservationsTable").DataTable();
+    $("#reservationsTable").DataTable({
+        order: [[2, "asc"]]
+    });
 
     $("#addFootballPitchReservation").on("click", function () {
         window.location.href = ReservationUrl.AddReservation + "?pitchTypeId=1"
@@ -26,7 +28,6 @@
     $("#searchReservations").on("click", function () {
         startDate = $("#startDate").val();
         endDate = $("#endDate").val();
-
         window.location.href = ReservationUrl.Index + "?startDate=" + startDate + "&endDate=" + endDate;
     });
 })
