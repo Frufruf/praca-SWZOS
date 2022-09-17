@@ -11,17 +11,17 @@
         window.location.href = ReservationUrl.AddReservation + "?pitchTypeId=1"
     });   
 
-    $("#addBasketballPitchReservation").on("click", function () {
+    $("#addTenisCourtReservation").on("click", function () {
         window.location.href = ReservationUrl.AddReservation + "?pitchTypeId=2"
     });
 
-    $("#addVolleyballPitchReservation").on("click", function () {
+    $("#addBasketballPitchReservation").on("click", function () {
         window.location.href = ReservationUrl.AddReservation + "?pitchTypeId=3"
     });
 
-    $("#addTenisCourtReservation").on("click", function () {
+    $("#addVolleyballPitchReservation").on("click", function () {
         window.location.href = ReservationUrl.AddReservation + "?pitchTypeId=4"
-    });
+    });   
 
     $("#searchReservations").on("click", function () {
         startDate = $("#startDate").val();

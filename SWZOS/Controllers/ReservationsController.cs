@@ -52,7 +52,14 @@ namespace SWZOS.Controllers
             else
             {
                 var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                model.Reservations = _reservationsRepository.GetUserReservations(Int32.Parse(userId));
+                if (startDate != null && endDate != null)
+                {
+                    model.Reservations = _reservationsRepository.GetUserReservations(Int32.Parse(userId), (DateTime)startDate, (DateTime)endDate);
+                }
+                else
+                {
+                    model.Reservations = _reservationsRepository.GetUserReservations(Int32.Parse(userId), DateTime.Now, DateTime.Now);
+                }
             }
             return View(model);
         }
@@ -66,7 +73,7 @@ namespace SWZOS.Controllers
             var model = new ReservationFormModel
             {
                 UserId = Int32.Parse(userId),
-                StartDate = DateTime.Today,
+                StartDate = DateTime.Today.AddHours(10),
                 PitchTypeId = pitchTypeId,
                 PitchEquipment = pitchEquipment,
                 Duration = 60,

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Serilog;
+using SWZOS.Models.Equipment;
 using SWZOS.Models.Reservations;
 using SWZOS_Database;
 using SWZOS_Database.Entities;
@@ -18,13 +19,16 @@ namespace SWZOS.Repositories
         }
 
         //Metoda pobierająca wszystkie rezerwacje użytkownika o podanym ID
-        public List<ReservationsViewModel> GetUserReservations(int userId)
+        public List<ReservationsViewModel> GetUserReservations(int userId, DateTime startDate, DateTime endDate)
         {
-            var result = _db.Reservations.Where(a => a.UserId == userId).Select(a => new ReservationsViewModel
+            var result = _db.Reservations.Where(a => a.ReservationStartDate >= startDate
+                                    && a.ReservationStartDate <= endDate
+                                    && a.UserId == userId).Select(a => new ReservationsViewModel
             {
                 UserId = a.UserId,
                 ReservationId = a.ReservationId,
                 PitchId = a.PitchId,
+                PitchTypeName = a.Pitch.PitchType.PitchTypeName,
                 StartDate = a.ReservationStartDate,
                 EndDate = a.ReservationStartDate.AddMinutes(a.ReservationDuration),
                 Price = a.ReservationPrice,
@@ -58,15 +62,35 @@ namespace SWZOS.Repositories
 
         public ReservationFormModel GetReservationById(int reservationId)
         {
-            return _db.Reservations.Where(a => a.ReservationId == reservationId).Select(a => new ReservationFormModel
+            var model = _db.Reservations.Where(a => a.ReservationId == reservationId).Select(a => new ReservationFormModel
             {
                 ReservationId = a.ReservationId,
                 UserId = a.UserId,
                 StartDate = a.ReservationStartDate,
                 Duration = a.ReservationDuration,
                 PitchTypeId = a.Pitch.PitchTypeId,
-                Description = a.Description
+                PitchPrice = a.Pitch.PitchType.PitchTypePrice,
+                Description = a.Description,
+                EquipmentList = a.ReservationsEquipment.Select(b => new EquipmentSimpleModel
+                {
+                    Id = b.EquipmentId,
+                    Name = b.Equipment.Name,
+                    Price = b.Equipment.Price,
+                    MaximumAmountPerReservation = b.Equipment.MaximumQuantityPerReservation,
+                    Quantity = b.Quantity
+                }).ToList()
             }).FirstOrDefault();
+
+            model.PitchEquipment = _db.PitchTypeEquipment.Where(a => a.PitchTypeId == model.PitchTypeId).Select(a => new EquipmentSimpleModel
+            {
+                Id = a.Equipment.Id,
+                Name = a.Equipment.Name,
+                Price = a.Equipment.Price,
+                MaximumAmountPerReservation = a.Equipment.MaximumQuantityPerReservation,
+                Quantity = a.Equipment.Quantity
+            }).ToList();
+
+            return model;
         }
 
         //Metoda dodająca rezerwację wraz ze sprzętem do bazy

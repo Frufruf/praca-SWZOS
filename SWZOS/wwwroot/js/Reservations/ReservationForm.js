@@ -1,4 +1,5 @@
 ﻿$(function () {
+    CalculatePrice();
 
     $("#Duration").on("change", function () {
         CalculatePrice();
