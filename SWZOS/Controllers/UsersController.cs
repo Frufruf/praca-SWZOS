@@ -31,6 +31,14 @@ namespace SWZOS.Controllers
         //}    
 
         [Authorize]
+        public IActionResult CurrentUserProfile()
+        {
+            var currentUser = _httpContextAccessor.HttpContext.User;
+            var userId = Int32.Parse(currentUser.FindFirstValue(ClaimTypes.NameIdentifier));
+            return RedirectToAction("Details", new { userId = userId });
+        }
+
+        [Authorize]
         public IActionResult Details(int userId)
         {
             var currentUser = _httpContextAccessor.HttpContext.User;

@@ -6,6 +6,7 @@
 @inject IHttpContextAccessor httpContextAccessor
 @{
     string role = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+    int userId = Int32.Parse(httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
 }
 <script>
     let UserUrl = {
@@ -94,6 +95,11 @@
         <div class="col-6">
             <button class="btn btn-primary adminButton" type="button" id="editProfile">Edytuj informacje</button>
         </div>
+        @if (Model.Id == userId) {
+            <div class="col-6">
+                <button class="btn btn-primary adminButton" type="button" id="changePassword">Zmiana hasła</button>
+            </div>
+        }
         @if (Model.UserTypeId == (int)UserTypesEnum.Customer && (role == "Admin" || role == "Employee"))
         {
             <div class="col-6">
