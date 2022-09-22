@@ -1,7 +1,7 @@
 ﻿@model SWZOS.Models.Reservations.ReservationsPageViewModel
 <script>
     let ReservationUrl = {
-        AddReservation: "@Url.Action("AddReservation", "Reservations")",
+        PickDate: "@Url.Action("PickDate", "Reservations")",
         Index: "@Url.Action("Index", "Reservations")",
         EditReservation: "@Url.Action("EditReservation", "Reservations")",
         CancelReservation: "@Url.Action("CancelReservation", "Reservations")"
@@ -46,7 +46,7 @@
             </div>
         </div>
         <div class="tableDiv">
-            <table id="reservationsTable" border="1" cellpadding="5" cellspacing="5" width="100%">
+            <table class="swzosTable" id="reservationsTable" border="1" cellpadding="5" cellspacing="5" width="100%">
                 <thead>
                     <tr>
                         <th>Nr boiska</th>

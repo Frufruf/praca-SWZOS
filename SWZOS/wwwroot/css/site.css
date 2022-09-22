@@ -75,16 +75,16 @@ body {
     height: 100%;
 }
 
-table {
+table .swzosTable{
     border-collapse: collapse;  
     margin: 0 auto;
 }
 
-table tr {
+table .swzosTable tr {
     border: 1px solid black;
 }
 
-table td {
+table .swzosTable td {
     padding: 20px;
 }
 
@@ -98,4 +98,16 @@ table td {
 
 .tableDiv {
     margin-bottom: 5px; /* or whatever */
+}
+
+.columns {
+    display: flex;
+}
+
+.column-main {
+    flex-grow: 1;
+}
+
+.column-left {
+    margin-right: 10px;
 }

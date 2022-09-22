@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace SWZOS.Controllers
 {
@@ -67,17 +68,33 @@ namespace SWZOS.Controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult AddReservation(int pitchTypeId)
+        public IActionResult PickDate(int pitchTypeId)
+        {
+            ViewData.Add("PitchTypeId", pitchTypeId);
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult<List<ReservationSlot>> GetRange(int pitchTypeId, DateTime start, DateTime end)
+        {
+            var userId = Int32.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var model = _reservationsRepository.GetAvailableSlotsForPitchType(pitchTypeId, start.Date.AddHours(9).AddMinutes(30), end.Date.AddHours(23), userId);
+            return model;
+        }
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult AddReservation(int pitchTypeId, DateTime start)
         {
             var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var pitchEquipment = _equipmentRepository.GetPitchEquipment(pitchTypeId);
             var model = new ReservationFormModel
             {
                 UserId = Int32.Parse(userId),
-                StartDate = DateTime.Today.AddHours(10),
+                StartDate = start,
                 PitchTypeId = pitchTypeId,
                 PitchEquipment = pitchEquipment,
-                Duration = 60,
+                Duration = 90,
                 PitchPrice = _pitchesRepository.GetPitchPrice(pitchTypeId)
             };
             return View(model);

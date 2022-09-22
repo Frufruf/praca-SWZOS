@@ -102,7 +102,7 @@ namespace SWZOS_Database.Configuration.Seeds
             modelBuilder.Entity<Global>().HasData(
                 new Global { Key = "HomePageDescription", Value = "", Description = "Tekst wyświetlany na stronie głównej aplikacji" },
                 new Global { Key = "Regulations", Value = "", Description = "Regulamin korzystania z obiektu sportowego" },
-                new Global { Key = "OpenHour", Value = "10:00:00", Description = "Godzina otwarcia obiektu" },
+                new Global { Key = "OpenHour", Value = "09:30:00", Description = "Godzina otwarcia obiektu" },
                 new Global { Key = "CloseHour", Value = "23:00:00", Description = "Godzina zamknięcia obiektu" }
             );
         }

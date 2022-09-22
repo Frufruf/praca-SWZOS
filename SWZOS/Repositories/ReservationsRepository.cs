@@ -96,6 +96,46 @@ namespace SWZOS.Repositories
             return model;
         }
 
+        public List<ReservationSlot> GetAvailableSlotsForPitchType(int pitchTypeId, DateTime start, DateTime end, int currentUserId)
+        {
+            var reservations = _db.Reservations.Where(a => a.Pitch.PitchTypeId == pitchTypeId
+                && a.ReservationStartDate >= start
+                && a.ReservationStartDate < end).ToList();
+
+            var numberOfPitches = _db.Pitches.Where(a => a.PitchTypeId == pitchTypeId && a.ActiveFlag).Count();
+
+            var model = new List<ReservationSlot>();
+
+            var difference = (end - start).Days;
+
+            for (var i = 0; i <= difference; i++)
+            {
+                for (var j = 0; j < 9; j++)
+                {
+                    var status = "free";
+                    if (reservations.Where(a => a.ReservationStartDate == start.AddDays(i).AddMinutes(j * 90) 
+                        && a.UserId == currentUserId).Any())
+                    {
+                        status = "userReservation";
+                    }
+                    else if (reservations.Where(a => a.ReservationStartDate == start.AddDays(i).AddMinutes(j * 90)).Count() == numberOfPitches)
+                    {
+                        status = "unavailable";
+                    }
+                    var slot = new ReservationSlot
+                    {
+                        Start = start.AddDays(i).AddMinutes(j * 90),
+                        End = start.AddDays(i).AddMinutes(j * 90 + 90),
+                        Duration = 90,
+                        Status = status
+                    };
+                    model.Add(slot);
+                }
+            }
+
+            return model;
+        }
+
         //Metoda dodająca rezerwację wraz ze sprzętem do bazy
         public void AddReservation(ReservationFullFormModel model)
         {
@@ -162,7 +202,7 @@ namespace SWZOS.Repositories
             }
 
             //Sprawdzenie czy rezerwacja znajduje się przedziale godzin otwarcia
-            TimeSpan startHour = new TimeSpan(10, 0, 0); 
+            TimeSpan startHour = new TimeSpan(9, 30, 0); 
             TimeSpan endHour = new TimeSpan(23, 0, 0);
             if (model.StartDate.TimeOfDay < startHour || model.StartDate.AddMinutes(model.Duration).TimeOfDay > endHour)
             {
