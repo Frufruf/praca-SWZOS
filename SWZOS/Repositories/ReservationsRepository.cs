@@ -101,15 +101,16 @@ namespace SWZOS.Repositories
             var reservations = _db.Reservations.Where(a => a.Pitch.PitchTypeId == pitchTypeId
                 && a.ReservationStartDate >= start
                 && a.ReservationStartDate < end).ToList();
-
-            var numberOfPitches = _db.Pitches.Where(a => a.PitchTypeId == pitchTypeId && a.ActiveFlag).Count();
-
+            
             var model = new List<ReservationSlot>();
 
             var difference = (end - start).Days;
 
             for (var i = 0; i <= difference; i++)
             {
+                var currentDay = start.AddDays(i).Date;
+                var numberOfPitches = _db.Pitches.Where(a => a.PitchTypeId == pitchTypeId 
+                    && !(a.OutOfServiceStartDate != null && a.OutOfServiceStartDate <= currentDay && a.OutOfServiceEndDate >= currentDay)).Count();
                 for (var j = 0; j < 9; j++)
                 {
                     var status = "free";
@@ -227,7 +228,9 @@ namespace SWZOS.Repositories
                                         && a.ReservationStatus != (int)ReservationStatusEnum.Canceled)
                                         .Select(a => a.PitchId).ToList();
 
-            var reservationPitchId = _db.Pitches.Where(a => (a.ActiveFlag || a.OutOfServiceEndDate < model.StartDate)
+            var reservationPitchId = _db.Pitches.Where(a => !(a.OutOfServiceStartDate != null 
+                                            && a.OutOfServiceStartDate <= model.StartDate 
+                                            && a.OutOfServiceEndDate >= model.StartDate)
                                             && !busyPitches.Contains(a.PitchId) && a.PitchTypeId == model.PitchTypeId)
                                             .Select(a => a.PitchId).FirstOrDefault();
             if (reservationPitchId == 0)
