@@ -32,7 +32,7 @@ namespace SWZOS.Controllers
         public IActionResult EditValue(string key)
         {
             var model = _homeRepository.GetModelByKey(key);
-            return View();
+            return View(model);
         }
 
         [Authorize(Roles = "Admin")]

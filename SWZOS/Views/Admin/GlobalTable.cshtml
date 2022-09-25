@@ -5,30 +5,28 @@
     };
 </script>
 <div class="container">
-    <div class="align-items-center">
-        <div class="row">
-            <table class="swzosTable" id="globalsTable" border="1" cellpadding="5" cellspacing="5" width="100%">
-                <thead>
+    <div class="row align-items-center">
+        <table class="swzosTable" id="globalsTable" border="1" cellpadding="5" cellspacing="5" width="100%">
+            <thead>
+                <tr>
+                    <th>Klucz</th>
+                    <th>Wartość</th>
+                    <th>Opis</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
                     <tr>
-                        <th>Klucz</th>
-                        <th>Wartość</th>
-                        <th>Opis</th>
-                        <th>Akcje</th>
+                        <td>@item.Key</td>
+                        <td>@item.DisplayedValue</td>
+                        <td>@item.Description</td>
+                        <td><button class="btn btn-primary" onclick="EditValue('@item.Key')">Edytuj</button></td>
                     </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        @foreach (var item in Model)
-                        {
-                            <td>@item.Key</td>
-                            <td>@item.Value</td>
-                            <td>@item.Description</td>
-                            <td><button class="btn btn-primary" onclick="EditValue(@item.Key)">Edytuj</button></td>
-                        }
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
 <script>

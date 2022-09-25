@@ -54,18 +54,18 @@
                     args.data.toolTip = "Termin dostępny";
                     break;
                 case "unavailable":
-                    args.data.backColor = "#e69138";  // orange
+                    args.data.backColor = "#900d09";  // scarlet
                     args.data.barHidden = true;
                     args.data.borderColor = "darker";
                     args.data.fontColor = "white";
-                    args.data.toolTip = "Termin niedostępny";
+                    args.data.html = "Termin niedostępny";
                     break;
                 case "userReservation":
                     args.data.backColor = "#6aa84f";  // green
                     args.data.barHidden = true;
                     args.data.borderColor = "darker";
                     args.data.fontColor = "white";
-                    args.data.toolTip = "Twoja rezerwacja";
+                    args.data.html = "Twoja rezerwacja";
                     break;
             }
         },
@@ -76,7 +76,6 @@
             }
 
             window.location.href = PickDateUrl.AddReservation + "?pitchTypeId=" + pitchTypeId + "&start=" + args.e.start();
-
         }
     });
     calendar.init();
