@@ -9,10 +9,12 @@
 }
 <script>
     BlackListUrl = {
-        ApproveUrl: "@Url.Action("ApproveBlackListEntry", "BlackList", new { id = "@Model.Id" })",
-        RejectUrl: "@Url.Action("RejectBlackListEntry", "BlackList", new { id = "@Model.Id" })",
-        DeleteUrl: "@Url.Action("DeleteFromBlackList", "BlackList", new { id = "@Model.Id" })"
+        ApproveUrl: "@Url.Action("ApproveBlackListEntry", "BlackList")",
+        RejectUrl: "@Url.Action("RejectBlackListEntry", "BlackList")",
+        DeleteUrl: "@Url.Action("DeleteFromBlackList", "BlackList")"
     }
+
+    let userId = "@Model.UserId";
 </script>
 <div class="container">
     <div class="row align-items-center">
@@ -32,15 +34,56 @@
         </div>
         @if (name != null && role == "Admin")
         {
-            <div class="col-4">
-                <button class="btn btn-primary" id="approveBlackListEntry" disabled="@if(Model.StatusId != 1) {<text>disabled</text>}">Zatwierdź</button>
-            </div>
-            <div class="col-4">
-                <button class="btn btn-primary" id="rejectBlackListEntry" disabled="@if(Model.StatusId != 1) {<text>disabled</text>}">Odrzuć</button>
-            </div>
-            <div class="col-4">
-                <button class="btn btn-primary" id="deleteBlackListEntry" disabled="@if(Model.StatusId == 1) {<text>disabled</text>}">Usuń</button>
-            </div> 
+            @if (Model.StatusId != 1) 
+            {
+                <div class="col-4">
+                    <button class="btn btn-primary" id="approveBlackListEntry" disabled>Zatwierdź</button>
+                </div>
+                <div class="col-4">
+                    <button class="btn btn-primary" id="rejectBlackListEntry" disabled>Odrzuć</button>
+                </div>
+                @if(Model.StatusId == 4) 
+                {
+                    <div class="col-4">
+                        <button class="btn btn-primary" id="deleteBlackListEntry" disabled>Usuń</button>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-4">
+                        <button class="btn btn-primary" id="deleteBlackListEntry">Usuń</button>
+                    </div>
+                }
+            }
+            else 
+            {
+                <div class="col-4">
+                    <button class="btn btn-primary" id="approveBlackListEntry">Zatwierdź</button>
+                </div>
+                <div class="col-4">
+                    <button class="btn btn-primary" id="rejectBlackListEntry">Odrzuć</button>
+                </div>
+                <div class="col-4">
+                    <button class="btn btn-primary" id="deleteBlackListEntry" disabled>Usuń</button>
+                </div>
+            }
         }
     </div>
 </div>
+<script>
+    $(function () {
+        
+        $("#approveBlackListEntry").on("click", function () {
+            window.location.href = BlackListUrl.ApproveUrl + "?userId=" + userId;
+        });
+
+        $("#rejectBlackListEntry").on("click", function () {
+            window.location.href = BlackListUrl.RejectUrl + "?userId=" + userId;
+        });
+
+        $("#deleteBlackListEntry").on("click", function () {
+            window.location.href = BlackListUrl.DeleteUrl + "?userId=" + userId;
+        });
+    
+    });
+</script>

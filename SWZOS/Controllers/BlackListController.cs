@@ -20,10 +20,12 @@ namespace SWZOS.Controllers
         public BlackListController(
             BlackListRepository blackListRepository, 
             UsersRepository usersRepository,
+            ReservationsRepository reservationsRepository,
             IHttpContextAccessor httpContextAccessor)
         {
             _blackListRepository = blackListRepository;
             _usersRepository = usersRepository;
+            _reservationsRepository = reservationsRepository;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -82,7 +84,7 @@ namespace SWZOS.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [HttpGet]
         [Authorize(Roles = "Admin")]
         public IActionResult DeleteFromBlackList(int userId)
         {
@@ -90,7 +92,7 @@ namespace SWZOS.Controllers
             return RedirectToAction("Details", "Users", new { userId = userId });
         }
 
-        [HttpPost]
+        [HttpGet]
         [Authorize(Roles = "Admin")]
         public IActionResult ApproveBlackListEntry(int userId)
         {
@@ -99,7 +101,7 @@ namespace SWZOS.Controllers
             return RedirectToAction("Details", "Users", new { userId = userId });
         }
 
-        [HttpPost]
+        [HttpGet]
         [Authorize(Roles = "Admin")]
         public IActionResult RejectBlackListEntry(int userId)
         {

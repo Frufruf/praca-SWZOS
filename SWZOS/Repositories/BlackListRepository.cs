@@ -79,21 +79,21 @@ namespace SWZOS.Repositories
 
         public void DeleteFromBlackList(int userId)
         {
-            var result = _db.BlackList.Where(a => a.UserId == userId).FirstOrDefault();
+            var result = _db.BlackList.Where(a => a.UserId == userId && a.StatusId != (int)BlackListStatusEnum.Deleted).FirstOrDefault();
             result.StatusId = (int)BlackListStatusEnum.Deleted;
             _db.SaveChanges();
         }
 
         public void ApproveBlackListEntry(int userId)
         {
-            var result = _db.BlackList.Where(a => a.UserId == userId).FirstOrDefault();
+            var result = _db.BlackList.Where(a => a.UserId == userId && a.StatusId != (int)BlackListStatusEnum.Deleted).FirstOrDefault();
             result.StatusId = (int)BlackListStatusEnum.Approved;
             _db.SaveChanges();
         }
 
         public void RejectBlackListEntry(int userId)
         {
-            var result = _db.BlackList.Where(a => a.UserId == userId).FirstOrDefault();
+            var result = _db.BlackList.Where(a => a.UserId == userId && a.StatusId != (int)BlackListStatusEnum.Deleted).FirstOrDefault();
             result.StatusId = (int)BlackListStatusEnum.Rejected;
             _db.SaveChanges();
         }

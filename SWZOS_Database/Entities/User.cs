@@ -20,7 +20,7 @@ namespace SWZOS_Database.Entities
         public bool ActiveFlag { get; set; }
         public bool DeletedFlag { get; set; }
         public UserType UserType { get; set; }
-        public BlackList BlackList { get; set; }
+        public List<BlackList> BlackList { get; set; }
         public List<Reservation> Reservations { get; set; } 
     }
 }
