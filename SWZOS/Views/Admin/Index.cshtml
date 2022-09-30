@@ -1,0 +1,50 @@
+﻿@using Microsoft.AspNetCore.Http
+@using System.Security.Claims
+
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    string name = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    string role = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+}
+<script>
+    var AdminUrl = {
+        PitchUrl: "@Url.Action("Index", "Pitch")",
+        EquipmentUrl: "@Url.Action("Index", "Equipment")",
+        BlackListUrl: "@Url.Action("Index","BlackList")",
+        PriceListUrl: "@Url.Action("Index","PriceList")",
+        ApprovalUrl: "@Url.Action("Approvals", "BlackList")",
+        AddEmployeeUrl: "@Url.Action("AddEmployee", "Account")",
+        GlobalUrl: "@Url.Action("GlobalTable", "Admin")"
+    };
+</script>
+<div class="container">
+     <div class="row align-items-center">
+         <div class="col-12">
+            <div class="form-group">
+                <button class="btn btn-primary adminButton" type="button" id="pitchesButton">Boiska</button>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary adminButton" type="button" id="equipmentButton">Magazyn</button>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary adminButton" type="button" id="blackListButton">Czarna Lista</button>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary adminButton" type="button" id="priceListButton">Cennik</button>
+            </div>
+            @if (name != null && role == "Admin")
+            {
+                <div class="form-group">
+                    <button class="btn btn-primary adminButton" type="button" id="approvalsButton">Zatwierdzanie wpisów</button>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary adminButton" type="button" id="addEmployeeButton">Dodaj pracownika</button>
+                </div>
+                <div>
+                    <button class="btn btn-primary adminButton" type="button" id="editGlobalTable">Edytuj informacje</button>
+                </div>
+            }
+        </div>
+     </div>
+</div>
+<script src="~/js/Admin/Admin.js"></script>

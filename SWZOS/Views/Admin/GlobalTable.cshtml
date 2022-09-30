@@ -1,0 +1,41 @@
+﻿@model List<SWZOS.Models.Admin.GlobalViewModel>
+<script>
+    let AdminUrl = {
+        EditValue: "@Url.Action("EditValue", "Admin")"
+    };
+</script>
+<div class="container">
+    <div class="row align-items-center">
+        <table class="swzosTable" id="globalsTable" border="1" cellpadding="5" cellspacing="5" width="100%">
+            <thead>
+                <tr>
+                    <th>Klucz</th>
+                    <th>Wartość</th>
+                    <th>Opis</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Key</td>
+                        <td>@item.DisplayedValue</td>
+                        <td>@item.Description</td>
+                        <td><button class="btn btn-primary" onclick="EditValue('@item.Key')">Edytuj</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("#globalsTable").DataTable();
+    });
+
+    function EditValue(key)
+    {
+        window.location.href = AdminUrl.EditValue + "?key=" + key;
+    }
+</script>

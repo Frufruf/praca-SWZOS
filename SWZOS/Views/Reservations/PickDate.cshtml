@@ -1,0 +1,19 @@
+﻿<script>
+    let pitchTypeId = @ViewData["PitchTypeId"];
+
+    let PickDateUrl = {
+        GetRange: "@Url.Action("GetRange", "Reservations")",
+        AddReservation: "@Url.Action("AddReservation", "Reservations")"
+    };
+</script>
+<div class="columns">
+    <div class="column-left">
+        <div id="nav"></div>
+    </div>
+    <div class="column-main">
+        <div class="toolbar">Dostępne terminy:</div>
+        <div id="calendar"></div>
+    </div>
+</div>
+<script src="~/lib/daypilot/daypilot-all.min.js"></script>
+<script src="~/js/Reservations/PickDate.js"></script>

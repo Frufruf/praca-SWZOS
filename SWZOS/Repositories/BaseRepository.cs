@@ -8,16 +8,16 @@ namespace SWZOS.Repositories
 {
     public class BaseRepository
     {
-        protected SWZOSContext _database;
+        protected SWZOSContext _db;
 
         public BaseRepository(SWZOSContext database)
         {
-            _database = database;
+            _db = database;
         }
 
         public void SaveChanges()
         {
-            _database.SaveChanges();
+            _db.SaveChanges();
         }
     }
 }

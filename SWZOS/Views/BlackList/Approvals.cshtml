@@ -1,0 +1,38 @@
+﻿@model List<SWZOS.Models.BlackList.BlackListViewModel>
+
+<script>
+    let BlackListUrl = {
+        Details: "@Url.Action("Details", "BlackList")"
+    }
+</script>
+@if (@Model.Count > 0)
+{
+    <div class="container">
+    <div class="row align-items-center">
+        <div class="row">
+                <table class="swzosTable" border="1" cellpadding="5" cellspacing="5" width="100%">
+                <tr>
+                    <th>Imię i nazwisko</th>
+                    <th>Status</th>
+                    <th>Powód</th>
+                    <th>Akcje</th>
+                </tr>
+                @foreach (var element in Model)
+                {
+                    <tr>
+                        <td>@element.FullName</td>
+                        <td>@element.StatusName</td>
+                        <td>@element.Reason</td>
+                        <td><button class="btn btn-primary" onclick="Details(@element.Id)">Szczegóły</button></td>
+                    </tr>
+                }
+            </table>    
+        </div>
+    </div>
+    </div>
+}
+else
+{
+    <h1>Brak wpisów do zatwierdzenia</h1>
+}
+<script src="~/js/BlackList/Index.js"></script>

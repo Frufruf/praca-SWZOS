@@ -1,0 +1,52 @@
+﻿@using Microsoft.AspNetCore.Http
+@using System.Security.Claims
+@model List<SWZOS.Models.PriceList.PriceListTypeViewModel>
+
+@inject IHttpContextAccessor httpContextAccessor
+@{
+    string name = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    string role = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+}
+<script>
+    var PriceListUrl = {
+        EditPitchType: "@Url.Action("EditPitchType", "Pitch")",
+        EditEquipment: "@Url.Action("Edit", "Equipment")"
+    }
+</script>
+<div class="container">
+    <div class="align-items-center">
+        <table class="swzosTable" id="priceListTable" border="1" cellpadding="5" cellspacing="5" width="100%">
+            <thead>
+                <tr>
+                    <th>Rodzaj usługi</th>
+                    <th>Nazwa</th>
+                    <th>Cena za godzinę</th>
+                    <th>Opis</th>
+                    @if (name != null && role == "Admin")
+                    {
+                        <th>Akcje</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var type in Model)
+                {
+                    @foreach (var element in type.PriceList)
+                    {
+                        <tr>
+                            <td>@type.PriceListItemTypeName</td>
+                            <td>@element.Name</td>
+                            <td>@element.Price</td>
+                            <td>@element.Description</td>
+                            @if (name != null && role == "Admin")
+                            {
+                                <td><button class="btn btn-primary" onclick="EditPrice(@type.PriceListItemType, @element.Id)">Edytuj</button></td>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>       
+    </div>
+</div>
+<script src="~/js/PriceList/Index.js"></script>

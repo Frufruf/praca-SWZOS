@@ -1,0 +1,21 @@
+﻿@model SWZOS.Models.BlackList.BlackListFormModel
+
+<div class="container">
+    <form class="form-horizontal" id="AddToBlackListForm" asp-action="AddToBlackList">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <input asp-for="UserId" hidden/>
+                <div class="form-group">
+                    <label class="form-label" asp-for="FullName">Imię i nazwisko</label>
+                    <input class="form-control" type="text" asp-for="FullName" disabled/>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" asp-for="Reason">Powód:</label>
+                    <textarea class="form-control" asp-for="Reason" required></textarea>
+                    <span class="text-danger" asp-validation-for="Reason"></span>
+                </div>
+            </div>
+            <input id="SubmitBlackListForm" type="submit" value="Zapisz"/>
+        </div>
+    </form>
+</div>

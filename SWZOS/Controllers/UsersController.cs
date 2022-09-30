@@ -1,69 +1,98 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Serilog;
+using SWZOS.Models.BlackList;
 using SWZOS.Models.User;
 using SWZOS.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using static SWZOS_Database.Enum;
 
 namespace SWZOS.Controllers
 {
     public class UsersController : Controller
     {
         private UsersRepository _usersRepository;
-        public UsersController(UsersRepository usersRepository)
+        private IHttpContextAccessor _httpContextAccessor;
+
+        public UsersController(UsersRepository usersRepository, IHttpContextAccessor httpContextAccessor)
         {
             _usersRepository = usersRepository;
-        }
-        public IActionResult Index()
-        {
-            return View();
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        [HttpGet]
-        public IActionResult AddUser()
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}    
+
+        [Authorize]
+        public IActionResult CurrentUserProfile()
         {
-            var model = new UserFormModel
+            var currentUser = _httpContextAccessor.HttpContext.User;
+            var userId = Int32.Parse(currentUser.FindFirstValue(ClaimTypes.NameIdentifier));
+            return RedirectToAction("Details", new { userId = userId });
+        }
+
+        [Authorize]
+        public IActionResult Details(int userId)
+        {
+            var currentUser = _httpContextAccessor.HttpContext.User;
+            var role = currentUser.FindFirstValue(ClaimTypes.Role);
+            if (role == "Admin" || role == "Employee" || Int32.Parse(currentUser.FindFirstValue(ClaimTypes.NameIdentifier)) == userId)
             {
-                IsEditForm = false
-            };
-            return View("~/Views/Users/UserForm.cshtml", model);
+                var user = _usersRepository.GetUserViewModel(userId);
+                if (user == null)
+                {
+                    Response.StatusCode = 404;
+                }
+                return View(user);
+            }
+            else
+            {
+                Response.StatusCode = 401;
+                return View();
+            }
+        }        
+
+        [HttpGet]
+        [Authorize]
+        public IActionResult EditUser(int userId)
+        {
+            var currentUser = _httpContextAccessor.HttpContext.User;
+            var currentUserId = Int32.Parse(currentUser.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (currentUserId == userId)
+            {
+                var user = _usersRepository.GetUserFormById(userId);
+                if (user == null)
+                {
+                    Response.StatusCode = 404;
+                }
+                return View(user);
+            }
+            else
+            {
+                Response.StatusCode = 401;
+                return View();
+            }
         }
 
         [HttpPost]
-        public JsonResult AddUser(UserFormModel model)
+        [Authorize]
+        public ActionResult EditUser(UserFormModel model)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _usersRepository.AddUser(model);
-                    return Json(new { success = true });
-                }
-                catch (Exception ex)
-                {
-                    var errorMessage = ex.Message;
-                    return Json(new { success = false, errorMessage = errorMessage });
-                }
-            }
-            return Json(new { success = false });
-        }
-
-        [HttpGet]
-        public IActionResult EditUser(int userId)
-        {
-            var user = _usersRepository.GetUserById(userId);
-            throw new NotImplementedException();
-        }
-
-        public JsonResult EditUser(UserFormModel model)
-        {
-            throw new NotImplementedException();
+            _usersRepository.EditUser(model);
+            return RedirectToAction("Details", model.Id);
         }
 
         public JsonResult DeleteUser(int userId)
         {
             throw new NotImplementedException();
         }
+
     }
 }

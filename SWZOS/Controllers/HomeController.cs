@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SWZOS.Models;
+using SWZOS.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,18 +13,25 @@ namespace SWZOS.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private HomeRepository _homeRepository;
+        public HomeController(HomeRepository homeRepository)
         {
-            _logger = logger;
+            _homeRepository = homeRepository;
         }
 
         public IActionResult Index()
         {
+            ViewData.Add("Description", _homeRepository.GetHomePageDescription());
             return View();
         }
 
+        public IActionResult Regulations()
+        {
+            ViewData.Add("Regulations", _homeRepository.GetRegulations());
+            return View();
+        }
+
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();

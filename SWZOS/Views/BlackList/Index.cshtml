@@ -1,0 +1,72 @@
+﻿@model List<SWZOS.Models.BlackList.BlackListViewModel>
+
+<script>
+    let BlackListUrl = {
+        Details: "@Url.Action("Details", "BlackList")",
+        Search: "@Url.Action("SearchUsers", "BlackList")",
+        UserProfile: "@Url.Action("Details","Users")"
+    }
+</script>
+<div class="container">
+    <div class="row align-items-center">
+        <div class="col-3">
+            <div class="form-group">
+                <label class="form-label">Imię:</label>
+                <input class="form-control" type="text" id="userName"/>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="form-group">
+                <label class="form-label">Nazwisko:</label>
+                <input class="form-control" type="text" id="userSurname"/>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="form-group">
+                <label class="form-label">Email:</label>
+                <input class="form-control" type="text" id="userEmail"/>
+            </div>
+        </div>
+        <div class="col-3">
+            <input id="searchUsers" type="submit" value="Szukaj"/>
+        </div>
+        <div class="row customCenterElements">
+            <div id="searchedUsersDiv" hidden>
+                <table class="swzosTable" id="searchedUsersTable" border="1" cellpadding="5" cellspacing="5" width="100%">  
+                    <thead>
+                        <tr>
+                            <th>Imię</th>
+                            <th>Nazwisko</th>
+                            <th>Email</th>
+                            <th>Numer telefonu</th>
+                            <th>Akcje</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <table class="swzosTable" id="blackListTable" border="1" cellpadding="5" cellspacing="5" width="100%">
+                <thead>
+                    <tr>
+                        <th>Imię i nazwisko</th>
+                        <th>Status</th>
+                        <th>Powód</th>
+                        <th>Akcje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var element in Model)
+                    {
+                        <tr>
+                            <td>@element.FullName</td>
+                            <td>@element.StatusName</td>
+                            <td>@element.Reason</td>
+                            <td><button class="btn btn-primary" onclick="Details(@element.Id)">Szczegóły</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>    
+        </div>
+    </div>
+</div>
+<script src="~/js/BlackList/Index.js"></script>

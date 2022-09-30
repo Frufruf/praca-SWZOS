@@ -1,0 +1,41 @@
+﻿@model List<SWZOS.Models.Equipment.EquipmentViewModel>
+<script>
+    var EquipmentUrl = {
+        Add:    "@Url.Action("Add", "Equipment")",
+        Edit:   "@Url.Action("Edit", "Equipment")"
+    }
+</script>
+<div class="container">
+    <div class="align-items-center">
+        <div class="row">
+            <table class="swzosTable" id="equipmentTable" border="1" cellpadding="5" cellspacing="5" width="100%">
+                <thead>
+                    <tr>
+                        <th>Nazwa przedmiotu</th>
+                        <th>Ilość w magazynie</th>
+                        <th>Opis</th>
+                        <th>Cena za godzinę wypożyczenia</th>
+                        <th>Maksymalna ilość na rezerwację</th>
+                        <th>Dostępne na</th>
+                        <th>Akcje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.Description</td>
+                            <td>@item.Price</td>
+                            <td>@item.MaximumAmountPerReservation</td>
+                            <td>@String.Join(", ", item.PitchTypes.Select(a => a.PitchTypeName).ToList())</td>
+                            <td><button class="btn btn-primary" onclick="EditEquipment(@item.Id)">Edytuj</button></td>
+                        </tr> 
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="~/js/Equipment/Index.js"></script>

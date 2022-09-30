@@ -1,0 +1,92 @@
+﻿@model SWZOS.Models.Reservations.ReservationFormModel
+<script>
+    let ReservationsUrl = "@Url.Action("Index", "Reservations")";
+    let equipmentCounter = @Model.EquipmentList.Count;
+    let pitchEquipment = @Html.Raw(Json.Serialize(Model.PitchEquipment));
+    let pitchPrice = @Model.PitchPrice;
+</script>
+<div class="container">
+    <form method="post" class="form-horizontal" id="EditReservationForm" asp-action="EditReservation">
+        <div class="form-row">
+            <div class="col-6">
+                <input asp-for="UserId" hidden/>
+                <input asp-for="PitchTypeId" hidden/>
+                <input asp-for="ReservationId" hidden />
+                <div class="form-group">
+                    <label class="form-label" asp-for="StartDate">Czas rozpoczęcia</label>
+                    <input class="form-control dateTimePicker" asp-for="StartDate"/>
+                    <span class="text-danger" asp-validation-for="StartDate"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" asp-for="Duration">Czas rezerwacji w minutach</label>
+                    <input class="form-control" asp-for="Duration" step="30" min="60" onkeydown="return false" required />
+                    <span class="text-danger" asp-validation-for="Duration"></span>               
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Cena:</label>
+                    <input class="form-control" id="priceCounterInput" disabled/>                 
+                </div>
+                <div class="form-group">
+                    <label class="form-label" asp-for="Description">Dodatkowe uwagi</label>
+                    <textarea class="form-control" asp-for="Description"></textarea>
+                    <span class="text-danger" asp-validation-for="Description"></span>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" type="button" id="addEquipment">Dodaj sprzęt do rezerwacji</button>
+                </div>
+                <button class="btn btn-primary" type="button" id="SubmitEditReservationForm">Zapisz</button>
+            </div>
+            <div id="equipmentFormDiv" class="col-6">
+                @for (var i = 0; i < Model.EquipmentList.Count; i++)
+                {
+                    <div id="equipmentDiv_@i">
+                        <div class="form-group">
+                            <label class="form-label">Wyposażenie:</label>
+                            <select class="form-control" step="30" required>
+                                @foreach(var item in Model.PitchEquipment)
+                                {
+                                    if (item.Id == Model.EquipmentList[i].Id)
+                                    {
+                                        <option value="@item.Id" selected>@item.Name</option>   
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Id">@item.Name</option> 
+                                    }
+                                }
+                            </select>              
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Ilość</label>
+                            <input type="number" class="form-control equipmentQuantity" step="1" min="1" value="@Model.EquipmentList[i].Quantity"/> 
+                            <span class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-primary removeEquipment" onClick="RemoveEquipment(this)" type="button">Usuń</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </form>
+    <div id="equipmentDiv" hidden>
+        <div class="form-group">
+            <label class="form-label">Wyposażenie:</label>
+            <select class="form-control" step="30" required>
+                @foreach(var item in Model.PitchEquipment)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </select>              
+        </div>
+        <div class="form-group">
+            <label class="form-label">Ilość</label>
+            <input type="number" class="form-control equipmentQuantity" step="1" min="1" value="1"/> 
+            <span class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary removeEquipment" onClick="RemoveEquipment(this)" type="button">Usuń</button>
+        </div>
+    </div>
+</div>
+<script src="~/js/Reservations/ReservationForm.js"></script>

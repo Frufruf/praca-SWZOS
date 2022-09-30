@@ -1,0 +1,42 @@
+﻿@model List<SWZOS.Models.Pitches.PitchModel>
+<script>
+    let PitchUrl = {
+        EditPitch: "@Url.Action("EditPitch", "Pitch")"
+    }
+</script>
+<div class="container">
+    <div class="align-items-center">
+        <div class="row">
+            <table class="swzosTable" id="pitchesTable" border="1" cellpadding="5" cellspacing="5" width="100%">
+                <thead>
+                    <tr>
+                        <th>Boisko nr</th>
+                        <th>Rodzaj boiska</th>
+                        <th>Aktywne</th>
+                        <th>Opis</th>
+                        <th>Data wyłączenia z użytku</th>
+                        <th>Koniec wyłączenia z użytku</th>
+                        <th>Powód wyłączenia z użytku</th>
+                        <th>Akcje</th>
+                    </tr>   
+                </thead>
+                <tbody>
+                    @foreach (var pitch in Model)
+                    {
+                        <tr>
+                            <th>@pitch.PitchId</th>
+                            <td>@pitch.PitchTypeName</td>
+                            <td>@if(pitch.ActiveFlag) { <text>✓</text>} else { <text>x</text> }</td>
+                            <td>@pitch.Description</td>
+                            <td>@pitch.OutOfServiceStartDate</td>
+                            <td>@pitch.OutOfServiceEndDate</td>
+                            <td>@pitch.OutOfServiceReason</td>
+                            <td><button class="btn btn-primary" onclick="EditPitch(@pitch.PitchId)">Edytuj</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>          
+        </div>
+    </div>
+</div>
+<script src="~/js/Pitches/Index.js"></script>
