@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using SWZOS.Models.BlackList;
@@ -9,82 +10,83 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using static SWZOS_Database.Enum;
 
 namespace SWZOS.Controllers
 {
     public class UsersController : Controller
     {
         private UsersRepository _usersRepository;
-        private BlackListRepository _blackListRepository;
+        private IHttpContextAccessor _httpContextAccessor;
 
-        public UsersController(UsersRepository usersRepository, BlackListRepository blackListRepository)
+        public UsersController(UsersRepository usersRepository, IHttpContextAccessor httpContextAccessor)
         {
             _usersRepository = usersRepository;
-            _blackListRepository = blackListRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public IActionResult Index()
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}    
+
+        [Authorize]
+        public IActionResult CurrentUserProfile()
         {
-            return View();
-        }    
-        
-        public IActionResult Details()
-        {
-            //TODO obsługa parsowania Id użytkownika
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = _usersRepository.GetUserViewModel(Int32.Parse(userId));
-            return View(user);
+            var currentUser = _httpContextAccessor.HttpContext.User;
+            var userId = Int32.Parse(currentUser.FindFirstValue(ClaimTypes.NameIdentifier));
+            return RedirectToAction("Details", new { userId = userId });
         }
 
-        [HttpGet]
-        public IActionResult AddUser()
+        [Authorize]
+        public IActionResult Details(int userId)
         {
-            return View();
-        }
-
-        //TODO przenieść do AccountController
-        [HttpPost]
-        public IActionResult AddUser(UserFormModel model)
-        {
-            _usersRepository.ValidateUserFormModel(model, ModelState); //Walidacja przy tworzeniu konta
-            if (ModelState.IsValid)
+            var currentUser = _httpContextAccessor.HttpContext.User;
+            var role = currentUser.FindFirstValue(ClaimTypes.Role);
+            if (role == "Admin" || role == "Employee" || Int32.Parse(currentUser.FindFirstValue(ClaimTypes.NameIdentifier)) == userId)
             {
-                try
+                var user = _usersRepository.GetUserViewModel(userId);
+                if (user == null)
                 {
-                    _usersRepository.AddUser(model); //Dodanie użytkownika
-                    //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);
-                    //var message = new Message(new string[] { user.Email }, "Confirmation email link", confirmationLink, null);
-                    //await _emailSender.SendEmailAsync(message);
-                    return RedirectToAction("Login", "Account"); //Przekierowanie na stronę logowania
+                    Response.StatusCode = 404;
                 }
-                catch (Exception ex)
-                {
-                    Log.Logger.Error(ex.Message);
-                    ModelState.AddModelError("", "Wystąpił nieoczekiwany błąd");
-                    return View(model);
-                }
+                return View(user);
             }
-            return View(model);
-        }
+            else
+            {
+                Response.StatusCode = 401;
+                return View();
+            }
+        }        
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public IActionResult AddEmployee()
-        {
-            return View();
-        }
-
-        [HttpGet]
+        [Authorize]
         public IActionResult EditUser(int userId)
         {
-            var user = _usersRepository.GetUserFormById(userId);
-            return View(user);
+            var currentUser = _httpContextAccessor.HttpContext.User;
+            var currentUserId = Int32.Parse(currentUser.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (currentUserId == userId)
+            {
+                var user = _usersRepository.GetUserFormById(userId);
+                if (user == null)
+                {
+                    Response.StatusCode = 404;
+                }
+                return View(user);
+            }
+            else
+            {
+                Response.StatusCode = 401;
+                return View();
+            }
         }
 
-        public JsonResult EditUser(UserFormModel model)
+        [HttpPost]
+        [Authorize]
+        public ActionResult EditUser(UserFormModel model)
         {
-            throw new NotImplementedException();
+            _usersRepository.EditUser(model);
+            return RedirectToAction("Details", model.Id);
         }
 
         public JsonResult DeleteUser(int userId)
@@ -92,16 +94,5 @@ namespace SWZOS.Controllers
             throw new NotImplementedException();
         }
 
-        public IActionResult AddToBlackList(int userId)
-        {
-            return View();
-        }
-
-        public IActionResult AddToBlackList(BlackListFormModel model)
-        {
-            _blackListRepository.AddToBlackList(model);
-            //TODO redirect do strony profilu użytkownika
-            return RedirectToAction("Index");
-        }
     }
 }

@@ -2,6 +2,7 @@
 {
     public class BlackListViewModel
     {
+        public int Id { get; set; }
         //Klucz główny użytkownika
         public int UserId { get; set; }
         //Klucz statusu

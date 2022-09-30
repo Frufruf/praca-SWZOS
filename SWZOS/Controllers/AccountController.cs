@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using SWZOS.Models.Account;
 using SWZOS.Models.User;
 using SWZOS.Repositories;
@@ -10,18 +11,85 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using static SWZOS_Database.Enum;
 
 namespace SWZOS.Controllers
 {
     public class AccountController : Controller
     {
+        private UsersRepository _usersRepository;
         private AccountRepository _accountRepository;
         private IHttpContextAccessor _httpContextAccessor;
 
-        public AccountController(AccountRepository accountRepository, IHttpContextAccessor httpContextAccessor)
+        public AccountController(
+            UsersRepository usersRepository,
+            AccountRepository accountRepository, 
+            IHttpContextAccessor httpContextAccessor)
         {
+            _usersRepository = usersRepository;
             _accountRepository = accountRepository;
             _httpContextAccessor = httpContextAccessor;
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddEmployee()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddEmployee(UserFormModel model)
+        {
+            _usersRepository.ValidateUserFormModel(model, ModelState);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _usersRepository.AddUser(model, (int)UserTypesEnum.Employee);
+                    return RedirectToAction("Index", "Admin");
+                }
+                catch (Exception ex)
+                {
+                    Log.Logger.Error(ex.Message);
+                    ModelState.AddModelError("", "Wystąpił nieoczekiwany błąd");
+                    return View(model);
+                }
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult AddUser()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddUser(UserFormModel model)
+        {
+            _usersRepository.ValidateUserFormModel(model, ModelState); //Walidacja przy tworzeniu konta
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    //TODO potwierdzanie maila
+                    _usersRepository.AddUser(model); //Dodanie użytkownika
+                    //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token, email = user.Email }, Request.Scheme);
+                    //var message = new Message(new string[] { user.Email }, "Confirmation email link", confirmationLink, null);
+                    //await _emailSender.SendEmailAsync(message);
+                    return RedirectToAction("Login", "Account"); //Przekierowanie na stronę logowania
+                }
+                catch (Exception ex)
+                {
+                    Log.Logger.Error(ex.Message);
+                    ModelState.AddModelError("", "Wystąpił nieoczekiwany błąd");
+                    return View(model);
+                }
+            }
+            return View(model);
         }
 
         [HttpGet]
@@ -52,7 +120,7 @@ namespace SWZOS.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-                    new Claim(ClaimTypes.Name, user.MailAddress),
+                    new Claim(ClaimTypes.Name, user.Login),
                     new Claim("FullName", user.Name + " " + user.Surname),
                     new Claim(ClaimTypes.Role, userRole),
                 };
@@ -114,12 +182,13 @@ namespace SWZOS.Controllers
         [Authorize]
         public IActionResult ChangePassword(PasswordChangeModel model)
         {
-            _accountRepository.ValidatePasswordChange(model, ModelState);
+            var login = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+            var userId = Int32.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+            _accountRepository.ValidatePasswordChange(model, login, ModelState);
             if (ModelState.IsValid)
             {
-                _accountRepository.ChangePassword(model);
-                //TODO jaki widok zwrócić po zmianie hasła
-                return RedirectToAction("Login");
+                _accountRepository.ChangePassword(model, userId);
+                return RedirectToAction("Logout");
             }
             return View(model);
         }

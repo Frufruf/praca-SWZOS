@@ -49,8 +49,7 @@ namespace SWZOS.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("BLACK_LIST", (string)null);
                 });
@@ -111,7 +110,8 @@ namespace SWZOS.Migrations
                         .HasColumnName("DESCRIPTION");
 
                     b.Property<int>("MaximumQuantityPerReservation")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MAX_QUANTITY_PER_RESERVATION");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -171,36 +171,36 @@ namespace SWZOS.Migrations
                         new
                         {
                             Id = 5,
-                            Description = "Koszulka sportowa",
+                            Description = "Lejbik sportowy",
                             MaximumQuantityPerReservation = 18,
-                            Name = "Czerwone koszulki do gry",
+                            Name = "Czerwone lejbiki do gry",
                             Price = 1.5m,
                             Quantity = 40
                         },
                         new
                         {
                             Id = 6,
-                            Description = "Koszulka sportowa",
+                            Description = "Lejbik sportowy",
                             MaximumQuantityPerReservation = 18,
-                            Name = "Niebieskie koszulki do gry",
+                            Name = "Niebieskie lejbiki do gry",
                             Price = 1.5m,
                             Quantity = 40
                         },
                         new
                         {
                             Id = 7,
-                            Description = "Koszulka sportowa",
+                            Description = "Lejbik sportowy",
                             MaximumQuantityPerReservation = 18,
-                            Name = "Białe koszulki do gry",
+                            Name = "Białe lejbiki do gry",
                             Price = 1.5m,
                             Quantity = 40
                         },
                         new
                         {
                             Id = 8,
-                            Description = "Koszulka sportowa",
+                            Description = "Lejbik sportowy",
                             MaximumQuantityPerReservation = 18,
-                            Name = "Czarne koszulki do gry",
+                            Name = "Czarne lejbiki do gry",
                             Price = 1.5m,
                             Quantity = 40
                         },
@@ -212,6 +212,53 @@ namespace SWZOS.Migrations
                             Name = "Rakieta tenisowa",
                             Price = 10m,
                             Quantity = 24
+                        });
+                });
+
+            modelBuilder.Entity("SWZOS_Database.Entities.Global", b =>
+                {
+                    b.Property<string>("Key")
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)")
+                        .HasColumnName("KEY");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)")
+                        .HasColumnName("DESCRIPTION");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("VALUE");
+
+                    b.HasKey("Key");
+
+                    b.ToTable("GLOBAL", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Key = "HomePageDescription",
+                            Description = "Tekst wyświetlany na stronie głównej aplikacji",
+                            Value = ""
+                        },
+                        new
+                        {
+                            Key = "Regulations",
+                            Description = "Regulamin korzystania z obiektu sportowego",
+                            Value = ""
+                        },
+                        new
+                        {
+                            Key = "OpenHour",
+                            Description = "Godzina otwarcia obiektu",
+                            Value = "09:30:00"
+                        },
+                        new
+                        {
+                            Key = "CloseHour",
+                            Description = "Godzina zamknięcia obiektu",
+                            Value = "23:00:00"
                         });
                 });
 
@@ -281,35 +328,33 @@ namespace SWZOS.Migrations
                     b.HasKey("PaymentStatusId");
 
                     b.ToTable("PAYMENTS_STATUS", (string)null);
-                });
 
-            modelBuilder.Entity("SWZOS_Database.Entities.Permission", b =>
-                {
-                    b.Property<int>("PermissionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("PERMISSION_ID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PermissionId"), 1L, 1);
-
-                    b.Property<bool>("DeletedFlag")
-                        .HasColumnType("bit")
-                        .HasColumnName("DELETED_FLAG");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(4000)
-                        .HasColumnType("nvarchar(4000)")
-                        .HasColumnName("DESCRIPTION");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("NAME");
-
-                    b.HasKey("PermissionId");
-
-                    b.ToTable("PERMISSIONS", (string)null);
+                    b.HasData(
+                        new
+                        {
+                            PaymentStatusId = 1,
+                            Name = "NotPaid"
+                        },
+                        new
+                        {
+                            PaymentStatusId = 2,
+                            Name = "Paid"
+                        },
+                        new
+                        {
+                            PaymentStatusId = 3,
+                            Name = "Delayed"
+                        },
+                        new
+                        {
+                            PaymentStatusId = 4,
+                            Name = "Overpaid"
+                        },
+                        new
+                        {
+                            PaymentStatusId = 5,
+                            Name = "Canceled"
+                        });
                 });
 
             modelBuilder.Entity("SWZOS_Database.Entities.Pitch", b =>
@@ -329,6 +374,19 @@ namespace SWZOS.Migrations
                         .HasMaxLength(4000)
                         .HasColumnType("nvarchar(4000)")
                         .HasColumnName("DESCRIPTION");
+
+                    b.Property<DateTime?>("OutOfServiceEndDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("OUT_OF_SERVICE_END_DATE");
+
+                    b.Property<string>("OutOfServiceReason")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)")
+                        .HasColumnName("OUT_OF_SERVICE_REASON");
+
+                    b.Property<DateTime?>("OutOfServiceStartDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("OUT_OF_SERVICE_START_DATE");
 
                     b.Property<int>("PitchTypeId")
                         .HasColumnType("int")
@@ -474,20 +532,20 @@ namespace SWZOS.Migrations
                         new
                         {
                             PitchTypeId = 2,
+                            PitchTypeName = "Kort tenisowy",
+                            PitchTypePrice = 50m
+                        },
+                        new
+                        {
+                            PitchTypeId = 3,
                             PitchTypeName = "Boisko do koszykówki",
                             PitchTypePrice = 80m
                         },
                         new
                         {
-                            PitchTypeId = 3,
+                            PitchTypeId = 4,
                             PitchTypeName = "Boisko do siatkówki",
                             PitchTypePrice = 80m
-                        },
-                        new
-                        {
-                            PitchTypeId = 4,
-                            PitchTypeName = "Kort tenisowy",
-                            PitchTypePrice = 50m
                         });
                 });
 
@@ -506,6 +564,93 @@ namespace SWZOS.Migrations
                     b.HasIndex("EquipmentId");
 
                     b.ToTable("PITCH_TYPE_EQUIPMENT", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            PitchTypeId = 1,
+                            EquipmentId = 1
+                        },
+                        new
+                        {
+                            PitchTypeId = 3,
+                            EquipmentId = 2
+                        },
+                        new
+                        {
+                            PitchTypeId = 4,
+                            EquipmentId = 3
+                        },
+                        new
+                        {
+                            PitchTypeId = 2,
+                            EquipmentId = 4
+                        },
+                        new
+                        {
+                            PitchTypeId = 1,
+                            EquipmentId = 5
+                        },
+                        new
+                        {
+                            PitchTypeId = 3,
+                            EquipmentId = 5
+                        },
+                        new
+                        {
+                            PitchTypeId = 4,
+                            EquipmentId = 5
+                        },
+                        new
+                        {
+                            PitchTypeId = 1,
+                            EquipmentId = 6
+                        },
+                        new
+                        {
+                            PitchTypeId = 3,
+                            EquipmentId = 6
+                        },
+                        new
+                        {
+                            PitchTypeId = 4,
+                            EquipmentId = 6
+                        },
+                        new
+                        {
+                            PitchTypeId = 1,
+                            EquipmentId = 7
+                        },
+                        new
+                        {
+                            PitchTypeId = 3,
+                            EquipmentId = 7
+                        },
+                        new
+                        {
+                            PitchTypeId = 4,
+                            EquipmentId = 7
+                        },
+                        new
+                        {
+                            PitchTypeId = 1,
+                            EquipmentId = 8
+                        },
+                        new
+                        {
+                            PitchTypeId = 3,
+                            EquipmentId = 8
+                        },
+                        new
+                        {
+                            PitchTypeId = 4,
+                            EquipmentId = 8
+                        },
+                        new
+                        {
+                            PitchTypeId = 2,
+                            EquipmentId = 9
+                        });
                 });
 
             modelBuilder.Entity("SWZOS_Database.Entities.Reservation", b =>
@@ -619,11 +764,6 @@ namespace SWZOS.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("NAME");
 
-                    b.Property<string>("PESEL")
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)")
-                        .HasColumnName("PESEL");
-
                     b.Property<DateTime>("PasswordExpirationDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("PASSWORD_EXPIRATION_DATE");
@@ -657,23 +797,120 @@ namespace SWZOS.Migrations
                     b.HasIndex("UserTypeId");
 
                     b.ToTable("USERS", (string)null);
-                });
 
-            modelBuilder.Entity("SWZOS_Database.Entities.UserPermission", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int")
-                        .HasColumnName("USER_ID");
-
-                    b.Property<int>("PermissionId")
-                        .HasColumnType("int")
-                        .HasColumnName("PERMISSION_ID");
-
-                    b.HasKey("UserId", "PermissionId");
-
-                    b.HasIndex("PermissionId");
-
-                    b.ToTable("USER_PERMISSIONS", (string)null);
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            ActiveFlag = true,
+                            DeletedFlag = false,
+                            Login = "kbrydak",
+                            MailAddress = "krzysztof.brydak@gmail.com",
+                            Name = "Krzysztof",
+                            PasswordExpirationDate = new DateTime(2023, 9, 30, 16, 6, 5, 166, DateTimeKind.Local).AddTicks(2356),
+                            PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
+                            PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
+                            Surname = "Brydak",
+                            UserTypeId = 1
+                        },
+                        new
+                        {
+                            UserId = 2,
+                            ActiveFlag = true,
+                            DeletedFlag = false,
+                            Login = "employee_a",
+                            MailAddress = "employee_a@swzos.pl",
+                            Name = "Jan",
+                            PasswordExpirationDate = new DateTime(2023, 9, 30, 16, 6, 5, 166, DateTimeKind.Local).AddTicks(2399),
+                            PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
+                            PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
+                            Surname = "Śliwa",
+                            UserTypeId = 2
+                        },
+                        new
+                        {
+                            UserId = 3,
+                            ActiveFlag = true,
+                            DeletedFlag = false,
+                            Login = "employee_b",
+                            MailAddress = "employee_b@swzos.pl",
+                            Name = "Grzegorz",
+                            PasswordExpirationDate = new DateTime(2023, 9, 30, 16, 6, 5, 166, DateTimeKind.Local).AddTicks(2404),
+                            PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
+                            PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
+                            Surname = "Nowak",
+                            UserTypeId = 2
+                        },
+                        new
+                        {
+                            UserId = 4,
+                            ActiveFlag = true,
+                            DeletedFlag = false,
+                            Login = "dzony_a",
+                            MailAddress = "dzony_a@swzos.pl",
+                            Name = "Łukasz",
+                            PasswordExpirationDate = new DateTime(2023, 9, 30, 16, 6, 5, 166, DateTimeKind.Local).AddTicks(2408),
+                            PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
+                            PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
+                            Surname = "Piotrowski",
+                            UserTypeId = 3
+                        },
+                        new
+                        {
+                            UserId = 5,
+                            ActiveFlag = true,
+                            DeletedFlag = false,
+                            Login = "dzony_b",
+                            MailAddress = "dzony_b@swzos.pl",
+                            Name = "Michał",
+                            PasswordExpirationDate = new DateTime(2023, 9, 30, 16, 6, 5, 166, DateTimeKind.Local).AddTicks(2412),
+                            PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
+                            PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
+                            Surname = "Skórka",
+                            UserTypeId = 3
+                        },
+                        new
+                        {
+                            UserId = 6,
+                            ActiveFlag = true,
+                            DeletedFlag = false,
+                            Login = "dzony_c",
+                            MailAddress = "dzony_c@swzos.pl",
+                            Name = "Piotr",
+                            PasswordExpirationDate = new DateTime(2023, 9, 30, 16, 6, 5, 166, DateTimeKind.Local).AddTicks(2416),
+                            PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
+                            PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
+                            Surname = "Koza",
+                            UserTypeId = 3
+                        },
+                        new
+                        {
+                            UserId = 7,
+                            ActiveFlag = true,
+                            DeletedFlag = false,
+                            Login = "dzony_d",
+                            MailAddress = "dzony_d@swzos.pl",
+                            Name = "Krzysztof",
+                            PasswordExpirationDate = new DateTime(2023, 9, 30, 16, 6, 5, 166, DateTimeKind.Local).AddTicks(2419),
+                            PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
+                            PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
+                            Surname = "Pałka",
+                            UserTypeId = 3
+                        },
+                        new
+                        {
+                            UserId = 8,
+                            ActiveFlag = true,
+                            DeletedFlag = false,
+                            Login = "dzony_e",
+                            MailAddress = "dzony_e@swzos.pl",
+                            Name = "Filip",
+                            PasswordExpirationDate = new DateTime(2023, 9, 30, 16, 6, 5, 166, DateTimeKind.Local).AddTicks(2423),
+                            PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
+                            PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
+                            Surname = "Wilczek",
+                            UserTypeId = 3
+                        });
                 });
 
             modelBuilder.Entity("SWZOS_Database.Entities.UserType", b =>
@@ -721,8 +958,8 @@ namespace SWZOS.Migrations
                         .IsRequired();
 
                     b.HasOne("SWZOS_Database.Entities.User", "User")
-                        .WithOne("BlackList")
-                        .HasForeignKey("SWZOS_Database.Entities.BlackList", "UserId")
+                        .WithMany("BlackList")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -829,25 +1066,6 @@ namespace SWZOS.Migrations
                     b.Navigation("UserType");
                 });
 
-            modelBuilder.Entity("SWZOS_Database.Entities.UserPermission", b =>
-                {
-                    b.HasOne("SWZOS_Database.Entities.Permission", "Permission")
-                        .WithMany("UserPermissions")
-                        .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SWZOS_Database.Entities.User", "User")
-                        .WithMany("UserPermissions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Permission");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("SWZOS_Database.Entities.BlackListStatus", b =>
                 {
                     b.Navigation("BlackLists");
@@ -863,11 +1081,6 @@ namespace SWZOS.Migrations
             modelBuilder.Entity("SWZOS_Database.Entities.PaymentStatus", b =>
                 {
                     b.Navigation("Payments");
-                });
-
-            modelBuilder.Entity("SWZOS_Database.Entities.Permission", b =>
-                {
-                    b.Navigation("UserPermissions");
                 });
 
             modelBuilder.Entity("SWZOS_Database.Entities.Pitch", b =>
@@ -894,8 +1107,6 @@ namespace SWZOS.Migrations
                     b.Navigation("BlackList");
 
                     b.Navigation("Reservations");
-
-                    b.Navigation("UserPermissions");
                 });
 
             modelBuilder.Entity("SWZOS_Database.Entities.UserType", b =>

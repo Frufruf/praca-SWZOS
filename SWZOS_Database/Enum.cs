@@ -25,8 +25,7 @@ namespace SWZOS_Database
         {
             Active = 1,
             Paid = 2,
-            Canceled = 3,
-            Deleted = 4
+            Canceled = 3
         }
 
         public enum BlackListStatusEnum
@@ -39,7 +38,11 @@ namespace SWZOS_Database
 
         public enum PaymentStatusEnum
         {
-
+            NotPaid = 1,
+            Paid = 2,
+            Delayed = 3,
+            Overpaid = 4,
+            Canceled = 5
         }
 
         //Rodzaje pozycji w cenniku

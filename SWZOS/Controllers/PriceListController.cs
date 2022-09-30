@@ -16,5 +16,6 @@ namespace SWZOS.Controllers
             var model = _priceListRepository.GetPriceListFull();
             return View(model);
         }
+
     }
 }

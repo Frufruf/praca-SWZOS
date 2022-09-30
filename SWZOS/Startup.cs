@@ -49,7 +49,8 @@ namespace SWZOS
             services.AddMvc();
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddDbContext<SWZOSContext>(a =>
-                a.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("SWZOS")));
+                a.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), 
+                b => b.MigrationsAssembly("SWZOS")));
 
             services.AddTransient<IEmailSender, EmailSender>();
 
@@ -60,6 +61,9 @@ namespace SWZOS
             services.AddScoped<ReservationsRepository, ReservationsRepository>();
             services.AddScoped<PriceListRepository, PriceListRepository>();
             services.AddScoped<BlackListRepository, BlackListRepository>();
+            services.AddScoped<PitchesRepository, PitchesRepository>();
+            services.AddScoped<EquipmentRepository, EquipmentRepository>();
+            services.AddScoped<HomeRepository, HomeRepository>();
 
             #endregion
         }

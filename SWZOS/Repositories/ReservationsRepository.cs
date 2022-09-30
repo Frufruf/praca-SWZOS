@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
+using SWZOS.Models.Equipment;
 using SWZOS.Models.Reservations;
 using SWZOS_Database;
 using SWZOS_Database.Entities;
@@ -18,13 +20,17 @@ namespace SWZOS.Repositories
         }
 
         //Metoda pobierająca wszystkie rezerwacje użytkownika o podanym ID
-        public List<ReservationsViewModel> GetUserReservations(int userId)
+        public List<ReservationsViewModel> GetUserReservations(int userId, DateTime startDate, DateTime endDate)
         {
-            var result = _db.Reservations.Where(a => a.UserId == userId).Select(a => new ReservationsViewModel
+            var result = _db.Reservations.Where(a => a.ReservationStartDate >= startDate
+                                    && a.ReservationStartDate <= endDate
+                                    && a.UserId == userId).Select(a => new ReservationsViewModel
             {
                 UserId = a.UserId,
+                UserFullName = a.User.Name + " " + a.User.Surname,
                 ReservationId = a.ReservationId,
                 PitchId = a.PitchId,
+                PitchTypeName = a.Pitch.PitchType.PitchTypeName,
                 StartDate = a.ReservationStartDate,
                 EndDate = a.ReservationStartDate.AddMinutes(a.ReservationDuration),
                 Price = a.ReservationPrice,
@@ -35,16 +41,19 @@ namespace SWZOS.Repositories
         }
 
         //Metoda pobierająca wszystkie rezerwacje w dniu dzisiejszym
-        public List<ReservationsViewModel> GetTodayReservations()
+        public List<ReservationsViewModel> GetReservationsByDate(DateTime startDate, DateTime endDate)
         {
-            var result = _db.Reservations.Where(a => a.ReservationStartDate.Day == DateTime.Now.Day
-                                    && a.ReservationStatus != (int)ReservationStatusEnum.Canceled
-                                    && a.ReservationStatus != (int)ReservationStatusEnum.Deleted)
+            var result = _db.Reservations.Where(a => a.ReservationStartDate >= startDate 
+                                    && a.ReservationStartDate <= endDate 
+                                    && a.ReservationStatus != (int)ReservationStatusEnum.Canceled)
             .Select(a => new ReservationsViewModel
             {
                 UserId = a.UserId,
+                UserFullName = a.User.Name + " " + a.User.Surname,
                 ReservationId = a.ReservationId,
                 PitchId = a.PitchId,
+                PitchTypeId = a.Pitch.PitchTypeId,
+                PitchTypeName = a.Pitch.PitchType.PitchTypeName,
                 StartDate = a.ReservationStartDate,
                 EndDate = a.ReservationStartDate.AddMinutes(a.ReservationDuration),
                 Price = a.ReservationPrice,
@@ -56,15 +65,76 @@ namespace SWZOS.Repositories
 
         public ReservationFormModel GetReservationById(int reservationId)
         {
-            return _db.Reservations.Where(a => a.ReservationId == reservationId).Select(a => new ReservationFormModel
+            var model = _db.Reservations.Where(a => a.ReservationId == reservationId).Select(a => new ReservationFormModel
             {
                 ReservationId = a.ReservationId,
                 UserId = a.UserId,
                 StartDate = a.ReservationStartDate,
                 Duration = a.ReservationDuration,
                 PitchTypeId = a.Pitch.PitchTypeId,
-                Description = a.Description
+                PitchPrice = a.Pitch.PitchType.PitchTypePrice,
+                Description = a.Description,
+                EquipmentList = a.ReservationsEquipment.Select(b => new EquipmentSimpleModel
+                {
+                    Id = b.EquipmentId,
+                    Name = b.Equipment.Name,
+                    Price = b.Equipment.Price,
+                    MaximumAmountPerReservation = b.Equipment.MaximumQuantityPerReservation,
+                    Quantity = b.Quantity
+                }).ToList()
             }).FirstOrDefault();
+
+            model.PitchEquipment = _db.PitchTypeEquipment.Where(a => a.PitchTypeId == model.PitchTypeId).Select(a => new EquipmentSimpleModel
+            {
+                Id = a.Equipment.Id,
+                Name = a.Equipment.Name,
+                Price = a.Equipment.Price,
+                MaximumAmountPerReservation = a.Equipment.MaximumQuantityPerReservation,
+                Quantity = a.Equipment.Quantity
+            }).ToList();
+
+            return model;
+        }
+
+        public List<ReservationSlot> GetAvailableSlotsForPitchType(int pitchTypeId, DateTime start, DateTime end, int currentUserId)
+        {
+            var reservations = _db.Reservations.Where(a => a.Pitch.PitchTypeId == pitchTypeId
+                && a.ReservationStartDate >= start
+                && a.ReservationStartDate < end).ToList();
+            
+            var model = new List<ReservationSlot>();
+
+            var difference = (end - start).Days;
+
+            for (var i = 0; i <= difference; i++)
+            {
+                var currentDay = start.AddDays(i).Date;
+                var numberOfPitches = _db.Pitches.Where(a => a.PitchTypeId == pitchTypeId 
+                    && !(a.OutOfServiceStartDate != null && a.OutOfServiceStartDate <= currentDay && a.OutOfServiceEndDate >= currentDay)).Count();
+                for (var j = 0; j < 9; j++)
+                {
+                    var status = "free";
+                    if (reservations.Where(a => a.ReservationStartDate == start.AddDays(i).AddMinutes(j * 90) 
+                        && a.UserId == currentUserId).Any())
+                    {
+                        status = "userReservation";
+                    }
+                    else if (reservations.Where(a => a.ReservationStartDate == start.AddDays(i).AddMinutes(j * 90)).Count() == numberOfPitches)
+                    {
+                        status = "unavailable";
+                    }
+                    var slot = new ReservationSlot
+                    {
+                        Start = start.AddDays(i).AddMinutes(j * 90),
+                        End = start.AddDays(i).AddMinutes(j * 90 + 90),
+                        Duration = 90,
+                        Status = status
+                    };
+                    model.Add(slot);
+                }
+            }
+
+            return model;
         }
 
         //Metoda dodająca rezerwację wraz ze sprzętem do bazy
@@ -86,18 +156,32 @@ namespace SWZOS.Repositories
             _db.Reservations.Add(reservation);
             _db.SaveChanges();
 
-            var equipmentList = new List<ReservationEquipment>();
-            foreach (var equipment in model.EquipmentList)
+            if (model.EquipmentList != null)
             {
-                var reservationEquipment = new ReservationEquipment
+                var equipmentList = new List<ReservationEquipment>();
+                foreach (var equipment in model.EquipmentList)
                 {
-                    ReservationId = reservation.ReservationId,
-                    EquipmentId = equipment.Id,
-                    Quantity = equipment.Quantity
-                };
-                equipmentList.Add(reservationEquipment);
+                    var reservationEquipment = new ReservationEquipment
+                    {
+                        ReservationId = reservation.ReservationId,
+                        EquipmentId = equipment.Id,
+                        Quantity = equipment.Quantity
+                    };
+                    equipmentList.Add(reservationEquipment);
+                }
+                _db.ReservationsEquipment.AddRange(equipmentList);
+                _db.SaveChanges();
             }
-            _db.ReservationsEquipment.AddRange(equipmentList);
+
+            _db.Payments.Add(new Payment
+            {
+                ReservationId = reservation.ReservationId,
+                UserId = model.UserId,
+                FullFee = model.Price,
+                AdvancePayment = model.Price > 500.00 ? model.Price * 0.2 : 0.00,
+                PaidInAmmount = 0.00,
+                StatusId = (int)PaymentStatusEnum.NotPaid
+            });
             _db.SaveChanges();
 
             transaction.Commit();
@@ -105,30 +189,50 @@ namespace SWZOS.Repositories
 
         //Metoda służąca do sprawdzenia poprawności tworzonej rezerwacji
         //zwracająca model uzupełniony o zliczoną cenę 
-        //TODO (Rozbić to na dwie osobne metody)
         public ReservationFullFormModel ValidateReservation(ReservationFormModel model, ModelStateDictionary modelState)
         {
             //Blokowanie edycji typu boiska
             if (model.IsEditForm)
             {
-                var old = _db.Reservations.Where(a => a.ReservationId == model.ReservationId).FirstOrDefault();
+                var old = _db.Reservations.Include(a => a.Pitch).Where(a => a.ReservationId == model.ReservationId).FirstOrDefault();
                 if (old.Pitch.PitchTypeId != model.PitchTypeId)
                 {
                     modelState.AddModelError("", "Nie możesz zmienić typu zarezerwowanego boiska, w tym celu anuluj obecną rezerwację i utwórz nową");
                     return null;
                 }
-            }       
+            }
+
+            //Sprawdzenie czy rezerwacja znajduje się przedziale godzin otwarcia
+            TimeSpan startHour = new TimeSpan(9, 30, 0); 
+            TimeSpan endHour = new TimeSpan(23, 0, 0);
+            if (model.StartDate.TimeOfDay < startHour || model.StartDate.AddMinutes(model.Duration).TimeOfDay > endHour)
+            {
+                modelState.AddModelError("", "Czas rezerwacji wykracza poza godziny działania obiektu");
+                return null;
+            }
+            if (model.StartDate < DateTime.Now)
+            {
+                modelState.AddModelError("", "Wybrany termin już minął");
+                return null;
+            }
+
             //Sprawdzenie czy w wybranym terminie są dostępne boiska dla danego typu
             //wywoływane również przy edycji (w przypadku zmiany godziny trzeba przypisać nowe boisko)
             var endDate = model.StartDate.AddMinutes(model.Duration);
             var busyPitches = _db.Reservations.Where(a => a.ReservationId != model.ReservationId 
                                         && a.Pitch.PitchTypeId == model.PitchTypeId
-                                        && a.ReservationStartDate > model.StartDate
-                                        && a.ReservationStartDate < endDate
-                                        && a.ReservationStatus != (int)ReservationStatusEnum.Canceled
-                                        && a.ReservationStatus != (int)ReservationStatusEnum.Deleted).Select(a => a.PitchId).ToList();
+                                        && ((a.ReservationStartDate < model.StartDate 
+                                        && a.ReservationStartDate.AddMinutes(a.ReservationDuration) > model.StartDate)
+                                        || a.ReservationStartDate >= model.StartDate
+                                        && a.ReservationStartDate < endDate)
+                                        && a.ReservationStatus != (int)ReservationStatusEnum.Canceled)
+                                        .Select(a => a.PitchId).ToList();
 
-            var reservationPitchId = _db.Pitches.Where(a => !busyPitches.Contains(a.PitchId)).Select(a => a.PitchId).FirstOrDefault();
+            var reservationPitchId = _db.Pitches.Where(a => !(a.OutOfServiceStartDate != null 
+                                            && a.OutOfServiceStartDate <= model.StartDate 
+                                            && a.OutOfServiceEndDate >= model.StartDate)
+                                            && !busyPitches.Contains(a.PitchId) && a.PitchTypeId == model.PitchTypeId)
+                                            .Select(a => a.PitchId).FirstOrDefault();
             if (reservationPitchId == 0)
             {
                 modelState.AddModelError("", "Brak wolnych boisk w wybranym terminie");
@@ -174,10 +278,13 @@ namespace SWZOS.Repositories
             var pitchPrice = _db.PitchTypes.Where(a => a.PitchTypeId == model.PitchTypeId).FirstOrDefault().PitchTypePrice;
             price += pitchPrice * (model.Duration / 60.0);
 
-            foreach (var equipment in model.EquipmentList)
+            if (model.EquipmentList != null)
             {
-                var equipmentPrice = _db.Equipment.Where(a => a.Id == equipment.Id).FirstOrDefault().Price;
-                price += equipmentPrice * equipment.Quantity * (model.Duration / 60.0);
+                foreach (var equipment in model.EquipmentList)
+                {
+                    var equipmentPrice = _db.Equipment.Where(a => a.Id == equipment.Id).FirstOrDefault().Price;
+                    price += equipmentPrice * equipment.Quantity * (model.Duration / 60.0);
+                }
             }
             return price;
         }
@@ -191,49 +298,62 @@ namespace SWZOS.Repositories
             reservation.ReservationStartDate = model.StartDate;
             reservation.ReservationDuration = model.Duration;
             reservation.Description = model.Description;
+            reservation.ReservationPrice = model.Price;
             
 
             //Usunięcie i ponowne przypisanie wyposażenia do rezerwacji
             var equipment = _db.ReservationsEquipment.Where(a => a.ReservationId == reservation.ReservationId).ToList();
             _db.ReservationsEquipment.RemoveRange(equipment);
             _db.SaveChanges();
-
-            var equipmentList = new List<ReservationEquipment>();
-            foreach (var eq in model.EquipmentList)
+        
+            if  (model.EquipmentList != null && model.EquipmentList.Count > 0)
             {
-                var reservationEquipment = new ReservationEquipment
+                var equipmentList = new List<ReservationEquipment>();
+                foreach (var eq in model.EquipmentList)
                 {
-                    ReservationId = reservation.ReservationId,
-                    EquipmentId = eq.Id,
-                    Quantity = eq.Quantity
-                };
-                equipmentList.Add(reservationEquipment);
-            }
-            _db.ReservationsEquipment.AddRange(equipmentList);
-            _db.SaveChanges();
-            transaction.Commit();
-        }
-
-        //Metoda usuwająca rezerwację z systemu
-        public void DeleteReservaion(int reservationId)
-        {
-            var reservation = _db.Reservations.Where(a => a.ReservationId == reservationId).FirstOrDefault();
-            if (reservation != null)
-            {
-                reservation.ReservationStatus = (int)ReservationStatusEnum.Deleted;
+                    var reservationEquipment = new ReservationEquipment
+                    {
+                        ReservationId = reservation.ReservationId,
+                        EquipmentId = eq.Id,
+                        Quantity = eq.Quantity
+                    };
+                    equipmentList.Add(reservationEquipment);
+                }
+                _db.ReservationsEquipment.AddRange(equipmentList);
                 _db.SaveChanges();
             }
-        }
+            
+            transaction.Commit();
+        }        
 
         //Metoda anulująca rezerwację
-        public void CancelReservation(int reservationId)
+        public bool CancelReservation(int reservationId, int userId, bool isEmployee = false)
         {
-            var reservation = _db.Reservations.Where(a => a.ReservationId == reservationId).FirstOrDefault();
+            var reservation = _db.Reservations.Where(a => a.ReservationId == reservationId && a.ReservationStartDate > DateTime.Now).FirstOrDefault();
             if (reservation != null)
             {
-                reservation.ReservationStatus = (int)ReservationStatusEnum.Canceled;
-                _db.SaveChanges();
+                if (reservation.UserId == userId || isEmployee)
+                {
+                    var payment = _db.Payments.Where(a => a.ReservationId == reservationId).FirstOrDefault();
+                    reservation.ReservationStatus = (int)ReservationStatusEnum.Canceled;                   
+                    payment.StatusId = (int)PaymentStatusEnum.Canceled;
+                    _db.SaveChanges();
+                    return true;
+                }
             }
+            return false;
+        }
+
+        public void CancelAllUsersReservations(int userId)
+        {
+            var reservations = _db.Reservations.Where(a => a.UserId == userId && a.ReservationStartDate > DateTime.Now).ToList();
+
+            foreach (var res in reservations)
+            {
+                res.ReservationStatus = (int)ReservationStatusEnum.Canceled;
+            }
+
+            _db.SaveChanges();
         }
     }
 }

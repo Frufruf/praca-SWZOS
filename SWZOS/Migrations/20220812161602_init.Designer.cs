@@ -12,8 +12,8 @@ using SWZOS_Database;
 namespace SWZOS.Migrations
 {
     [DbContext(typeof(SWZOSContext))]
-    [Migration("20220612171543_PitchTypeEquipment")]
-    partial class PitchTypeEquipment
+    [Migration("20220812161602_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -113,7 +113,8 @@ namespace SWZOS.Migrations
                         .HasColumnName("DESCRIPTION");
 
                     b.Property<int>("MaximumQuantityPerReservation")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MAX_QUANTITY_PER_RESERVATION");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -173,36 +174,36 @@ namespace SWZOS.Migrations
                         new
                         {
                             Id = 5,
-                            Description = "Koszulka sportowa",
+                            Description = "Lejbik sportowy",
                             MaximumQuantityPerReservation = 18,
-                            Name = "Czerwone koszulki do gry",
+                            Name = "Czerwone lejbiki do gry",
                             Price = 1.5m,
                             Quantity = 40
                         },
                         new
                         {
                             Id = 6,
-                            Description = "Koszulka sportowa",
+                            Description = "Lejbik sportowy",
                             MaximumQuantityPerReservation = 18,
-                            Name = "Niebieskie koszulki do gry",
+                            Name = "Niebieskie lejbiki do gry",
                             Price = 1.5m,
                             Quantity = 40
                         },
                         new
                         {
                             Id = 7,
-                            Description = "Koszulka sportowa",
+                            Description = "Lejbik sportowy",
                             MaximumQuantityPerReservation = 18,
-                            Name = "Białe koszulki do gry",
+                            Name = "Białe lejbiki do gry",
                             Price = 1.5m,
                             Quantity = 40
                         },
                         new
                         {
                             Id = 8,
-                            Description = "Koszulka sportowa",
+                            Description = "Lejbik sportowy",
                             MaximumQuantityPerReservation = 18,
-                            Name = "Czarne koszulki do gry",
+                            Name = "Czarne lejbiki do gry",
                             Price = 1.5m,
                             Quantity = 40
                         },
@@ -285,35 +286,6 @@ namespace SWZOS.Migrations
                     b.ToTable("PAYMENTS_STATUS", (string)null);
                 });
 
-            modelBuilder.Entity("SWZOS_Database.Entities.Permission", b =>
-                {
-                    b.Property<int>("PermissionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("PERMISSION_ID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PermissionId"), 1L, 1);
-
-                    b.Property<bool>("DeletedFlag")
-                        .HasColumnType("bit")
-                        .HasColumnName("DELETED_FLAG");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(4000)
-                        .HasColumnType("nvarchar(4000)")
-                        .HasColumnName("DESCRIPTION");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("NAME");
-
-                    b.HasKey("PermissionId");
-
-                    b.ToTable("PERMISSIONS", (string)null);
-                });
-
             modelBuilder.Entity("SWZOS_Database.Entities.Pitch", b =>
                 {
                     b.Property<int>("PitchId")
@@ -331,6 +303,19 @@ namespace SWZOS.Migrations
                         .HasMaxLength(4000)
                         .HasColumnType("nvarchar(4000)")
                         .HasColumnName("DESCRIPTION");
+
+                    b.Property<DateTime?>("OutOfServiceEndDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("OUT_OF_SERVICE_END_DATE");
+
+                    b.Property<string>("OutOfServiceReason")
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)")
+                        .HasColumnName("OUT_OF_SERVICE_REASON");
+
+                    b.Property<DateTime?>("OutOfServiceStartDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("OUT_OF_SERVICE_START_DATE");
 
                     b.Property<int>("PitchTypeId")
                         .HasColumnType("int")
@@ -508,6 +493,93 @@ namespace SWZOS.Migrations
                     b.HasIndex("EquipmentId");
 
                     b.ToTable("PITCH_TYPE_EQUIPMENT", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            PitchTypeId = 1,
+                            EquipmentId = 1
+                        },
+                        new
+                        {
+                            PitchTypeId = 3,
+                            EquipmentId = 2
+                        },
+                        new
+                        {
+                            PitchTypeId = 4,
+                            EquipmentId = 3
+                        },
+                        new
+                        {
+                            PitchTypeId = 2,
+                            EquipmentId = 4
+                        },
+                        new
+                        {
+                            PitchTypeId = 1,
+                            EquipmentId = 5
+                        },
+                        new
+                        {
+                            PitchTypeId = 3,
+                            EquipmentId = 5
+                        },
+                        new
+                        {
+                            PitchTypeId = 4,
+                            EquipmentId = 5
+                        },
+                        new
+                        {
+                            PitchTypeId = 1,
+                            EquipmentId = 6
+                        },
+                        new
+                        {
+                            PitchTypeId = 3,
+                            EquipmentId = 6
+                        },
+                        new
+                        {
+                            PitchTypeId = 4,
+                            EquipmentId = 6
+                        },
+                        new
+                        {
+                            PitchTypeId = 1,
+                            EquipmentId = 7
+                        },
+                        new
+                        {
+                            PitchTypeId = 3,
+                            EquipmentId = 7
+                        },
+                        new
+                        {
+                            PitchTypeId = 4,
+                            EquipmentId = 7
+                        },
+                        new
+                        {
+                            PitchTypeId = 1,
+                            EquipmentId = 8
+                        },
+                        new
+                        {
+                            PitchTypeId = 3,
+                            EquipmentId = 8
+                        },
+                        new
+                        {
+                            PitchTypeId = 4,
+                            EquipmentId = 8
+                        },
+                        new
+                        {
+                            PitchTypeId = 2,
+                            EquipmentId = 9
+                        });
                 });
 
             modelBuilder.Entity("SWZOS_Database.Entities.Reservation", b =>
@@ -621,11 +693,6 @@ namespace SWZOS.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("NAME");
 
-                    b.Property<string>("PESEL")
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)")
-                        .HasColumnName("PESEL");
-
                     b.Property<DateTime>("PasswordExpirationDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("PASSWORD_EXPIRATION_DATE");
@@ -659,23 +726,6 @@ namespace SWZOS.Migrations
                     b.HasIndex("UserTypeId");
 
                     b.ToTable("USERS", (string)null);
-                });
-
-            modelBuilder.Entity("SWZOS_Database.Entities.UserPermission", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int")
-                        .HasColumnName("USER_ID");
-
-                    b.Property<int>("PermissionId")
-                        .HasColumnType("int")
-                        .HasColumnName("PERMISSION_ID");
-
-                    b.HasKey("UserId", "PermissionId");
-
-                    b.HasIndex("PermissionId");
-
-                    b.ToTable("USER_PERMISSIONS", (string)null);
                 });
 
             modelBuilder.Entity("SWZOS_Database.Entities.UserType", b =>
@@ -831,25 +881,6 @@ namespace SWZOS.Migrations
                     b.Navigation("UserType");
                 });
 
-            modelBuilder.Entity("SWZOS_Database.Entities.UserPermission", b =>
-                {
-                    b.HasOne("SWZOS_Database.Entities.Permission", "Permission")
-                        .WithMany("UserPermissions")
-                        .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SWZOS_Database.Entities.User", "User")
-                        .WithMany("UserPermissions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Permission");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("SWZOS_Database.Entities.BlackListStatus", b =>
                 {
                     b.Navigation("BlackLists");
@@ -865,11 +896,6 @@ namespace SWZOS.Migrations
             modelBuilder.Entity("SWZOS_Database.Entities.PaymentStatus", b =>
                 {
                     b.Navigation("Payments");
-                });
-
-            modelBuilder.Entity("SWZOS_Database.Entities.Permission", b =>
-                {
-                    b.Navigation("UserPermissions");
                 });
 
             modelBuilder.Entity("SWZOS_Database.Entities.Pitch", b =>
@@ -896,8 +922,6 @@ namespace SWZOS.Migrations
                     b.Navigation("BlackList");
 
                     b.Navigation("Reservations");
-
-                    b.Navigation("UserPermissions");
                 });
 
             modelBuilder.Entity("SWZOS_Database.Entities.UserType", b =>

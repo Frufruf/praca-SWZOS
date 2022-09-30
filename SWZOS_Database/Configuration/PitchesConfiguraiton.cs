@@ -31,6 +31,16 @@ namespace SWZOS_Database.Configuration
                 .HasColumnName("DESCRIPTION")
                 .HasMaxLength(4000);
 
+            builder.Property(e => e.OutOfServiceStartDate)
+                .HasColumnName("OUT_OF_SERVICE_START_DATE");
+
+            builder.Property(e => e.OutOfServiceEndDate)
+                .HasColumnName("OUT_OF_SERVICE_END_DATE");
+
+            builder.Property(e => e.OutOfServiceReason)
+                .HasColumnName("OUT_OF_SERVICE_REASON")
+                .HasMaxLength(4000);
+
             builder.HasMany(e => e.Reservations)
                 .WithOne(r => r.Pitch)
                 .HasForeignKey(r => r.PitchId);

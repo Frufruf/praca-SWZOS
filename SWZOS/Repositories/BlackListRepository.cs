@@ -3,6 +3,7 @@ using SWZOS_Database;
 using SWZOS_Database.Entities;
 using System.Collections.Generic;
 using System.Linq;
+using static SWZOS_Database.Enum;
 
 namespace SWZOS.Repositories
 {
@@ -17,12 +18,38 @@ namespace SWZOS.Repositories
         {
             return _db.BlackList.Select(a => new BlackListViewModel 
             { 
+                Id = a.Id,
                 UserId = a.UserId,
                 StatusId = a.StatusId,
                 StatusName = a.BlackListStatus.Name,
                 FullName = a.User.Name + " " + a.User.Surname,
                 Reason = a.Reason
             }).ToList();
+        }
+
+        public List<BlackListViewModel> GetRecordsToApprove()
+        {
+            return _db.BlackList.Where(a => a.StatusId == (int)BlackListStatusEnum.WaitingForApproval).Select(a => new BlackListViewModel
+            {
+                Id = a.Id,
+                UserId = a.UserId,
+                StatusId = a.StatusId,
+                StatusName = a.BlackListStatus.Name,
+                FullName = a.User.Name + " " + a.User.Surname,
+                Reason = a.Reason
+            }).ToList();
+        }
+
+        public BlackListViewModel GetBlackListEntry(int id)
+        {
+            return _db.BlackList.Where(a => a.Id == id).Select(a => new BlackListViewModel
+            {
+                UserId = a.UserId,
+                StatusId = a.StatusId,
+                StatusName = a.BlackListStatus.Name,
+                FullName = a.User.Name + " " + a.User.Surname,
+                Reason = a.Reason
+            }).FirstOrDefault();
         }
 
         public BlackListFormModel GetBlackListFormModelByUserId (int userId)
@@ -52,9 +79,24 @@ namespace SWZOS.Repositories
 
         public void DeleteFromBlackList(int userId)
         {
-            var result = _db.BlackList.Where(a => a.UserId == userId).FirstOrDefault();
-            _db.BlackList.Remove(result);
+            var result = _db.BlackList.Where(a => a.UserId == userId && a.StatusId != (int)BlackListStatusEnum.Deleted).FirstOrDefault();
+            result.StatusId = (int)BlackListStatusEnum.Deleted;
             _db.SaveChanges();
         }
+
+        public void ApproveBlackListEntry(int userId)
+        {
+            var result = _db.BlackList.Where(a => a.UserId == userId && a.StatusId != (int)BlackListStatusEnum.Deleted).FirstOrDefault();
+            result.StatusId = (int)BlackListStatusEnum.Approved;
+            _db.SaveChanges();
+        }
+
+        public void RejectBlackListEntry(int userId)
+        {
+            var result = _db.BlackList.Where(a => a.UserId == userId && a.StatusId != (int)BlackListStatusEnum.Deleted).FirstOrDefault();
+            result.StatusId = (int)BlackListStatusEnum.Rejected;
+            _db.SaveChanges();
+        }
+        
     }
 }

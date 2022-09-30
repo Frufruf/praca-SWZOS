@@ -34,10 +34,6 @@ namespace SWZOS_Database.Configuration
                 .HasMaxLength(50)
                 .IsRequired();
 
-            builder.Property(e => e.PESEL)
-                .HasColumnName("PESEL")
-                .HasMaxLength(11);
-
             builder.Property(e => e.PhoneNumber)
                 .HasColumnName("PHONE_NUMBER");
 
@@ -72,9 +68,9 @@ namespace SWZOS_Database.Configuration
                 .WithOne(r => r.User)
                 .HasForeignKey(r => r.UserId);
 
-            builder.HasOne<BlackList>(e => e.BlackList)
+            builder.HasMany(e => e.BlackList)
                 .WithOne(b => b.User)
-                .HasForeignKey<BlackList>(b => b.UserId);
+                .HasForeignKey(b => b.UserId);
         }
     }
 }
