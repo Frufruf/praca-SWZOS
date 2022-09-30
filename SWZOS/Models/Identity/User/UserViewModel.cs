@@ -21,6 +21,7 @@ namespace SWZOS.Models.User
         }
         public string PhoneNumber { get; set; }
         public string MailAddress { get; set; }
+        public bool IsBlackListed { get; set; }
         public List<ReservationsViewModel> Reservations { get; set; }
     }
 }

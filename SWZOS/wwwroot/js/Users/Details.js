@@ -1,6 +1,10 @@
 ﻿$(function () {
     $("#userReservationsTable").DataTable();
     $("#userPaymentsTable").DataTable();
+
+    $("#changePassword").on("click", function () {
+        window.location.href = UserUrl.ChangePassword;
+    });
 });
 
 function EditReservation(reservationId) {

@@ -77,6 +77,7 @@ namespace SWZOS.Repositories
                 Surname = a.Surname,
                 MailAddress = a.MailAddress,
                 PhoneNumber = a.PhoneNumber,
+                IsBlackListed = a.BlackList.Where(c => c.StatusId == (int)BlackListStatusEnum.Approved).Any(),
                 Reservations = a.Reservations.Select(b => new ReservationsViewModel
                 {
                     UserId = userId,

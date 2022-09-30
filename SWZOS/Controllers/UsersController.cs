@@ -25,11 +25,6 @@ namespace SWZOS.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}    
-
         [Authorize]
         public IActionResult CurrentUserProfile()
         {
