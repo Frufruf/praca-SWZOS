@@ -52,7 +52,7 @@ namespace SWZOS
                 a.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), 
                 b => b.MigrationsAssembly("SWZOS")));
 
-            services.AddTransient<IEmailSender, EmailSender>();
+            //services.AddTransient<IEmailSender, EmailSender>();
 
             #region DependencyInjection
 

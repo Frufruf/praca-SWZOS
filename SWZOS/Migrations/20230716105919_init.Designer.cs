@@ -12,8 +12,8 @@ using SWZOS_Database;
 namespace SWZOS.Migrations
 {
     [DbContext(typeof(SWZOSContext))]
-    [Migration("20220917160939_pitch_types_fix")]
-    partial class pitch_types_fix
+    [Migration("20230716105919_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -51,8 +51,7 @@ namespace SWZOS.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("BLACK_LIST", (string)null);
                 });
@@ -255,7 +254,7 @@ namespace SWZOS.Migrations
                         {
                             Key = "OpenHour",
                             Description = "Godzina otwarcia obiektu",
-                            Value = "10:00:00"
+                            Value = "09:30:00"
                         },
                         new
                         {
@@ -804,27 +803,13 @@ namespace SWZOS.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = 1,
-                            ActiveFlag = true,
-                            DeletedFlag = false,
-                            Login = "kbrydak",
-                            MailAddress = "krzysztof.brydak@gmail.com",
-                            Name = "Krzysztof",
-                            PasswordExpirationDate = new DateTime(2023, 9, 17, 18, 9, 38, 972, DateTimeKind.Local).AddTicks(4939),
-                            PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
-                            PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
-                            Surname = "Brydak",
-                            UserTypeId = 1
-                        },
-                        new
-                        {
                             UserId = 2,
                             ActiveFlag = true,
                             DeletedFlag = false,
                             Login = "employee_a",
                             MailAddress = "employee_a@swzos.pl",
                             Name = "Jan",
-                            PasswordExpirationDate = new DateTime(2023, 9, 17, 18, 9, 38, 972, DateTimeKind.Local).AddTicks(4976),
+                            PasswordExpirationDate = new DateTime(2024, 7, 15, 12, 59, 19, 562, DateTimeKind.Local).AddTicks(2206),
                             PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
                             PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
                             Surname = "Śliwa",
@@ -838,7 +823,7 @@ namespace SWZOS.Migrations
                             Login = "employee_b",
                             MailAddress = "employee_b@swzos.pl",
                             Name = "Grzegorz",
-                            PasswordExpirationDate = new DateTime(2023, 9, 17, 18, 9, 38, 972, DateTimeKind.Local).AddTicks(4980),
+                            PasswordExpirationDate = new DateTime(2024, 7, 15, 12, 59, 19, 562, DateTimeKind.Local).AddTicks(2234),
                             PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
                             PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
                             Surname = "Nowak",
@@ -852,7 +837,7 @@ namespace SWZOS.Migrations
                             Login = "dzony_a",
                             MailAddress = "dzony_a@swzos.pl",
                             Name = "Łukasz",
-                            PasswordExpirationDate = new DateTime(2023, 9, 17, 18, 9, 38, 972, DateTimeKind.Local).AddTicks(4984),
+                            PasswordExpirationDate = new DateTime(2024, 7, 15, 12, 59, 19, 562, DateTimeKind.Local).AddTicks(2236),
                             PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
                             PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
                             Surname = "Piotrowski",
@@ -866,7 +851,7 @@ namespace SWZOS.Migrations
                             Login = "dzony_b",
                             MailAddress = "dzony_b@swzos.pl",
                             Name = "Michał",
-                            PasswordExpirationDate = new DateTime(2023, 9, 17, 18, 9, 38, 972, DateTimeKind.Local).AddTicks(4987),
+                            PasswordExpirationDate = new DateTime(2024, 7, 15, 12, 59, 19, 562, DateTimeKind.Local).AddTicks(2237),
                             PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
                             PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
                             Surname = "Skórka",
@@ -880,7 +865,7 @@ namespace SWZOS.Migrations
                             Login = "dzony_c",
                             MailAddress = "dzony_c@swzos.pl",
                             Name = "Piotr",
-                            PasswordExpirationDate = new DateTime(2023, 9, 17, 18, 9, 38, 972, DateTimeKind.Local).AddTicks(4990),
+                            PasswordExpirationDate = new DateTime(2024, 7, 15, 12, 59, 19, 562, DateTimeKind.Local).AddTicks(2239),
                             PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
                             PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
                             Surname = "Koza",
@@ -894,7 +879,7 @@ namespace SWZOS.Migrations
                             Login = "dzony_d",
                             MailAddress = "dzony_d@swzos.pl",
                             Name = "Krzysztof",
-                            PasswordExpirationDate = new DateTime(2023, 9, 17, 18, 9, 38, 972, DateTimeKind.Local).AddTicks(4994),
+                            PasswordExpirationDate = new DateTime(2024, 7, 15, 12, 59, 19, 562, DateTimeKind.Local).AddTicks(2240),
                             PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
                             PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
                             Surname = "Pałka",
@@ -908,7 +893,7 @@ namespace SWZOS.Migrations
                             Login = "dzony_e",
                             MailAddress = "dzony_e@swzos.pl",
                             Name = "Filip",
-                            PasswordExpirationDate = new DateTime(2023, 9, 17, 18, 9, 38, 972, DateTimeKind.Local).AddTicks(4997),
+                            PasswordExpirationDate = new DateTime(2024, 7, 15, 12, 59, 19, 562, DateTimeKind.Local).AddTicks(2260),
                             PasswordHash = "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=",
                             PasswordSalt = "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=",
                             Surname = "Wilczek",
@@ -961,8 +946,8 @@ namespace SWZOS.Migrations
                         .IsRequired();
 
                     b.HasOne("SWZOS_Database.Entities.User", "User")
-                        .WithOne("BlackList")
-                        .HasForeignKey("SWZOS_Database.Entities.BlackList", "UserId")
+                        .WithMany("BlackList")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -40,6 +40,19 @@ namespace SWZOS.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GLOBAL",
+                columns: table => new
+                {
+                    KEY = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    VALUE = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DESCRIPTION = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GLOBAL", x => x.KEY);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PAYMENTS_STATUS",
                 columns: table => new
                 {
@@ -300,14 +313,37 @@ namespace SWZOS.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "GLOBAL",
+                columns: new[] { "KEY", "DESCRIPTION", "VALUE" },
+                values: new object[,]
+                {
+                    { "CloseHour", "Godzina zamknięcia obiektu", "23:00:00" },
+                    { "HomePageDescription", "Tekst wyświetlany na stronie głównej aplikacji", "" },
+                    { "OpenHour", "Godzina otwarcia obiektu", "09:30:00" },
+                    { "Regulations", "Regulamin korzystania z obiektu sportowego", "" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "PAYMENTS_STATUS",
+                columns: new[] { "PAYMENT_STATUS_ID", "NAME" },
+                values: new object[,]
+                {
+                    { 1, "NotPaid" },
+                    { 2, "Paid" },
+                    { 3, "Delayed" },
+                    { 4, "Overpaid" },
+                    { 5, "Canceled" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "PITCH_TYPES",
                 columns: new[] { "PITCH_TYPE_ID", "PITCH_TYPE_NAME", "PITCH_TYPE_PRICE" },
                 values: new object[,]
                 {
                     { 1, "Boisko piłkarskie", 120m },
-                    { 2, "Boisko do koszykówki", 80m },
-                    { 3, "Boisko do siatkówki", 80m },
-                    { 4, "Kort tenisowy", 50m }
+                    { 2, "Kort tenisowy", 50m },
+                    { 3, "Boisko do koszykówki", 80m },
+                    { 4, "Boisko do siatkówki", 80m }
                 });
 
             migrationBuilder.InsertData(
@@ -365,6 +401,20 @@ namespace SWZOS.Migrations
                     { 8, 4 }
                 });
 
+            migrationBuilder.InsertData(
+                table: "USERS",
+                columns: new[] { "USER_ID", "ACTIVE_FLAG", "DELETED_FLAG", "LOGIN", "EMAIL_ADDRESS", "NAME", "PASSWORD_EXPIRATION_DATE", "PASSWORD_HASH", "PASSWORD_SALT", "PHONE_NUMBER", "SURNAME", "USER_TYPE_ID" },
+                values: new object[,]
+                {
+                    { 2, true, false, "employee_a", "employee_a@swzos.pl", "Jan", new DateTime(2024, 7, 15, 12, 59, 19, 562, DateTimeKind.Local).AddTicks(2206), "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=", "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=", null, "Śliwa", 2 },
+                    { 3, true, false, "employee_b", "employee_b@swzos.pl", "Grzegorz", new DateTime(2024, 7, 15, 12, 59, 19, 562, DateTimeKind.Local).AddTicks(2234), "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=", "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=", null, "Nowak", 2 },
+                    { 4, true, false, "dzony_a", "dzony_a@swzos.pl", "Łukasz", new DateTime(2024, 7, 15, 12, 59, 19, 562, DateTimeKind.Local).AddTicks(2236), "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=", "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=", null, "Piotrowski", 3 },
+                    { 5, true, false, "dzony_b", "dzony_b@swzos.pl", "Michał", new DateTime(2024, 7, 15, 12, 59, 19, 562, DateTimeKind.Local).AddTicks(2237), "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=", "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=", null, "Skórka", 3 },
+                    { 6, true, false, "dzony_c", "dzony_c@swzos.pl", "Piotr", new DateTime(2024, 7, 15, 12, 59, 19, 562, DateTimeKind.Local).AddTicks(2239), "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=", "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=", null, "Koza", 3 },
+                    { 7, true, false, "dzony_d", "dzony_d@swzos.pl", "Krzysztof", new DateTime(2024, 7, 15, 12, 59, 19, 562, DateTimeKind.Local).AddTicks(2240), "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=", "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=", null, "Pałka", 3 },
+                    { 8, true, false, "dzony_e", "dzony_e@swzos.pl", "Filip", new DateTime(2024, 7, 15, 12, 59, 19, 562, DateTimeKind.Local).AddTicks(2260), "2pXiCfz7Auwsjm27jcVR5+tI2siy3pu1M+MxmBzFbsc=", "GwsT98hcHRzddN0OB4/CPbnHSqwz+Y2W8C1sVh4da9s=", null, "Wilczek", 3 }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_BLACK_LIST_STATUS_ID",
                 table: "BLACK_LIST",
@@ -373,8 +423,7 @@ namespace SWZOS.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_BLACK_LIST_USER_ID",
                 table: "BLACK_LIST",
-                column: "USER_ID",
-                unique: true);
+                column: "USER_ID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PAYMENTS_PAYMENT_STATUS_ID",
@@ -427,6 +476,9 @@ namespace SWZOS.Migrations
         {
             migrationBuilder.DropTable(
                 name: "BLACK_LIST");
+
+            migrationBuilder.DropTable(
+                name: "GLOBAL");
 
             migrationBuilder.DropTable(
                 name: "PAYMENTS");
